@@ -17,6 +17,12 @@ ios/
 *.apk
 *.ipa
 
+# Translations
+*.translation
+
+# Export presets (optional, comment out if you want to share exports)
+export_presets.cfg
+
 # User-specific files
 .DS_Store
 .vscode/
@@ -26,7 +32,6 @@ ios/
 Saves/
 *.tmp
 
-# Icons
-Vampire Survivors Proto.apple-touch-icon.png
-Vampire Survivors Proto.icon.png
-Vampire Survivors Proto.png
+# Icons (generic rule)
+*.icon.png
+*apple-touch-icon.png
