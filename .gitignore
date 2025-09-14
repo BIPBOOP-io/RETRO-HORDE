@@ -27,6 +27,7 @@ export_presets.cfg
 .DS_Store
 .vscode/
 .idea/
+WARP.md
 
 # Save files and temp files
 Saves/

@@ -2636,9 +2636,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -235.0
-offset_top = -103.5
+offset_top = -132.5
 offset_right = 235.0
-offset_bottom = 103.5
+offset_bottom = 132.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 60
@@ -2666,6 +2666,19 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("3_744d7")
 theme_override_font_sizes/font_size = 30
 text = "JOUER"
+flat = true
+
+[node name="Records" type="Button" parent="VBoxContainer"]
+z_index = 10
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_744d7")
+theme_override_font_sizes/font_size = 30
+text = "RECORDS"
 flat = true
 
 [node name="Quit" type="Button" parent="VBoxContainer"]
@@ -2757,4 +2770,5 @@ horizontal_alignment = 2
 vertical_alignment = 2
 
 [connection signal="pressed" from="VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/Records" to="." method="_on_records_pressed"]
 [connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_quit_pressed"]
