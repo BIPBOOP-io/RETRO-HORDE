@@ -35,3 +35,7 @@ Saves/
 # Icons (generic rule)
 *.icon.png
 *apple-touch-icon.png
+*.pck
+*.wasm
+*.html
+*.js
