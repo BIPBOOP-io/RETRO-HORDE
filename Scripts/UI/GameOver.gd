@@ -3,7 +3,6 @@ extends Control
 @onready var time_label:  Label = $VBoxContainer/HBoxContainer/TimeLabel
 @onready var kills_label: Label = $VBoxContainer/HBoxContainer/KillsLabel
 @onready var level_label: Label = $VBoxContainer/HBoxContainer/LevelLabel
-# Optional: add a Label named BestLabel in your scene to show the record
 @onready var best_label:  Label = $VBoxContainer/BestLabel if has_node("VBoxContainer/BestLabel") else null
 
 func _ready():
@@ -32,7 +31,7 @@ func _ready():
 
 		# Affichage optionnel dans l'UI si BestLabel existe
 		if best_label:
-			var bt = int(best.get("time", 0))
+			var bt = int(best.get("duration", 0))
 			var bm = bt / 60
 			var bs = bt % 60
 			best_label.text = "Record : %d kills – Lvl %d – %02d:%02d" % [
