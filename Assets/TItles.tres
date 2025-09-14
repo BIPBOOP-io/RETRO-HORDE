@@ -1,0 +1,11 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://cuug347ylb7m7"]
+
+[ext_resource type="FontFile" uid="uid://dhngfs8qsll5r" path="res://Assets/Fonts/Jersey15-Regular.ttf" id="1_3oknr"]
+
+[resource]
+font = ExtResource("1_3oknr")
+font_size = 60
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(0, 5)

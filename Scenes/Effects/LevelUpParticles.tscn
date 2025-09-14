@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bthcdsld7ke43"]
+
+[sub_resource type="Curve" id="Curve_3y376"]
+
+[node name="LevelUpParticles" type="CPUParticles2D"]
+amount = 40
+spread = 180.0
+initial_velocity_min = 80.0
+initial_velocity_max = 150.0
+scale_amount_curve = SubResource("Curve_3y376")
+color = Color(1, 0.847059, 0.290196, 1)

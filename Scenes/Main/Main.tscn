@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://cc4340a75g7lv"]
+
+[ext_resource type="Script" uid="uid://bwuybd5ewokeb" path="res://Scripts/Managers/Main.gd" id="1_cmk6n"]
+[ext_resource type="PackedScene" uid="uid://dfgof8pxal3hl" path="res://Scenes/Player/Player.tscn" id="1_p8rbg"]
+[ext_resource type="PackedScene" uid="uid://ddq00jv2jmlxp" path="res://Scenes/Enemies/Enemy.tscn" id="2_qtv3y"]
+[ext_resource type="PackedScene" uid="uid://b64rd1akldydb" path="res://Scenes/Enemies/EnemySpawner.tscn" id="4_i3fi7"]
+[ext_resource type="PackedScene" uid="uid://pw8tvjcusgok" path="res://Scenes/UI/HUD.tscn" id="5_o8wgc"]
+[ext_resource type="PackedScene" uid="uid://b3j8v86qbtj6w" path="res://Scenes/UI/LevelUpMenu.tscn" id="6_w20t6"]
+
+[node name="Main" type="Node2D" groups=["main"]]
+script = ExtResource("1_cmk6n")
+
+[node name="Player" parent="." instance=ExtResource("1_p8rbg")]
+z_index = 5
+position = Vector2(960, 540)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="EnemySpawner" parent="." instance=ExtResource("4_i3fi7")]
+z_index = 5
+enemy_scene = ExtResource("2_qtv3y")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="LevelUpMenu" parent="CanvasLayer" instance=ExtResource("6_w20t6")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -125.0
+offset_right = 250.0
+offset_bottom = 125.0
+
+[node name="Hud" parent="." groups=["main"] instance=ExtResource("5_o8wgc")]

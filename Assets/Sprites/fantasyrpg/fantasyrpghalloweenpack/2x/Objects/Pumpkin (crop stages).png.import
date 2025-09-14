@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://dt2vb01btra6s"
+path="res://.godot/imported/Pumpkin (crop stages).png-68067107aad87b8d5b8e0b016ec64604.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Assets/Sprites/fantasyrpg/fantasyrpghalloweenpack/2x/Objects/Pumpkin (crop stages).png"
+dest_files=["res://.godot/imported/Pumpkin (crop stages).png-68067107aad87b8d5b8e0b016ec64604.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dfmjiasifebcu"]
+
+[sub_resource type="Gradient" id="Gradient_kh0mx"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_d65ay"]
+gradient = SubResource("Gradient_kh0mx")
+
+[sub_resource type="Curve" id="Curve_kh0mx"]
+
+[node name="HealParticles" type="CPUParticles2D"]
+emitting = false
+amount = 20
+texture = SubResource("GradientTexture2D_d65ay")
+one_shot = true
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+scale_amount_curve = SubResource("Curve_kh0mx")
+color = Color(0.290196, 1, 0.290196, 1)

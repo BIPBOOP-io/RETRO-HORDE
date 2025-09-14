@@ -1,0 +1,17 @@
+FANTASY RPG Halloween pack (by Franuka) v1.0
+-------------------------
+Thank you for getting this asset pack!
+Make sure to check my other Fantasy RPG assets to complement this one.
+
+Included are all the tiles and spritesheets for each asset, in .png format, transparent background. You should be able to recreate anything you see on the example images.
+Everything comes in two sizes (100% and 200%). Tile size is 16x16/32x32.
+
+---
+
+All assets were created from scratch by me.
+Contact: franukai@gmail.com
+Instagram: https://www.instagram.com/franuka.art/
+Twitter: https://twitter.com/franuka_art
+
+If you like what I do, consider supporting me by buying my packs, sharing, or sending your feedback.
+Have a good time making your games, and send me a link if you make something cool, I'd love to check your projects! :)

@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dajvircxqlavl"]
+
+[ext_resource type="Script" uid="uid://657udssxxv4l" path="res://Scripts/Projectiles/Arrow.gd" id="1_qaq63"]
+[ext_resource type="PackedScene" uid="uid://fp6u3n15yf8o" path="res://Scenes/UI/FloatingText.tscn" id="2_1lymg"]
+[ext_resource type="Texture2D" uid="uid://jxls1tlmpbsl" path="res://Assets/Sprites/Projectiles/Arrow.png" id="2_doom2"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1lymg"]
+radius = 5.0
+height = 20.0
+
+[node name="Arrow" type="Area2D"]
+texture_filter = 1
+script = ExtResource("1_qaq63")
+floating_text_scene = ExtResource("2_1lymg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_doom2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_1lymg")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

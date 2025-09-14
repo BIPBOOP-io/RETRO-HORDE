@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://fp6u3n15yf8o"]
+
+[ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="1_5clbq"]
+[ext_resource type="Script" uid="uid://bkl3xl7qic8el" path="res://Scripts/UI/FloatingText.gd" id="2_y8jlb"]
+
+[node name="FloatingText" type="Label"]
+text = "Crit!"
+label_settings = ExtResource("1_5clbq")
+script = ExtResource("2_y8jlb")
