@@ -26,3 +26,11 @@ const GROUPS = {
 	"enemies": "enemies",
 	"hud": "hud"
 }
+
+# Score global
+static func calculate_score(data: Dictionary) -> int:
+	var kills    = int(data.get("kills", 0))
+	var level    = int(data.get("level", 1))
+	var duration = int(data.get("duration", 0))
+
+	return (kills * 10) + (level * 100) + (duration * 2)

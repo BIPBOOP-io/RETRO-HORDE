@@ -13,59 +13,69 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_n002h")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(470, 0)
+[node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -23.5
-offset_right = 20.0
-offset_bottom = 23.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 40
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="GameOverTitle" type="Label" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin"]
+custom_minimum_size = Vector2(470, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="GameOverTitle" type="Label" parent="Margin/VBoxContainer"]
 layout_mode = 2
 text = "GAME OVER"
 label_settings = ExtResource("2_34bmr")
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Margin/VBoxContainer"]
 layout_mode = 2
 
-[node name="LevelLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="LevelLabel" type="Label" parent="Margin/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Level"
 label_settings = ExtResource("2_6pbke")
 
-[node name="TimeLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="TimeLabel" type="Label" parent="Margin/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Time"
 label_settings = ExtResource("2_6pbke")
 horizontal_alignment = 1
 
-[node name="KillsLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="KillsLabel" type="Label" parent="Margin/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Kills"
 label_settings = ExtResource("2_6pbke")
 horizontal_alignment = 2
 
-[node name="ReplayButton" type="Button" parent="VBoxContainer"]
+[node name="ScoreLabel" type="Label" parent="Margin/VBoxContainer"]
+layout_mode = 2
+text = "Score :"
+label_settings = ExtResource("2_6pbke")
+horizontal_alignment = 1
+
+[node name="ReplayButton" type="Button" parent="Margin/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 20
 text = "Rejouer"
 
-[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="Margin/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -73,11 +83,11 @@ mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 20
 text = "Menu principal"
 
-[node name="BestLabel" type="Label" parent="VBoxContainer"]
+[node name="BestLabel" type="Label" parent="Margin/VBoxContainer"]
 layout_mode = 2
 text = "Record :"
 label_settings = ExtResource("2_6pbke")
 horizontal_alignment = 1
 
-[connection signal="pressed" from="VBoxContainer/ReplayButton" to="." method="_on_replay_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="Margin/VBoxContainer/ReplayButton" to="." method="_on_replay_button_pressed"]
+[connection signal="pressed" from="Margin/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]

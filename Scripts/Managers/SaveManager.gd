@@ -8,9 +8,10 @@ const SAVE_PATH = "user://scores.save"
 static func save_game(duration: int, kills: int, level: int) -> void:
 	var stats = load_stats()
 	stats.append({
-		"duration": duration,   # ✅ cohérent partout
+		"duration": duration,
 		"kills": kills,
 		"level": level,
+		"score": (kills * 10) + (level * 100) + (duration * 2),
 		"date": Time.get_datetime_string_from_system()
 	})
 
