@@ -19,13 +19,12 @@ var upgrades_data = {
 	"Coup critique": { "rarity": "epic", "max_level": 5 }
 }
 
+
 # --- Raretés ---
-var rarity_weights = {
-	"common": 60,
-	"rare": 25,
-	"epic": 12,
-	"legendary": 3
-}
+# Utilisation des poids de rareté globaux
+
+# --- Import du singleton Global pour accès aux constantes globales ---
+@onready var Global = get_node("/root/Global")
 
 # --- Paramètres globaux ---
 const CHOICES_PER_LEVEL = 3  # combien d’upgrades sont proposés par level-up
@@ -49,7 +48,7 @@ func get_random_upgrades() -> Array:
 
 		# exclure si déjà au max
 		if current_level < data.max_level:
-			var weight: int = rarity_weights[data.rarity]
+			var weight: int = Global.RARITY_WEIGHTS[data.rarity]
 			for i in range(weight):
 				weighted_pool.append(upgrade_name)
 

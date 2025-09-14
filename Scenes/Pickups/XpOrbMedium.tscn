@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://4bkawpubrcbc"]
 
-[ext_resource type="Script" uid="uid://d1upcddqxqe42" path="res://Scripts/Pickups/XpOrbSmall.gd" id="1_eixo6"]
+[ext_resource type="Script" uid="uid://ba1hfo5v5lspf" path="res://Scripts/Pickups/XpOrb.gd" id="1_eixo6"]
 [ext_resource type="Texture2D" uid="uid://3sw5dnsibk53" path="res://Assets/Sprites/fantasyrpg/fantasyrpghalloweenpack/2x/Objects/Pumpkin_medium.png" id="2_eixo6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k6twy"]
@@ -9,6 +9,7 @@ radius = 14.0
 [node name="XpOrb" type="Area2D"]
 texture_filter = 1
 script = ExtResource("1_eixo6")
+xp_value = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_eixo6")
