@@ -36,7 +36,7 @@ var animated_sprite: AnimatedSprite2D
 var attack_timer: Timer
 var hud: Node
 var regen_timer: Timer
-@onready var upgrade_manager: UpgradeManager = preload("res://Scripts/Upgrades/UpgradeManager.gd").new()
+@onready var upgrade_manager: UpgradeManager = preload("res://Scripts/Managers/UpgradeManager.gd").new()
 
 func _ready():
 	animated_sprite = $AnimatedSprite2D
