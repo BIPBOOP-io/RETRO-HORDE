@@ -25,3 +25,8 @@ ios/
 # Save files and temp files
 Saves/
 *.tmp
+
+# Icons
+Vampire Survivors Proto.apple-touch-icon.png
+Vampire Survivors Proto.icon.png
+Vampire Survivors Proto.png
