@@ -20,7 +20,7 @@ You play as a lone hero facing endless waves of enemies, leveling up, and choosi
 - **Engine**: Godot 4.4.1  
 - **Language**: GDScript  
 - **Version control**: Git + GitHub (organization [BIPBOOP](https://github.com/BIPBOOP-io))  
-- **Assets**: Franuka[Franuka](https://franuka.itch.io))  
+- **Assets**: Fantasy RPG by [Franuka](https://franuka.itch.io)
 
 ## 🚀 Planned Features
 - Additional **playable classes** with unique weapons & skills
