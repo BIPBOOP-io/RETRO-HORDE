@@ -8,6 +8,7 @@ var score_data: Dictionary = {}  # time, kills, level, etc.
 # Raretés des upgrades
 const RARITY_WEIGHTS = {
 	"common": 60,
+	"uncommon": 40,
 	"rare": 25,
 	"epic": 12,
 	"legendary": 3

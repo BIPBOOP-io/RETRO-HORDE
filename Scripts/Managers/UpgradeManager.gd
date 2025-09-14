@@ -1,100 +1,83 @@
-# res://Scripts/Upgrades/UpgradeManager.gd
 extends Node
 class_name UpgradeManager
 
 # --- Définition des upgrades ---
 var upgrades_data = {
-	"Augmenter la vitesse de déplacement": { "rarity": "common", "max_level": 10 },
-	"Augmenter la portée d’attaque": { "rarity": "common", "max_level": 10 },
-	"Augmenter la cadence de tir": { "rarity": "rare", "max_level": 5 },
-	"Augmenter les dégâts des flèches": { "rarity": "common", "max_level": 10 },
-	"Tirer une flèche supplémentaire": { "rarity": "epic", "max_level": 5 },
-	"Multiplicateur de tir": { "rarity": "legendary", "max_level": 3 },
-	"Régénération lente": { "rarity": "rare", "max_level": 1 },
-	"Boost d’XP": { "rarity": "common", "max_level": 5 },
-	"Knockback amélioré": { "rarity": "rare", "max_level": 5 },
-	"Vampirisme": { "rarity": "epic", "max_level": 5 },
-	"Bouclier": { "rarity": "epic", "max_level": 1 },
-	"Perforation": { "rarity": "rare", "max_level": 5 },
-	"Coup critique": { "rarity": "epic", "max_level": 5 }
+	"speed":        { "title": "Vitesse",         "rarity": "common",    "max_level": 10 },
+	"range":        { "title": "Portée",          "rarity": "uncommon",  "max_level": 10 },
+	"firerate":     { "title": "Cadence",         "rarity": "rare",      "max_level": 5 },
+	"damage":       { "title": "Dégâts",          "rarity": "common",    "max_level": 10 },
+	"extra_arrow":  { "title": "Flèche +1",       "rarity": "epic",      "max_level": 5 },
+	"multi_shot":   { "title": "Multi-tir",       "rarity": "legendary", "max_level": 3 },
+	"regen":        { "title": "Régénération",    "rarity": "uncommon",  "max_level": 1 },
+	"xp_boost":     { "title": "Boost XP",        "rarity": "common",    "max_level": 5 },
+	"knockback":    { "title": "Repousser",       "rarity": "uncommon",  "max_level": 5 },
+	"vampirism":    { "title": "Vampirisme",      "rarity": "epic",      "max_level": 5 },
+	"shield":       { "title": "Bouclier",        "rarity": "epic",      "max_level": 1 },
+	"pierce":       { "title": "Perforation",     "rarity": "rare",      "max_level": 5 },
+	"crit":         { "title": "Critique",        "rarity": "epic",      "max_level": 5 }
 }
 
-
-# --- Raretés ---
-# Utilisation des poids de rareté globaux
-
-# --- Import du singleton Global pour accès aux constantes globales ---
 @onready var Global = get_node("/root/Global")
 
-# --- Paramètres globaux ---
-const CHOICES_PER_LEVEL = 3  # combien d’upgrades sont proposés par level-up
-
-# --- Suivi des niveaux ---
+const CHOICES_PER_LEVEL = 3
 var upgrades_level: Dictionary = {}
 
 func _ready():
-	# Initialiser tous les upgrades à 0
 	for key in upgrades_data.keys():
 		upgrades_level[key] = 0
 
-# ==========================
-#   Tirage d’upgrades
-# ==========================
 func get_random_upgrades() -> Array:
 	var weighted_pool: Array = []
-	for upgrade_name in upgrades_data.keys():
-		var data = upgrades_data[upgrade_name]
-		var current_level: int = upgrades_level[upgrade_name]
-
-		# exclure si déjà au max
+	for id in upgrades_data.keys():
+		var data = upgrades_data[id]
+		var current_level: int = upgrades_level[id]
 		if current_level < data.max_level:
 			var weight: int = Global.RARITY_WEIGHTS[data.rarity]
 			for i in range(weight):
-				weighted_pool.append(upgrade_name)
+				weighted_pool.append(id)
 
 	if weighted_pool.is_empty():
-		return []  # plus d’upgrades dispo
+		return []
 
 	weighted_pool.shuffle()
 	return weighted_pool.slice(0, CHOICES_PER_LEVEL)
 
-# ==========================
-#   Application d’un upgrade
-# ==========================
 func apply_upgrade(player: Node, choice: String):
 	if not upgrades_data.has(choice): return
-
-	# empêcher de dépasser max_level
 	if upgrades_level[choice] >= upgrades_data[choice].max_level:
 		return
-
 	upgrades_level[choice] += 1
 
 	match choice:
-		"Augmenter la vitesse de déplacement":
+		"speed":
 			player.speed += 20
-		"Augmenter la portée d’attaque":
+		"range":
 			player.attack_range += 30
-		"Augmenter la cadence de tir":
+		"firerate":
 			player.attack_interval = max(0.2, player.attack_interval - 0.1)
 			player.attack_timer.wait_time = player.attack_interval
-		"Augmenter les dégâts des flèches":
+		"damage":
 			player.arrow_damage += 1
-		"Tirer une flèche supplémentaire":
+		"extra_arrow":
 			player.arrow_count += 1
-		"Multiplicateur de tir":
+		"multi_shot":
 			player.multi_shot += 1
-		"Régénération lente":
+		"regen":
 			player.regen_timer.start()
-		"Boost d'XP":
+		"xp_boost":
 			player.xp_multiplier += 0.2
-		"Knockback amélioré":
+		"knockback":
 			player.knockback_multiplier *= 1.5
-		"Vampirisme":
+		"vampirism":
 			player.vampirism += 0.1
-		"Bouclier":
+		"shield":
 			player.has_shield = true
-		"Perforation":
+		"pierce":
 			player.arrow_pierce += 1
-		"Coup critique":
+		"crit":
 			player.crit_chance = min(1.0, player.crit_chance + 0.1)
+
+# Helper pour récupérer le titre d’un upgrade
+func get_title(id: String) -> String:
+	return upgrades_data.get(id, {}).get("title", id)
