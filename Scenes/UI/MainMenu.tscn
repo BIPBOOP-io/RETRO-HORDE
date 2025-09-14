@@ -2,9 +2,18 @@
 
 [ext_resource type="Script" uid="uid://qcdkieaivgfq" path="res://Scripts/UI/MainMenu.gd" id="1_g18y6"]
 [ext_resource type="Script" uid="uid://bqe472hrtenbq" path="res://Scripts/Enemies/BackgroundEnnemySpawner.gd" id="2_72sra"]
-[ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_744d7"]
 [ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="2_mjmdf"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_744d7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_k8um8"]
+font = ExtResource("3_744d7")
+font_size = 130
+font_color = Color(1, 0.74902, 0.290196, 1)
+outline_size = 40
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 30
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(0, 10)
 
 [sub_resource type="LabelSettings" id="LabelSettings_t6w0q"]
 font = ExtResource("3_744d7")
@@ -23,40 +32,32 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_g18y6")
 
-[node name="Background" type="Node2D" parent="."]
-
-[node name="BackgroundSpawner" type="Node2D" parent="Background"]
-z_index = 4
-position = Vector2(686.5, 356.5)
-script = ExtResource("2_72sra")
-background_enemy_scene = ExtResource("2_mjmdf")
-enemy_count = 10
-
 [node name="UI" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -273.5
-offset_top = -168.5
-offset_right = 273.5
-offset_bottom = 168.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI"]
 z_index = 5
 layout_mode = 2
-theme_override_constants/separation = 50
+theme_override_constants/separation = 15
 alignment = 1
+
+[node name="BackgroundSpawner" type="Node2D" parent="UI/VBoxContainer"]
+z_index = 6
+position = Vector2(282, 190.5)
+script = ExtResource("2_72sra")
+background_enemy_scene = ExtResource("2_mjmdf")
+enemy_count = 10
 
 [node name="TitleLabel" type="Label" parent="UI/VBoxContainer"]
 z_index = 5
 layout_mode = 2
 text = "RETRO HORDE"
-label_settings = ExtResource("2_744d7")
+label_settings = SubResource("LabelSettings_k8um8")
 horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/VBoxContainer"]
@@ -70,7 +71,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 10
@@ -85,7 +86,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 10
@@ -101,7 +102,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 focus_mode = 0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 10
@@ -110,33 +111,26 @@ theme_override_font_sizes/font_size = 30
 text = "QUITTER"
 flat = true
 
-[node name="Footer" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -15.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="Footer" type="MarginContainer" parent="UI/VBoxContainer"]
+layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Footer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/Footer"]
 z_index = 10
 layout_mode = 2
 alignment = 1
 
-[node name="CreditsLabel" type="Label" parent="Footer/HBoxContainer"]
+[node name="CreditsLabel" type="Label" parent="UI/VBoxContainer/Footer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "BIP BOOP Games"
 label_settings = SubResource("LabelSettings_t6w0q")
 vertical_alignment = 2
 
-[node name="VersionLabel" type="Label" parent="Footer/HBoxContainer"]
+[node name="VersionLabel" type="Label" parent="UI/VBoxContainer/Footer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "v.0.0.0.0.0.0.0.0.0.0.0.1"

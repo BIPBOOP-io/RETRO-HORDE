@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwoggo87lo28k"]
+[gd_scene load_steps=5 format=3 uid="uid://dwoggo87lo28k"]
 
 [ext_resource type="Script" uid="uid://6jpx8qvqwk4t" path="res://Scripts/UI/RecordsMenu.gd" id="1_4pdgm"]
 [ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_vrhfd"]
+[ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_h7bsa"]
+[ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="3_vrhfd"]
 
 [node name="RecordsMenu" type="Control"]
 layout_mode = 3
@@ -50,4 +52,14 @@ alignment = 1
 
 [node name="BackButton" type="Button" parent="Margin/VBox/Buttons"]
 layout_mode = 2
-text = "Retour"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_h7bsa")
+theme_override_font_sizes/font_size = 30
+text = "RETOUR"
+flat = true
+
+[node name="BackgroundEnemy" parent="Margin/VBox" instance=ExtResource("3_vrhfd")]

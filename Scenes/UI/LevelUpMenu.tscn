@@ -1,7 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://b3j8v86qbtj6w"]
+[gd_scene load_steps=4 format=3 uid="uid://b3j8v86qbtj6w"]
 
 [ext_resource type="Script" uid="uid://44jy6auyxv5p" path="res://Scripts/UI/LevelUpMenu.gd" id="1_vgv7i"]
-[ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="2_yvb0c"]
+[ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_8qxo4"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yvb0c"]
+font = ExtResource("3_8qxo4")
+font_size = 32
+font_color = Color(1, 0.792238, 0.659141, 1)
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(-2, 3)
 
 [node name="LevelUpMenu" type="Control" groups=["levelup_menu"]]
 process_mode = 2
@@ -12,20 +22,24 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 mouse_filter = 1
 script = ExtResource("1_vgv7i")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -87.5
+offset_right = 170.0
+offset_bottom = 87.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-color = Color(0.584314, 0.584314, 0.584314, 0.647059)
+color = Color(0.0313726, 0.0980392, 0.219608, 0.360784)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
 layout_mode = 1
@@ -41,10 +55,10 @@ offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="ColorRect/VBoxContainer"]
+[node name="LevelUpLabel" type="Label" parent="ColorRect/VBoxContainer"]
 layout_mode = 2
-text = "Niveau supérieur !"
-label_settings = ExtResource("2_yvb0c")
+text = "LEVEL UP !!"
+label_settings = SubResource("LabelSettings_yvb0c")
 horizontal_alignment = 1
 
 [node name="Option1" type="Button" parent="ColorRect/VBoxContainer"]
@@ -52,21 +66,30 @@ process_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
-text = "texte"
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_8qxo4")
+theme_override_font_sizes/font_size = 20
+text = "POWER UP"
 
 [node name="Option2" type="Button" parent="ColorRect/VBoxContainer"]
 process_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
-text = "texte"
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_8qxo4")
+theme_override_font_sizes/font_size = 20
+text = "POWER UP"
 
 [node name="Option3" type="Button" parent="ColorRect/VBoxContainer"]
 process_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
-text = "texte"
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_8qxo4")
+theme_override_font_sizes/font_size = 20
+text = "POWER UP"
 
 [connection signal="pressed" from="ColorRect/VBoxContainer/Option1" to="." method="_on_option_1_pressed"]
 [connection signal="pressed" from="ColorRect/VBoxContainer/Option2" to="." method="_on_option_2_pressed"]

@@ -86,7 +86,7 @@ func apply_upgrade(player: Node, choice: String):
 			player.multi_shot += 1
 		"Régénération lente":
 			player.regen_timer.start()
-		"Boost d’XP":
+		"Boost d'XP":
 			player.xp_multiplier += 0.2
 		"Knockback amélioré":
 			player.knockback_multiplier *= 1.5
