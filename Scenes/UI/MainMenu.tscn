@@ -126,7 +126,7 @@ alignment = 1
 [node name="CreditsLabel" type="Label" parent="UI/VBoxContainer/Footer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "BIP BOOP Games"
+text = "BIP BOOP.io"
 label_settings = SubResource("LabelSettings_t6w0q")
 vertical_alignment = 2
 

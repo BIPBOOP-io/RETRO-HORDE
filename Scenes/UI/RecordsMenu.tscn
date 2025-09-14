@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dwoggo87lo28k"]
+[gd_scene load_steps=6 format=3 uid="uid://dwoggo87lo28k"]
 
 [ext_resource type="Script" uid="uid://6jpx8qvqwk4t" path="res://Scripts/UI/RecordsMenu.gd" id="1_4pdgm"]
 [ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_vrhfd"]
+[ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_em42n"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_h7bsa"]
 [ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="3_vrhfd"]
 
@@ -28,6 +29,7 @@ theme_override_constants/margin_bottom = 20
 
 [node name="VBox" type="VBoxContainer" parent="Margin"]
 layout_mode = 2
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="Title" type="Label" parent="Margin/VBox"]
@@ -35,6 +37,67 @@ layout_mode = 2
 text = "Records"
 label_settings = ExtResource("2_vrhfd")
 horizontal_alignment = 1
+
+[node name="HeaderPanel" type="Panel" parent="Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox/HeaderPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="HName" type="Label" parent="Margin/VBox/HeaderPanel/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Name"
+label_settings = ExtResource("3_em42n")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="HScore" type="Label" parent="Margin/VBox/HeaderPanel/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Score"
+label_settings = ExtResource("3_em42n")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="HKills" type="Label" parent="Margin/VBox/HeaderPanel/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Kills"
+label_settings = ExtResource("3_em42n")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="HLevel" type="Label" parent="Margin/VBox/HeaderPanel/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Level"
+label_settings = ExtResource("3_em42n")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="HTime" type="Label" parent="Margin/VBox/HeaderPanel/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Time"
+label_settings = ExtResource("3_em42n")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="HDate" type="Label" parent="Margin/VBox/HeaderPanel/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Date"
+label_settings = ExtResource("3_em42n")
+horizontal_alignment = 1
+uppercase = true
 
 [node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
 layout_mode = 2

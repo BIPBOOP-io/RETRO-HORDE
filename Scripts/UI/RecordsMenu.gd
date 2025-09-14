@@ -4,6 +4,9 @@ extends Control
 @onready var back_button: Button = $Margin/VBox/Buttons/BackButton
 @onready var title_label: Label = $Margin/VBox/Title
 
+# On charge la scène RecordRow pour avoir plus de contrôle sur le design
+var row_scene: PackedScene = preload("res://Scenes/UI/RecordRow.tscn")
+
 func _ready():
 	title_label.text = "Records"
 	back_button.pressed.connect(_on_back_pressed)
@@ -25,56 +28,41 @@ func _populate_list():
 		list_container.add_child(empty)
 		return
 
-	# Tri simple : par kills décroissants (tu peux switch sur date si tu préfères)
-	stats.sort_custom(Callable(self, "_sort_by_kills_desc"))
+	# Tri par score décroissant
+	stats.sort_custom(Callable(self, "_sort_by_score_desc"))
 
-	# (Option) Garde que les 50 derniers pour éviter des listes immenses:
-	# stats = stats.slice(0, min(50, stats.size()))
+	# Garder max 50 entrées
+	stats = stats.slice(0, min(50, stats.size()))
 
-	# En-tête
-	list_container.add_child(_make_header_row())
-
-	# Lignes
+	# Ajouter les lignes
+	var i := 0
 	for run in stats:
-		list_container.add_child(_make_row(
-			str(run.get("date", "")),
-			int(run.get("kills", 0)),
-			int(run.get("level", 1)),
-			_format_time(int(run.get("duration", 0)))
-		))
+		print("📊 Ajout ligne:", run)
+		var row = row_scene.instantiate()
+		row.set_data(
+			run.get("name", "Player"),        # Nom
+			int(run.get("score", 0)),         # Score
+			int(run.get("kills", 0)),         # Kills
+			int(run.get("level", 1)),         # Level
+			_format_time(int(run.get("duration", 0))),  # Temps formaté
+			_format_date(run.get("date", "")), # Date formatée
+			i % 2 == 1                        # alterne le fond
+		)
+		list_container.add_child(row)
+		i += 1
 
-func _sort_by_kills_desc(a: Dictionary, b: Dictionary) -> bool:
-	return int(a.get("kills", 0)) > int(b.get("kills", 0))
-
-func _make_header_row() -> HBoxContainer:
-	var row = HBoxContainer.new()
-	row.add_theme_constant_override("separation", 16)
-	row.add_child(_make_cell("Date", 220, true))
-	row.add_child(_make_cell("Kills", 80, true))
-	row.add_child(_make_cell("Level", 80, true))
-	row.add_child(_make_cell("Time", 100, true))
-	return row
-
-func _make_row(date_str: String, kills: int, level: int, time_str: String) -> HBoxContainer:
-	var row = HBoxContainer.new()
-	row.add_theme_constant_override("separation", 16)
-	row.add_child(_make_cell(date_str, 220))
-	row.add_child(_make_cell(str(kills), 80))
-	row.add_child(_make_cell(str(level), 80))
-	row.add_child(_make_cell(time_str, 100))
-	return row
-
-func _make_cell(text: String, min_width: int, is_header := false) -> Label:
-	var l = Label.new()
-	l.text = text
-	l.custom_minimum_size.x = min_width
-	l.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	if is_header:
-		l.add_theme_color_override("font_color", Color(1, 1, 0.7))
-		l.add_theme_font_size_override("font_size", 16)
-	return l
+func _sort_by_score_desc(a: Dictionary, b: Dictionary) -> bool:
+	return int(a.get("score", 0)) > int(b.get("score", 0))
 
 func _format_time(seconds: int) -> String:
 	var m = seconds / 60
 	var s = seconds % 60
 	return "%02d:%02d" % [m, s]
+
+func _format_date(date_str: String) -> String:
+	# Exemple: "2025-09-14T19:44:44" -> "2025-09-14 19:44"
+	if "T" in date_str:
+		var parts = date_str.split("T")
+		if parts.size() == 2:
+			return "%s %s" % [parts[0], parts[1].substr(0,5)]
+	return date_str
