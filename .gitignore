@@ -1,3 +1,27 @@
-# Godot 4+ specific ignores
+# Godot cache and import files
+.import/
+*.import
+
+# Godot local config and build dirs
 .godot/
-/android/
+mono/
+export/
+android/
+ios/
+
+# Build outputs and exports
+*.pck
+*.wasm
+*.js
+*.html
+*.apk
+*.ipa
+
+# User-specific files
+.DS_Store
+.vscode/
+.idea/
+
+# Save files and temp files
+Saves/
+*.tmp
