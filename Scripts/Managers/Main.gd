@@ -8,6 +8,7 @@ var survival_time: int = 0
 var kills: int = 0
 
 func _ready():
+	add_to_group("main")
 	spawner.set_player(player)
 
 	# ✅ écoute l’événement "died" du player

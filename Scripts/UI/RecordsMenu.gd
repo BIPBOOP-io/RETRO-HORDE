@@ -39,6 +39,7 @@ func _populate_list():
 	for run in stats:
 		print("📊 Ajout ligne:", run)
 		var row = row_scene.instantiate()
+		list_container.add_child(row)
 		row.set_data(
 			run.get("name", "Player"),        # Nom
 			int(run.get("score", 0)),         # Score
@@ -48,15 +49,14 @@ func _populate_list():
 			_format_date(run.get("date", "")), # Date formatée
 			i % 2 == 1                        # alterne le fond
 		)
-		list_container.add_child(row)
 		i += 1
 
 func _sort_by_score_desc(a: Dictionary, b: Dictionary) -> bool:
 	return int(a.get("score", 0)) > int(b.get("score", 0))
 
 func _format_time(seconds: int) -> String:
-	var m = seconds / 60
-	var s = seconds % 60
+	var m: int = int(seconds / 60)
+	var s: int = seconds % 60
 	return "%02d:%02d" % [m, s]
 
 func _format_date(date_str: String) -> String:

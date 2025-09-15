@@ -14,32 +14,53 @@ func _ready():
 
 func show_upgrades(options: Array):
 	upgrades = options
+
+	# Si aucune option disponible, fermer le menu sans pauser
+	if upgrades.is_empty():
+		visible = false
+		get_tree().paused = false
+		return
+
 	visible = true
 	get_tree().paused = true
-	
+
 	# récupérer le gestionnaire d’upgrades via le joueur
 	var player = get_tree().get_first_node_in_group("player")
+	if player == null:
+		return
 	var upgrade_manager = player.upgrade_manager
-	
-	for i in range(3):
-		var btn = get_node("ColorRect/VBoxContainer/Option%d" % (i+1))
-		var upgrade_id = upgrades[i]
-		var data = upgrade_manager.upgrades_data[upgrade_id]
 
-		btn.text = "%s (%d/%d)" % [
-			upgrade_manager.get_title(upgrade_id),
-			upgrade_manager.upgrades_level[upgrade_id],
-			data.max_level
-		]
+	var buttons: Array = [
+		$ColorRect/VBoxContainer/Option1,
+		$ColorRect/VBoxContainer/Option2,
+		$ColorRect/VBoxContainer/Option3
+	]
 
-		# couleur selon rareté
-		var rarity = data.rarity
-		match rarity:
-			"common": btn.add_theme_color_override("font_color", Color(1,1,1))
-			"uncommon": btn.add_theme_color_override("font_color", Color(0.2, 0.9, 0.2)) # ✅ vert
-			"rare": btn.add_theme_color_override("font_color", Color(0.4,0.6,1))
-			"epic": btn.add_theme_color_override("font_color", Color(0.7,0.3,0.9))
-			"legendary": btn.add_theme_color_override("font_color", Color(1,0.6,0))
+	for i in range(buttons.size()):
+		var btn: Button = buttons[i]
+		if i < upgrades.size():
+			var upgrade_id = upgrades[i]
+			var data: Dictionary = upgrade_manager.upgrades_data[upgrade_id]
+
+			btn.disabled = false
+			btn.visible = true
+			btn.text = "%s (%d/%d)" % [
+				upgrade_manager.get_title(upgrade_id),
+				upgrade_manager.upgrades_level[upgrade_id],
+				int(data.get("max_level", 1))
+			]
+
+			# couleur selon rareté
+			var rarity = str(data.get("rarity", "common"))
+			match rarity:
+				"common": btn.add_theme_color_override("font_color", Color(1,1,1))
+				"uncommon": btn.add_theme_color_override("font_color", Color(0.2, 0.9, 0.2)) # ✅ vert
+				"rare": btn.add_theme_color_override("font_color", Color(0.4,0.6,1))
+				"epic": btn.add_theme_color_override("font_color", Color(0.7,0.3,0.9))
+				"legendary": btn.add_theme_color_override("font_color", Color(1,0.6,0))
+		else:
+			btn.disabled = true
+			btn.visible = false
 
 func _on_option_pressed(index: int):
 	print(">>> Bouton cliqué :", index)

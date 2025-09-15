@@ -32,20 +32,29 @@ func get_random_upgrades() -> Array:
 	for id in upgrades_data.keys():
 		var data = upgrades_data[id]
 		var current_level: int = upgrades_level[id]
-		if current_level < data.max_level:
-			var weight: int = Global.RARITY_WEIGHTS[data.rarity]
+		if current_level < data["max_level"]:
+			var weight: int = Global.RARITY_WEIGHTS[data["rarity"]]
 			for i in range(weight):
 				weighted_pool.append(id)
 
 	if weighted_pool.is_empty():
 		return []
 
+	# Assure des choix uniques en conservant le poids
 	weighted_pool.shuffle()
-	return weighted_pool.slice(0, CHOICES_PER_LEVEL)
+	var unique_choices: Array = []
+	var seen := {}
+	for key in weighted_pool:
+		if not seen.has(key):
+			unique_choices.append(key)
+			seen[key] = true
+			if unique_choices.size() >= CHOICES_PER_LEVEL:
+				break
+	return unique_choices
 
 func apply_upgrade(player: Node, choice: String):
 	if not upgrades_data.has(choice): return
-	if upgrades_level[choice] >= upgrades_data[choice].max_level:
+	if upgrades_level[choice] >= upgrades_data[choice]["max_level"]:
 		return
 	upgrades_level[choice] += 1
 
