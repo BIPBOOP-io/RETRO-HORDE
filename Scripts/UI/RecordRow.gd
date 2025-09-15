@@ -17,8 +17,6 @@ func set_data(player_name: String, score: int, kills: int, level: int, time_str:
 	if time_label == null:  time_label  = $Time
 	if date_label == null:  date_label  = $Date
 
-	print("➡ set_data:", player_name, score, kills, level, time_str, date_str, is_alt) # DEBUG
-
 	if name_label:  name_label.text  = player_name
 	if score_label: score_label.text = str(score)
 	if kills_label: kills_label.text = str(kills)

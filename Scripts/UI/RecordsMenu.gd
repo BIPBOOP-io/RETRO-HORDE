@@ -37,7 +37,6 @@ func _populate_list():
 	# Ajouter les lignes
 	var i := 0
 	for run in stats:
-		print("📊 Ajout ligne:", run)
 		var row = row_scene.instantiate()
 		list_container.add_child(row)
 		row.set_data(
@@ -60,9 +59,17 @@ func _format_time(seconds: int) -> String:
 	return "%02d:%02d" % [m, s]
 
 func _format_date(date_str: String) -> String:
-	# Exemple: "2025-09-14T19:44:44" -> "2025-09-14 19:44"
 	if "T" in date_str:
-		var parts = date_str.split("T")
-		if parts.size() == 2:
-			return "%s %s" % [parts[0], parts[1].substr(0,5)]
+		var parts: Array = date_str.split("T")
+		if parts.size() >= 2:
+			var d: String = str(parts[0])
+			var t: String = str(parts[1])
+			var dparts: Array = d.split("-")
+			if dparts.size() == 3:
+				var y: String = dparts[0]
+				var m: String = dparts[1]
+				var day: String = dparts[2]
+				var yy: String = y.substr(max(0, y.length() - 2), 2)
+				var hhmm: String = t.substr(0, 5)
+				return "%s.%s.%s %s" % [day, m, yy, hhmm]
 	return date_str

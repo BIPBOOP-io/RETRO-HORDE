@@ -32,9 +32,6 @@ func _ready():
 			if int(e.get("score", 0)) > int(best.get("score", 0)):
 				best = e
 
-		# Affichage console
-		print("🏆 Meilleur score -> ", best)
-
 		# Affichage optionnel dans l'UI si BestLabel existe
 		if best_label:
 			var bt = int(best.get("duration", 0))

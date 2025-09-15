@@ -63,7 +63,6 @@ func show_upgrades(options: Array):
 			btn.visible = false
 
 func _on_option_pressed(index: int):
-	print(">>> Bouton cliqué :", index)
 	emit_signal("upgrade_chosen", upgrades[index])
 	visible = false
 	get_tree().paused = false

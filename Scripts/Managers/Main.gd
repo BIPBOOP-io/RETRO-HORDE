@@ -46,8 +46,6 @@ func on_player_died():
 	var score_data = get_score_data()
 	Global.score_data = score_data
 
-	print("💾 Sauvegarde -> ", score_data)
-
 	SaveManager.save_game(
 		score_data.get("duration", 0),
 		score_data.get("kills", 0),
