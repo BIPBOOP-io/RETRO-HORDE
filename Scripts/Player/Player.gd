@@ -159,9 +159,9 @@ func level_up():
 	var upgrades = upgrade_manager.get_random_upgrades()
 	var menu = get_tree().get_first_node_in_group("levelup_menu")
 	if menu:
-		menu.show_upgrades(upgrades)
-		if not menu.is_connected("upgrade_chosen", Callable(self, "_apply_upgrade")):
+		if not menu.upgrade_chosen.is_connected(_apply_upgrade):
 			menu.upgrade_chosen.connect(_apply_upgrade)
+		menu.show_upgrades(upgrades)
 	flash_gold()
 
 func _apply_upgrade(choice: String):

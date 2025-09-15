@@ -37,8 +37,8 @@ func _populate_list():
 	# Ajouter les lignes
 	var i := 0
 	for run in stats:
-		print("📊 Ajout ligne:", run)
 		var row = row_scene.instantiate()
+		list_container.add_child(row)
 		row.set_data(
 			run.get("name", "Player"),        # Nom
 			int(run.get("score", 0)),         # Score
@@ -48,21 +48,28 @@ func _populate_list():
 			_format_date(run.get("date", "")), # Date formatée
 			i % 2 == 1                        # alterne le fond
 		)
-		list_container.add_child(row)
 		i += 1
 
 func _sort_by_score_desc(a: Dictionary, b: Dictionary) -> bool:
 	return int(a.get("score", 0)) > int(b.get("score", 0))
 
 func _format_time(seconds: int) -> String:
-	var m = seconds / 60
-	var s = seconds % 60
+	var m: int = int(seconds / 60)
+	var s: int = seconds % 60
 	return "%02d:%02d" % [m, s]
 
 func _format_date(date_str: String) -> String:
-	# Exemple: "2025-09-14T19:44:44" -> "2025-09-14 19:44"
 	if "T" in date_str:
-		var parts = date_str.split("T")
-		if parts.size() == 2:
-			return "%s %s" % [parts[0], parts[1].substr(0,5)]
+		var parts: Array = date_str.split("T")
+		if parts.size() >= 2:
+			var d: String = str(parts[0])
+			var t: String = str(parts[1])
+			var dparts: Array = d.split("-")
+			if dparts.size() == 3:
+				var y: String = dparts[0]
+				var m: String = dparts[1]
+				var day: String = dparts[2]
+				var yy: String = y.substr(max(0, y.length() - 2), 2)
+				var hhmm: String = t.substr(0, 5)
+				return "%s.%s.%s %s" % [day, m, yy, hhmm]
 	return date_str

@@ -24,8 +24,6 @@ static func save_game(duration: int, kills: int, level: int) -> void:
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
 		file.store_var(stats)
-		#print("💾 Sauvegarde effectuée :", stats)
-		#print("📂 Save path -> ", ProjectSettings.globalize_path(SAVE_PATH))
 
 
 # ==========================

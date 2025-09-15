@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bmo2dnc5koc40"]
 
 [ext_resource type="Script" uid="uid://cambtp3dm7ycr" path="res://Scripts/UI/RecordRow.gd" id="1_da6m1"]
-[ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="2_cnvma"]
+[ext_resource type="LabelSettings" uid="uid://bikre5jifcmb0" path="res://Assets/HUD2.tres" id="2_da6m1"]
 
 [node name="RecordRow" type="HBoxContainer"]
 anchors_preset = 15
@@ -18,40 +18,40 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Name"
-label_settings = ExtResource("2_cnvma")
+label_settings = ExtResource("2_da6m1")
 horizontal_alignment = 1
 
 [node name="Score" type="Label" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Score"
-label_settings = ExtResource("2_cnvma")
+label_settings = ExtResource("2_da6m1")
 horizontal_alignment = 1
 
 [node name="Kills" type="Label" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Kills"
-label_settings = ExtResource("2_cnvma")
+label_settings = ExtResource("2_da6m1")
 horizontal_alignment = 1
 
 [node name="Level" type="Label" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Level"
-label_settings = ExtResource("2_cnvma")
+label_settings = ExtResource("2_da6m1")
 horizontal_alignment = 1
 
 [node name="Time" type="Label" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Time"
-label_settings = ExtResource("2_cnvma")
+label_settings = ExtResource("2_da6m1")
 horizontal_alignment = 1
 
 [node name="Date" type="Label" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Date"
-label_settings = ExtResource("2_cnvma")
+label_settings = ExtResource("2_da6m1")
 horizontal_alignment = 1

@@ -50,7 +50,7 @@ func take_damage(amount: int):
 		die()
 
 func die():
-	if xp_orb_small and xp_orb_medium and xp_orb_big:
+	if xp_orb_small or xp_orb_medium or xp_orb_big:
 		var spawn_pos = global_position
 		call_deferred("_spawn_xp_orb", spawn_pos)
 
@@ -62,6 +62,19 @@ func die():
 	call_deferred("queue_free")
 
 # ✅ Scaling des orbes avec le temps de jeu
+
+func _choose_orb_scene(desired: String) -> PackedScene:
+	if desired == "big":
+		for s in [xp_orb_big, xp_orb_medium, xp_orb_small]:
+			if s: return s
+	elif desired == "medium":
+		for s in [xp_orb_medium, xp_orb_small, xp_orb_big]:
+			if s: return s
+	else:
+		for s in [xp_orb_small, xp_orb_medium, xp_orb_big]:
+			if s: return s
+	return null
+
 func _spawn_xp_orb(pos: Vector2):
 	var elapsed = Time.get_ticks_msec() / 1000.0  # temps écoulé en secondes
 	var orb: Area2D
@@ -72,12 +85,18 @@ func _spawn_xp_orb(pos: Vector2):
 	var big_chance = clamp(elapsed / 300.0, 0.0, 0.15)     # monte à 15% en 5 min
 	var small_chance = 1.0 - medium_chance - big_chance
 
+	var desired := "small"
 	if roll < small_chance:
-		orb = xp_orb_small.instantiate()
+		desired = "small"
 	elif roll < small_chance + medium_chance:
-		orb = xp_orb_medium.instantiate()
+		desired = "medium"
 	else:
-		orb = xp_orb_big.instantiate()
+		desired = "big"
+
+	var scene: PackedScene = _choose_orb_scene(desired)
+	if scene == null:
+		return
+	orb = scene.instantiate()
 
 	orb.global_position = pos
 	get_parent().add_child(orb)

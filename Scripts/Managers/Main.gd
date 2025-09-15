@@ -8,6 +8,7 @@ var survival_time: int = 0
 var kills: int = 0
 
 func _ready():
+	add_to_group("main")
 	spawner.set_player(player)
 
 	# ✅ écoute l’événement "died" du player
@@ -44,8 +45,6 @@ func register_kill():
 func on_player_died():
 	var score_data = get_score_data()
 	Global.score_data = score_data
-
-	print("💾 Sauvegarde -> ", score_data)
 
 	SaveManager.save_game(
 		score_data.get("duration", 0),
