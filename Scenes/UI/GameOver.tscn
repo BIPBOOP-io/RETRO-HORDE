@@ -82,7 +82,7 @@ mouse_default_cursor_shape = 2
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("4_wpfos")
 theme_override_font_sizes/font_size = 20
-text = "Rejouer"
+text = "TRY AGAIN"
 
 [node name="MainMenuButton" type="Button" parent="Margin/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -92,7 +92,7 @@ mouse_default_cursor_shape = 2
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("4_wpfos")
 theme_override_font_sizes/font_size = 20
-text = "Menu principal"
+text = "GIVE UP"
 
 [node name="BestLabel" type="Label" parent="Margin/VBoxContainer"]
 layout_mode = 2

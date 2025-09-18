@@ -10,10 +10,19 @@ var kills: int = 0
 
 func _ready():
 	add_to_group("main")
-	spawner.set_player(player)
+	# Resolve player safely (instance may fail if scene had a transient parse error)
+	if player == null:
+		player = get_node_or_null("Player")
+	if player == null:
+		var p = get_tree().get_first_node_in_group("player")
+		if p and p is CharacterBody2D:
+			player = p
+	if spawner and player:
+		spawner.set_player(player)
 
-	# Listen to player's "died" signal
-	player.died.connect(on_player_died)
+	# Listen to player's "died" signal when available
+	if player and not player.died.is_connected(on_player_died):
+		player.died.connect(on_player_died)
 
 	# Survival timer
 	var survival_timer = Timer.new()
@@ -26,6 +35,20 @@ func _ready():
 	if hud:
 		hud.update_timer(survival_time)
 		hud.update_kills(kills)
+
+	# If player was not ready at _ready time, retry once on next frame
+	if player == null:
+		call_deferred("_retry_bind_player")
+
+func _retry_bind_player():
+	if player == null:
+		var p = get_tree().get_first_node_in_group("player")
+		if p and p is CharacterBody2D:
+			player = p
+			if spawner:
+				spawner.set_player(player)
+			if not player.died.is_connected(on_player_died):
+				player.died.connect(on_player_died)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

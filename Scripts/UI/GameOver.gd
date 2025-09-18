@@ -16,12 +16,12 @@ func _ready():
 	# Time format
 	var m = t / 60
 	var s = t % 60
-	time_label.text  = "Temps : %02d:%02d" % [m, s]
-	kills_label.text = "Kills : %d" % kills
-	level_label.text = "Niveau : %d" % lvl
+	time_label.text  = "TIME : %02d:%02d" % [m, s]
+	kills_label.text = "KILLS : %d" % kills
+	level_label.text = "LEVEL : %d" % lvl
 
 	if score_label:
-		score_label.text = "Score : %d" % score
+		score_label.text = "SCORE : %d" % score
 
 	# --- Best score (arcade-style) ---
 	var all_stats: Array = SaveManager.load_stats()
@@ -37,7 +37,7 @@ func _ready():
 			var bt = int(best.get("duration", 0))
 			var bm = bt / 60
 			var bs = bt % 60
-			best_label.text = "Record : %d pts – %d kills – Lvl %d – %02d:%02d" % [
+			best_label.text = "RECORD :\n %d PTS | %d KILLS | LEVEL %d | TIME : %02d:%02d" % [
 				int(best.get("score", 0)),
 				int(best.get("kills", 0)),
 				int(best.get("level", 1)),

@@ -68,7 +68,7 @@ func _clear_key_events(action: String) -> void:
 	for ev in to_remove:
 		InputMap.action_erase_event(action, ev)
 
-func _add_key_event(action: String, keycode: int) -> void:
+func _add_key_event(action: String, keycode: Key) -> void:
 	var e := InputEventKey.new()
 	e.keycode = keycode
 	e.pressed = false

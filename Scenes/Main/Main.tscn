@@ -14,13 +14,6 @@ script = ExtResource("1_cmk6n")
 [node name="Player" parent="." instance=ExtResource("1_p8rbg")]
 z_index = 5
 position = Vector2(960, 540)
-speed = null
-attack_interval = null
-attack_range = null
-arrow_damage = null
-max_health = null
-health = null
-xp_to_next_level = null
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 

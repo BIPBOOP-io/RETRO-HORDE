@@ -59,6 +59,9 @@ var attack_timer: Timer
 var hud: Node
 var regen_timer: Timer
 @onready var upgrade_manager: UpgradeManager = preload("res://Scripts/Managers/UpgradeManager.gd").new()
+@onready var health_bar_2d: Node2D = $HealthBar2D
+@onready var special_bar_2d: Node2D = $SpecialBar2D
+@onready var stamina_bar_2d: Node2D = $StaminaBar2D
 
 func _ready():
 	animated_sprite = $AnimatedSprite2D
@@ -77,6 +80,14 @@ func _ready():
 			hud.update_stamina(stamina, max_stamina)
 		if hud.has_method("update_special"):
 			hud.update_special(special_cooldown, special_cooldown)
+
+	# Init in-world bars
+	if health_bar_2d and health_bar_2d.has_method("set_values"):
+		health_bar_2d.set_values(health, max_health)
+	if stamina_bar_2d and stamina_bar_2d.has_method("set_values"):
+		stamina_bar_2d.set_values(stamina, max_stamina)
+	if special_bar_2d and special_bar_2d.has_method("set_values"):
+		special_bar_2d.set_values(special_cooldown, special_cooldown)
 
 	# Auto-attack timer
 	attack_timer = Timer.new()
@@ -136,15 +147,20 @@ func _update_stamina(delta: float) -> void:
 		stamina = min(max_stamina, stamina + stamina_regen_per_sec * delta)
 	if hud and hud.has_method("update_stamina"):
 		hud.update_stamina(stamina, max_stamina)
+	if stamina_bar_2d and stamina_bar_2d.has_method("set_values"):
+		stamina_bar_2d.set_values(stamina, max_stamina)
 
 func _update_special_bar() -> void:
-	if not hud or not hud.has_method("update_special"):
-		return
+	var elapsed_val: float
+	var max_val := special_cooldown
 	if special_ready:
-		hud.update_special(special_cooldown, special_cooldown)
+		elapsed_val = max_val
 	else:
-		var elapsed := special_cooldown - special_timer.time_left
-		hud.update_special(elapsed, special_cooldown)
+		elapsed_val = max_val - special_timer.time_left
+	if hud and hud.has_method("update_special"):
+		hud.update_special(elapsed_val, max_val)
+	if special_bar_2d and special_bar_2d.has_method("set_values"):
+		special_bar_2d.set_values(elapsed_val, max_val)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("special"):
@@ -291,8 +307,11 @@ func take_damage(amount: int):
 		has_shield = false
 		print("Bouclier absorbé !")
 		return
+
 	health -= amount
 	if hud: hud.update_health(health, max_health)
+	if health_bar_2d and health_bar_2d.has_method("set_values"):
+		health_bar_2d.set_values(health, max_health)
 	flash_red()
 	shake_camera()
 	if health <= 0: die()
@@ -305,12 +324,16 @@ func heal_from_vampirism(damage_dealt: int):
 		if new_health > health:  # only if it actually heals
 			health = new_health
 			if hud: hud.update_health(health, max_health)
+			if health_bar_2d and health_bar_2d.has_method("set_values"):
+				health_bar_2d.set_values(health, max_health)
 			flash_green()
 
 func _on_regen_tick():
 	if health < max_health:  # block regen if already at full health
 		health += 1
 		if hud: hud.update_health(health, max_health)
+		if health_bar_2d and health_bar_2d.has_method("set_values"):
+			health_bar_2d.set_values(health, max_health)
 		flash_green()
 
 # ==========================
