@@ -3,19 +3,19 @@ class_name UpgradeManager
 
 # --- Définition des upgrades ---
 var upgrades_data = {
-	"speed":        { "title": "Vitesse",         "rarity": "common",    "max_level": 10 },
-	"range":        { "title": "Portée",          "rarity": "uncommon",  "max_level": 10 },
-	"firerate":     { "title": "Cadence",         "rarity": "rare",      "max_level": 5 },
-	"damage":       { "title": "Dégâts",          "rarity": "common",    "max_level": 10 },
-	"extra_arrow":  { "title": "Flèche +1",       "rarity": "epic",      "max_level": 5 },
-	"multi_shot":   { "title": "Multi-tir",       "rarity": "legendary", "max_level": 3 },
-	"regen":        { "title": "Régénération",    "rarity": "uncommon",  "max_level": 1 },
-	"xp_boost":     { "title": "Boost XP",        "rarity": "common",    "max_level": 5 },
-	"knockback":    { "title": "Repousser",       "rarity": "uncommon",  "max_level": 5 },
-	"vampirism":    { "title": "Vampirisme",      "rarity": "epic",      "max_level": 5 },
-	"shield":       { "title": "Bouclier",        "rarity": "epic",      "max_level": 1 },
-	"pierce":       { "title": "Perforation",     "rarity": "rare",      "max_level": 5 },
-	"crit":         { "title": "Critique",        "rarity": "epic",      "max_level": 5 }
+	"speed":        { "title": "Speed",         "rarity": "common",    "max_level": 10 },
+	"range":        { "title": "Range",         "rarity": "uncommon",  "max_level": 10 },
+	"firerate":     { "title": "Fire Rate",     "rarity": "rare",      "max_level": 5 },
+	"damage":       { "title": "Damage",        "rarity": "common",    "max_level": 10 },
+	"extra_arrow":  { "title": "Extra Arrow",   "rarity": "epic",      "max_level": 5 },
+	"multi_shot":   { "title": "Multishot",     "rarity": "legendary", "max_level": 3 },
+	"regen":        { "title": "Regeneration",  "rarity": "uncommon",  "max_level": 1 },
+	"xp_boost":     { "title": "XP Boost",      "rarity": "common",    "max_level": 5 },
+	"knockback":    { "title": "Knockback",     "rarity": "uncommon",  "max_level": 5 },
+	"vampirism":    { "title": "Vampirism",     "rarity": "epic",      "max_level": 5 },
+	"shield":       { "title": "Shield",        "rarity": "epic",      "max_level": 1 },
+	"pierce":       { "title": "Pierce",        "rarity": "rare",      "max_level": 5 },
+	"crit":         { "title": "Critical",      "rarity": "epic",      "max_level": 5 }
 }
 
 @onready var Global = get_node("/root/Global")
