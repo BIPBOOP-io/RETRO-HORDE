@@ -22,7 +22,7 @@ func set_layout(new_layout: String) -> void:
 
 func apply_input_layout() -> void:
 	# Ensure actions exist
-	var actions = ["ui_up", "ui_down", "ui_left", "ui_right"]
+	var actions = ["ui_up", "ui_down", "ui_left", "ui_right", "sprint"]
 	for a in actions:
 		if not InputMap.has_action(a):
 			InputMap.add_action(a)
@@ -36,6 +36,9 @@ func apply_input_layout() -> void:
 	_add_key_event("ui_down", KEY_DOWN)
 	_add_key_event("ui_left", KEY_LEFT)
 	_add_key_event("ui_right", KEY_RIGHT)
+
+	# Sprint (Shift)
+	_add_key_event("sprint", KEY_SHIFT)
 
 	# Letter mapping depending on selected layout
 	if layout == "azerty":

@@ -9,6 +9,10 @@ signal died
 @export var arrow_scene: PackedScene
 @export var arrow_damage: int = 1
 
+# Sprinting
+@export var sprint_multiplier: float = 1.5  # applies to move speed and anim speed
+var is_sprinting: bool = false
+
 # --- Stats & XP ---
 @export var max_health: int = 10
 @export var health: int = 10
@@ -77,13 +81,21 @@ func _physics_process(_delta):
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	).normalized()
 
-	velocity = input_vector * speed
+	is_sprinting = Input.is_action_pressed("sprint") and input_vector != Vector2.ZERO and _can_sprint()
+	var current_speed = speed * (sprint_multiplier if is_sprinting else 1.0)
+	velocity = input_vector * current_speed
 	move_and_slide()
 
 	if input_vector == Vector2.ZERO:
+		animated_sprite.speed_scale = 1.0
 		_play_idle_animation()
 	else:
+		animated_sprite.speed_scale = sprint_multiplier if is_sprinting else 1.0
 		_play_walk_animation(input_vector)
+
+func _can_sprint() -> bool:
+	# Placeholder for future stamina system
+	return true
 
 func _play_walk_animation(dir: Vector2):
 	if abs(dir.x) > abs(dir.y):
