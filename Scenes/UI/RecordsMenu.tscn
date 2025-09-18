@@ -5,7 +5,7 @@
 [ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_em42n"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_h7bsa"]
 [ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="3_vrhfd"]
-[ext_resource type="Script" uid="uid://bqe472hrtenbq" path="res://Scripts/Enemies/BackgroundEnnemySpawner.gd" id="6_aif7k"]
+[ext_resource type="Script" uid="uid://bqe472hrtenbq" path="res://Scripts/Enemies/BackgroundEnemySpawner.gd" id="6_aif7k"]
 
 [node name="RecordsMenu" type="Control"]
 layout_mode = 3

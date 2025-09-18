@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://Scripts/Global.gd"
+Settings="*res://Scripts/Managers/Settings.gd"
 
 [display]
 
@@ -30,14 +31,6 @@ window/stretch/scale=3.0
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
-
-[input]
-
-Up={
-"deadzone": 0.2,
-"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":90,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
-]
-}
 
 [rendering]
 
