@@ -23,7 +23,7 @@ func update_xp(current_xp: int, xp_to_next: int):
 
 func update_level(level: int):
 	if level_label == null: level_label = $Control/MarginContainer/VBoxContainer/LevelLabel
-	level_label.text = "Niveau : %d" % level
+	level_label.text = "Level : %d" % level
 
 # ==========================
 #        VIE

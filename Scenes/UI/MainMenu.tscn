@@ -48,7 +48,6 @@ alignment = 1
 
 [node name="BackgroundSpawner" type="Node2D" parent="UI/VBoxContainer"]
 z_index = 6
-position = Vector2(282, 190.5)
 script = ExtResource("2_72sra")
 background_enemy_scene = ExtResource("2_mjmdf")
 enemy_count = 10
@@ -62,6 +61,7 @@ horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 20
 alignment = 1
 
@@ -71,13 +71,13 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_744d7")
 theme_override_font_sizes/font_size = 30
-text = "JOUER"
+text = "PLAY"
 flat = true
 
 [node name="RecordsButton" type="Button" parent="UI/VBoxContainer/VBoxContainer"]
@@ -86,9 +86,9 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_744d7")
 theme_override_font_sizes/font_size = 30
@@ -102,13 +102,13 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 focus_mode = 0
 mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_744d7")
 theme_override_font_sizes/font_size = 30
-text = "QUITTER"
+text = "QUIT"
 flat = true
 
 [node name="Footer" type="MarginContainer" parent="UI/VBoxContainer"]

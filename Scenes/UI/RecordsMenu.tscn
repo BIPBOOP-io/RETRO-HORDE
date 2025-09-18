@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dwoggo87lo28k"]
+[gd_scene load_steps=7 format=3 uid="uid://dwoggo87lo28k"]
 
 [ext_resource type="Script" uid="uid://6jpx8qvqwk4t" path="res://Scripts/UI/RecordsMenu.gd" id="1_4pdgm"]
 [ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_vrhfd"]
 [ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_em42n"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_h7bsa"]
 [ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="3_vrhfd"]
+[ext_resource type="Script" uid="uid://bqe472hrtenbq" path="res://Scripts/Enemies/BackgroundEnnemySpawner.gd" id="6_aif7k"]
 
 [node name="RecordsMenu" type="Control"]
 layout_mode = 3
@@ -22,10 +23,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="VBox" type="VBoxContainer" parent="Margin"]
 layout_mode = 2
@@ -37,12 +38,15 @@ layout_mode = 2
 text = "Records"
 label_settings = ExtResource("2_vrhfd")
 horizontal_alignment = 1
+uppercase = true
 
 [node name="HeaderPanel" type="Panel" parent="Margin/VBox"]
+z_index = 8
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Header" type="HBoxContainer" parent="Margin/VBox/HeaderPanel"]
+z_index = 8
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -100,6 +104,7 @@ horizontal_alignment = 1
 uppercase = true
 
 [node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
+z_index = 8
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -125,4 +130,9 @@ theme_override_font_sizes/font_size = 30
 text = "RETOUR"
 flat = true
 
-[node name="BackgroundEnemy" parent="Margin/VBox" instance=ExtResource("3_vrhfd")]
+[node name="BackgroundSpawner" type="Node2D" parent="Margin/VBox"]
+z_index = 6
+position = Vector2(280, 190)
+script = ExtResource("6_aif7k")
+background_enemy_scene = ExtResource("3_vrhfd")
+enemy_count = 10

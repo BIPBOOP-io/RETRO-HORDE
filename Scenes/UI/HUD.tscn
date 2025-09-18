@@ -91,8 +91,9 @@ alignment = 1
 [node name="LevelLabel" type="Label" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Niveau : 1"
+text = "Level : 1"
 label_settings = ExtResource("2_qc5w2")
+uppercase = true
 
 [node name="TimerLabel" type="Label" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -108,3 +109,4 @@ size_flags_horizontal = 3
 text = "Kills : 00"
 label_settings = ExtResource("2_qc5w2")
 horizontal_alignment = 2
+uppercase = true
