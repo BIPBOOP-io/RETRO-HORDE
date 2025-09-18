@@ -127,7 +127,7 @@ theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_h7bsa")
 theme_override_font_sizes/font_size = 30
-text = "RETOUR"
+text = "BACK"
 flat = true
 
 [node name="BackgroundSpawner" type="Node2D" parent="Margin/VBox"]
