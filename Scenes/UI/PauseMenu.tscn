@@ -11,15 +11,9 @@ layer = 100
 script = ExtResource("1_pause")
 
 [node name="Panel" type="Panel" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -180.0
-offset_top = -120.0
-offset_right = 180.0
-offset_bottom = 120.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
@@ -37,7 +31,7 @@ offset_right = 140.0
 offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="Title" type="Label" parent="Panel/RootMenu"]
@@ -49,18 +43,21 @@ uppercase = true
 
 [node name="ResumeButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("3_2bpff")
 theme_override_font_sizes/font_size = 20
 text = "RESUME"
 
 [node name="OptionsButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("3_2bpff")
 theme_override_font_sizes/font_size = 20
 text = "OPTIONS"
 
 [node name="QuitButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("3_2bpff")
 theme_override_font_sizes/font_size = 20
 text = "QUIT"
@@ -79,7 +76,7 @@ offset_right = 150.0
 offset_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 35
 alignment = 1
 
 [node name="OptionsTitle" type="Label" parent="Panel/OptionsMenu"]
@@ -91,6 +88,7 @@ uppercase = true
 
 [node name="LayoutRow" type="HBoxContainer" parent="Panel/OptionsMenu"]
 layout_mode = 2
+size_flags_horizontal = 4
 alignment = 1
 
 [node name="LayoutLabel" type="Label" parent="Panel/OptionsMenu/LayoutRow"]
@@ -106,6 +104,7 @@ theme_override_fonts/font = ExtResource("3_2bpff")
 
 [node name="BackButton" type="Button" parent="Panel/OptionsMenu"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("3_2bpff")
 theme_override_font_sizes/font_size = 20
 text = "BACK"
