@@ -19,6 +19,7 @@ var is_sprinting: bool = false
 @export var stamina_drain_per_sec: float = 20.0
 @export var stamina_regen_per_sec: float = 12.0
 @export var stamina_ready_fraction: float = 0.25
+var stamina_locked: bool = false  # becomes true only if stamina reached 0
 
 # --- Stats & XP ---
 @export var max_health: int = 10
@@ -85,13 +86,10 @@ func _ready():
 	# Init in-world bars
 	if health_bar_2d and health_bar_2d.has_method("set_values"):
 		health_bar_2d.set_values(health, max_health)
-		if stamina_bar_2d and stamina_bar_2d.has_method("set_values"):
-			var thr := max_stamina * stamina_ready_fraction
-			var target_color: Color = Color(1, 0.5, 0, 1) if stamina < thr else Color(1, 0.85, 0, 1)
-			stamina_bar_2d.fill_color = target_color
-			stamina_bar_2d.set_values(stamina, max_stamina)
-		if special_bar_2d and special_bar_2d.has_method("set_values"):
-			special_bar_2d.set_values(0.0, special_cooldown)
+	if stamina_bar_2d and stamina_bar_2d.has_method("set_values"):
+		stamina_bar_2d.set_values(stamina, max_stamina)
+	if special_bar_2d and special_bar_2d.has_method("set_values"):
+		special_bar_2d.set_values(0.0, special_cooldown)
 
 	# Auto-attack timer
 	attack_timer = Timer.new()
@@ -149,15 +147,26 @@ func _update_stamina(delta: float) -> void:
 	if not has_node("/root/Settings"): # safe-guard
 		return
 	if is_sprinting:
+		var prev := stamina
 		stamina = max(0.0, stamina - stamina_drain_per_sec * delta)
+		if stamina <= 0.0 and prev > 0.0:
+			stamina_locked = true
 	else:
 		stamina = min(max_stamina, stamina + stamina_regen_per_sec * delta)
+
+	var thr := max_stamina * stamina_ready_fraction
+	if stamina_locked and stamina >= thr:
+		stamina_locked = false
+
 	if hud and hud.has_method("update_stamina"):
 		hud.update_stamina(stamina, max_stamina)
+
 	if stamina_bar_2d and stamina_bar_2d.has_method("set_values"):
-		var thr := max_stamina * stamina_ready_fraction
-		var target_color: Color = Color(1, 0.5, 0, 1) if stamina < thr else Color(1, 0.85, 0, 1)
-		stamina_bar_2d.fill_color = target_color
+		# Orange only while recovering below threshold after full depletion
+		if (not is_sprinting) and stamina_locked and stamina < thr:
+			stamina_bar_2d.fill_color = Color(1, 0.5, 0, 1)
+		else:
+			stamina_bar_2d.fill_color = Color(1, 0.85, 0, 1)
 		stamina_bar_2d.set_values(stamina, max_stamina)
 
 func _update_special_bar() -> void:
@@ -223,8 +232,13 @@ func _fire_giant_arrow(dir: Vector2):
 	get_parent().add_child(arrow)
 
 func _can_sprint() -> bool:
-	# Allow sprint only when stamina reaches the ready threshold
-	return stamina >= (max_stamina * stamina_ready_fraction)
+	# Sprinting is blocked only if stamina was totally depleted,
+	# and only until it recovers above the threshold.
+	if stamina <= 0.0:
+		return false
+	if stamina_locked and stamina < (max_stamina * stamina_ready_fraction):
+		return false
+	return true
 
 func _play_walk_animation(dir: Vector2):
 	if abs(dir.x) > abs(dir.y):
