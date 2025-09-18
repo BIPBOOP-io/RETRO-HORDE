@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
 @export var speed: float = 40.0
-@export var move_interval: float = 2.0    # toutes les X secondes, choisir une nouvelle direction
-@export var idle_chance: float = 0.3      # probabilité de s'arrêter au lieu de bouger
+@export var move_interval: float = 2.0    # every X seconds, pick a new direction
+@export var idle_chance: float = 0.3      # probability to idle instead of moving
 
 var move_dir: Vector2 = Vector2.ZERO
 var timer: Timer

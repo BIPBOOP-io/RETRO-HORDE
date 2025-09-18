@@ -1,7 +1,7 @@
 extends Node
 class_name UpgradeManager
 
-# --- Définition des upgrades ---
+# --- Upgrades definition ---
 var upgrades_data = {
 	"speed":        { "title": "Speed",         "rarity": "common",    "max_level": 10 },
 	"range":        { "title": "Range",         "rarity": "uncommon",  "max_level": 10 },
@@ -40,7 +40,7 @@ func get_random_upgrades() -> Array:
 	if weighted_pool.is_empty():
 		return []
 
-	# Assure des choix uniques en conservant le poids
+	# Ensure unique choices while keeping weight influence
 	weighted_pool.shuffle()
 	var unique_choices: Array = []
 	var seen := {}
@@ -87,6 +87,6 @@ func apply_upgrade(player: Node, choice: String):
 		"crit":
 			player.crit_chance = min(1.0, player.crit_chance + 0.1)
 
-# Helper pour récupérer le titre d’un upgrade
+# Helper to get an upgrade title
 func get_title(id: String) -> String:
 	return upgrades_data.get(id, {}).get("title", id)

@@ -9,12 +9,12 @@ var knockback_multiplier: float = 1.0
 var traveled_distance: float = 0.0
 var direction: Vector2 = Vector2.ZERO
 
-# ✅ nouveaux
+# New fields
 var pierce_left: int = 0
 var crit_chance: float = 0.0
 var crit_multiplier: float = 2.0
 
-# ✅ texte flottant (assigne FloatingText.tscn dans l’inspecteur)
+# Floating text (assign FloatingText.tscn in the inspector)
 @export var floating_text_scene: PackedScene
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -37,7 +37,7 @@ func _physics_process(delta):
 func _on_body_entered(body: Node):
 	if body.is_in_group("enemies"):
 		if body.has_method("take_damage"):
-			# ✅ Critique
+			# Critical hit
 			var final_damage = damage
 			if randf() < crit_chance:
 				final_damage = int(damage * crit_multiplier)
@@ -45,23 +45,23 @@ func _on_body_entered(body: Node):
 
 			body.take_damage(final_damage)
 
-			# ✅ Knockback
+			# Knockback
 			if body.has_method("apply_knockback"):
 				var force = base_knockback * knockback_multiplier
 				body.apply_knockback(direction, force)
 
-			# ✅ Vampirisme
+			# Vampirism heal
 			var player = get_tree().get_first_node_in_group("player")
 			if player and player.has_method("heal_from_vampirism"):
 				player.heal_from_vampirism(final_damage)
 
-		# ✅ Gestion de la perforation
+		# Pierce handling
 		pierce_left -= 1
 		if pierce_left < 0:
 			queue_free()
 
 # ==========================
-#   Feedback texte flottant
+#   Floating text feedback
 # ==========================
 func _show_floating_text(pos: Vector2, text: String):
 	if floating_text_scene:

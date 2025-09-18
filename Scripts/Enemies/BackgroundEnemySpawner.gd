@@ -1,9 +1,9 @@
 extends Node2D
 
-@export var background_enemy_scene: PackedScene    # assigne BackgroundEnemy.tscn dans l’inspecteur
-@export var enemy_count: int = 5                   # nombre d'ennemis de fond à spawn
+@export var background_enemy_scene: PackedScene    # assign BackgroundEnemy.tscn in the inspector
+@export var enemy_count: int = 5                   # number of background enemies to spawn
 @export var spawn_area: Rect2 = Rect2(Vector2(-400, -200), Vector2(800, 400))
-# Rect2(position, size) → zone dans laquelle les ennemis spawnent
+# Rect2(position, size) → area within which enemies spawn
 
 func _ready():
 	for i in range(enemy_count):

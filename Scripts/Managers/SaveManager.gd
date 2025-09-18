@@ -5,7 +5,7 @@ class_name SaveManager
 const SAVE_PATH = "user://scores.save"
 
 # ==========================
-# Sauvegarde une partie
+# Save a run
 # ==========================
 static func save_game(duration: int, kills: int, level: int) -> void:
 	var stats = load_stats()
@@ -27,7 +27,7 @@ static func save_game(duration: int, kills: int, level: int) -> void:
 
 
 # ==========================
-# Chargement
+# Load all saved runs
 # ==========================
 static func load_stats() -> Array:
 	if not FileAccess.file_exists(SAVE_PATH):
@@ -38,7 +38,7 @@ static func load_stats() -> Array:
 
 	var stats: Array = file.get_var()
 
-	# Corrige rétroactivement les anciens runs qui n'ont pas de score
+	# Retroactively fix older runs that don't have a stored score
 	for entry in stats:
 		if not entry.has("score"):
 			entry["score"] = _compute_score(entry)
@@ -47,12 +47,12 @@ static func load_stats() -> Array:
 
 
 # ==========================
-# Calcul du score
+# Score calculation
 # ==========================
 static func _compute_score(data: Dictionary) -> int:
 	var duration = int(data.get("duration", 0))
 	var kills    = int(data.get("kills", 0))
 	var level    = int(data.get("level", 1))
 
-	# Même formule que celle utilisée dans save_game
+	# Same formula as in save_game
 	return (kills * 10) + (level * 100) + (duration * 2)

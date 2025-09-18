@@ -26,7 +26,7 @@ func update_level(level: int):
 	level_label.text = "Level : %d" % level
 
 # ==========================
-#        VIE
+#        HEALTH
 # ==========================
 func update_health(current_hp: int, max_hp: int):
 	if hp_bar == null: hp_bar = $HpBar

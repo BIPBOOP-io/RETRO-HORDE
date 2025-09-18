@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var xp_value: int = 1  # Par défaut
+@export var xp_value: int = 1  # Default value
 
 func _ready():
 	body_entered.connect(_on_body_entered)

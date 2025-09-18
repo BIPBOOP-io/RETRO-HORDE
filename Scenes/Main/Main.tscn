@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b64rd1akldydb" path="res://Scenes/Enemies/EnemySpawner.tscn" id="4_i3fi7"]
 [ext_resource type="PackedScene" uid="uid://pw8tvjcusgok" path="res://Scenes/UI/HUD.tscn" id="5_o8wgc"]
 [ext_resource type="PackedScene" uid="uid://b3j8v86qbtj6w" path="res://Scenes/UI/LevelUpMenu.tscn" id="6_w20t6"]
-[ext_resource type="PackedScene" path="res://Scenes/UI/PauseMenu.tscn" id="7_pause"]
+[ext_resource type="PackedScene" uid="uid://paus3m3nu" path="res://Scenes/UI/PauseMenu.tscn" id="7_pause"]
 
 [node name="Main" type="Node2D" groups=["main"]]
 script = ExtResource("1_cmk6n")
@@ -14,6 +14,13 @@ script = ExtResource("1_cmk6n")
 [node name="Player" parent="." instance=ExtResource("1_p8rbg")]
 z_index = 5
 position = Vector2(960, 540)
+speed = null
+attack_interval = null
+attack_range = null
+arrow_damage = null
+max_health = null
+health = null
+xp_to_next_level = null
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
@@ -35,7 +42,7 @@ offset_top = -125.0
 offset_right = 250.0
 offset_bottom = 125.0
 
-[node name="Hud" parent="." groups=["main"] instance=ExtResource("5_o8wgc")]
-
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("7_pause")]
 visible = false
+
+[node name="Hud" parent="." groups=["main"] instance=ExtResource("5_o8wgc")]

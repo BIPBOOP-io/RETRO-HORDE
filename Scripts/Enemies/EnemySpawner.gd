@@ -1,10 +1,10 @@
 extends Node2D
 
 @export var enemy_scene: PackedScene
-@export var spawn_interval: float = 2.0      # délai initial entre chaque spawn
+@export var spawn_interval: float = 2.0      # initial delay between spawns
 @export var spawn_margin: float = 50.0
-@export var min_interval: float = 0.5        # vitesse maximale (cap)
-@export var difficulty_ramp: float = 0.98    # multiplicateur appliqué après chaque spawn
+@export var min_interval: float = 0.5        # maximum spawn speed (cap)
+@export var difficulty_ramp: float = 0.98    # multiplier applied after each spawn
 
 var player: CharacterBody2D
 var timer: Timer
@@ -33,15 +33,15 @@ func _spawn_enemy():
 	var spawn_pos: Vector2
 
 	match side:
-		0: spawn_pos = player.global_position + Vector2(randf_range(-half_w, half_w), -half_h - spawn_margin) # haut
-		1: spawn_pos = player.global_position + Vector2(randf_range(-half_w, half_w), half_h + spawn_margin)  # bas
-		2: spawn_pos = player.global_position + Vector2(-half_w - spawn_margin, randf_range(-half_h, half_h)) # gauche
-		3: spawn_pos = player.global_position + Vector2(half_w + spawn_margin, randf_range(-half_h, half_h))  # droite
+		0: spawn_pos = player.global_position + Vector2(randf_range(-half_w, half_w), -half_h - spawn_margin) # top
+		1: spawn_pos = player.global_position + Vector2(randf_range(-half_w, half_w), half_h + spawn_margin)  # bottom
+		2: spawn_pos = player.global_position + Vector2(-half_w - spawn_margin, randf_range(-half_h, half_h)) # left
+		3: spawn_pos = player.global_position + Vector2(half_w + spawn_margin, randf_range(-half_h, half_h))  # right
 
 	var enemy = enemy_scene.instantiate()
 	enemy.global_position = spawn_pos
 	enemy.set_player(player)
 	get_parent().add_child(enemy)
 
-	# ✅ scaling : accélère progressivement le rythme des spawns
+	# Progressive scaling: decrease interval over time
 	timer.wait_time = max(min_interval, timer.wait_time * difficulty_ramp)

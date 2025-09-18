@@ -9,7 +9,7 @@ extends HBoxContainer
 @onready var bg: ColorRect      = $ColorRect
 
 func set_data(player_name: String, score: int, kills: int, level: int, time_str: String, date_str: String, is_alt: bool = false):
-	# Sécurise l'accès si set_data est appelé avant _ready
+# Safeguard when set_data is called before _ready
 	if name_label == null:  name_label  = $Name
 	if score_label == null: score_label = $Score
 	if kills_label == null: kills_label = $Kills
@@ -24,6 +24,6 @@ func set_data(player_name: String, score: int, kills: int, level: int, time_str:
 	if time_label:  time_label.text  = time_str
 	if date_label:  date_label.text  = date_str
 
-	# Fond alterné
+	# Alternate background
 	if bg:
 		bg.color = Color(0,0,0,0.2) if is_alt else Color(0,0,0,0)

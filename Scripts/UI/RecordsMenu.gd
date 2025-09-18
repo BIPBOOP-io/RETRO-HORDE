@@ -4,7 +4,7 @@ extends Control
 @onready var back_button: Button = $Margin/VBox/Buttons/BackButton
 @onready var title_label: Label = $Margin/VBox/Title
 
-# On charge la scène RecordRow pour avoir plus de contrôle sur le design
+# Load RecordRow scene for better control over row design
 var row_scene: PackedScene = preload("res://Scenes/UI/RecordRow.tscn")
 
 func _ready():
@@ -16,7 +16,7 @@ func _on_back_pressed():
 	get_tree().change_scene_to_file("res://Scenes/UI/MainMenu.tscn")
 
 func _populate_list():
-	# Nettoyer la liste
+	# Clear existing rows
 	for c in list_container.get_children():
 		c.queue_free()
 
@@ -28,13 +28,13 @@ func _populate_list():
 		list_container.add_child(empty)
 		return
 
-	# Tri par score décroissant
+	# Sort by score (descending)
 	stats.sort_custom(Callable(self, "_sort_by_score_desc"))
 
-	# Garder max 50 entrées
+	# Keep max 50 entries
 	stats = stats.slice(0, min(50, stats.size()))
 
-	# Ajouter les lignes
+	# Add rows
 	var i := 0
 	for run in stats:
 		var row = row_scene.instantiate()
@@ -44,9 +44,9 @@ func _populate_list():
 			int(run.get("score", 0)),         # Score
 			int(run.get("kills", 0)),         # Kills
 			int(run.get("level", 1)),         # Level
-			_format_time(int(run.get("duration", 0))),  # Temps formaté
-			_format_date(run.get("date", "")), # Date formatée
-			i % 2 == 1                        # alterne le fond
+			_format_time(int(run.get("duration", 0))),  # formatted time
+			_format_date(run.get("date", "")),         # formatted date
+			i % 2 == 1                                     # alternate background
 		)
 		i += 1
 

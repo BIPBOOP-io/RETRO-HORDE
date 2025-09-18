@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export var damage_cooldown: float = 1.0
 @export var knockback_resistance: float = 1.0
 
-# ✅ Références aux différentes orbes d’XP
+# XP orb scene references
 @export var xp_orb_small: PackedScene
 @export var xp_orb_medium: PackedScene
 @export var xp_orb_big: PackedScene
@@ -54,14 +54,14 @@ func die():
 		var spawn_pos = global_position
 		call_deferred("_spawn_xp_orb", spawn_pos)
 
-	# informer le main d’un kill
+	# Inform Main about a kill
 	var main = get_tree().get_first_node_in_group("main")
 	if main and main.has_method("register_kill"):
 		main.register_kill()
 
 	call_deferred("queue_free")
 
-# ✅ Scaling des orbes avec le temps de jeu
+# Time-based scaling of XP orb sizes
 
 func _choose_orb_scene(desired: String) -> PackedScene:
 	if desired == "big":
@@ -76,13 +76,13 @@ func _choose_orb_scene(desired: String) -> PackedScene:
 	return null
 
 func _spawn_xp_orb(pos: Vector2):
-	var elapsed = Time.get_ticks_msec() / 1000.0  # temps écoulé en secondes
+	var elapsed = Time.get_ticks_msec() / 1000.0  # elapsed time in seconds
 	var orb: Area2D
 	var roll = randf()
 
-	# Probabilités évolutives
-	var medium_chance = clamp(elapsed / 120.0, 0.0, 0.25)  # monte à 25% en 2 min
-	var big_chance = clamp(elapsed / 300.0, 0.0, 0.15)     # monte à 15% en 5 min
+	# Evolving probabilities
+	var medium_chance = clamp(elapsed / 120.0, 0.0, 0.25)  # up to 25% in 2 minutes
+	var big_chance = clamp(elapsed / 300.0, 0.0, 0.15)     # up to 15% in 5 minutes
 	var small_chance = 1.0 - medium_chance - big_chance
 
 	var desired := "small"

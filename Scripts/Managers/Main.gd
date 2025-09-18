@@ -12,10 +12,10 @@ func _ready():
 	add_to_group("main")
 	spawner.set_player(player)
 
-	# ✅ écoute l’événement "died" du player
+	# Listen to player's "died" signal
 	player.died.connect(on_player_died)
 
-	# Timer de survie
+	# Survival timer
 	var survival_timer = Timer.new()
 	survival_timer.wait_time = 1.0
 	survival_timer.autostart = true
@@ -77,16 +77,15 @@ func on_player_died():
 
 	call_deferred("_go_to_game_over")
 
-
 func _go_to_game_over():
 	get_tree().change_scene_to_file("res://Scenes/UI/GameOver.tscn")
 
 # ==========================
-#   Score de fin de partie
+#   End of run score data
 # ==========================
 func get_score_data() -> Dictionary:
 	return {
-		"duration": survival_time,  # ✅ on utilise directement la variable
+		"duration": survival_time,  # use the variable directly
 		"kills": kills,
 		"level": player.level,
 		"date": Time.get_datetime_string_from_system()

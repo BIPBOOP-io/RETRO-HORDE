@@ -2,10 +2,10 @@ extends Node
 var score_data: Dictionary = {}  # time, kills, level, etc.
 
 # ================================
-#   Constantes globales
+#   Global constants
 # ================================
 
-# Raretés des upgrades
+# Upgrade rarities
 const RARITY_WEIGHTS = {
 	"common": 60,
 	"uncommon": 40,
@@ -14,21 +14,21 @@ const RARITY_WEIGHTS = {
 	"legendary": 3
 }
 
-# Valeurs XP des orbes
+# XP orb values
 const XP_ORBS = {
 	"small": 1,
 	"medium": 5,
 	"large": 10
 }
 
-# Groupes de nodes
+# Node groups
 const GROUPS = {
 	"player": "player",
 	"enemies": "enemies",
 	"hud": "hud"
 }
 
-# Score global
+# Global score formula
 static func calculate_score(data: Dictionary) -> int:
 	var kills    = int(data.get("kills", 0))
 	var level    = int(data.get("level", 1))

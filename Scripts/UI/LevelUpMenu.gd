@@ -9,13 +9,13 @@ signal upgrade_chosen(upgrade: String)
 var upgrades: Array = []
 
 func _ready():
-	# Cache le menu au démarrage
+# Hide menu on start
 	visible = false
 
 func show_upgrades(options: Array):
 	upgrades = options
 
-	# Si aucune option disponible, fermer le menu sans pauser
+	# If there are no options, close the menu without pausing
 	if upgrades.is_empty():
 		visible = false
 		get_tree().paused = false
@@ -24,7 +24,7 @@ func show_upgrades(options: Array):
 	visible = true
 	get_tree().paused = true
 
-	# récupérer le gestionnaire d’upgrades via le joueur
+	# Retrieve the upgrade manager via the player
 	var player = get_tree().get_first_node_in_group("player")
 	if player == null:
 		return
@@ -50,7 +50,7 @@ func show_upgrades(options: Array):
 				int(data.get("max_level", 1))
 			]
 
-			# couleur selon rareté
+			# color based on rarity
 			var rarity = str(data.get("rarity", "common"))
 			match rarity:
 				"common": btn.add_theme_color_override("font_color", Color(1,1,1))
@@ -67,7 +67,7 @@ func _on_option_pressed(index: int):
 	visible = false
 	get_tree().paused = false
 
-# Ces fonctions sont déclenchées par les signaux connectés dans l’éditeur
+# These functions are triggered by signals connected in the editor
 func _on_option_1_pressed(): _on_option_pressed(0)
 func _on_option_2_pressed(): _on_option_pressed(1)
 func _on_option_3_pressed(): _on_option_pressed(2)

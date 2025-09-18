@@ -11,9 +11,9 @@ func _ready():
 	var t     = int(data.get("duration", 0))
 	var kills = int(data.get("kills", 0))
 	var lvl   = int(data.get("level", 1))
-	var score = int(data.get("score", (kills * 10) + (lvl * 100) + (t * 2))) # fallback si vieux run
+	var score = int(data.get("score", (kills * 10) + (lvl * 100) + (t * 2))) # fallback for older runs
 
-	# Format temps
+	# Time format
 	var m = t / 60
 	var s = t % 60
 	time_label.text  = "Temps : %02d:%02d" % [m, s]
@@ -23,7 +23,7 @@ func _ready():
 	if score_label:
 		score_label.text = "Score : %d" % score
 
-	# --- Meilleur score (par score arcade) ---
+	# --- Best score (arcade-style) ---
 	var all_stats: Array = SaveManager.load_stats()
 	if all_stats.size() > 0:
 		var best: Dictionary = all_stats[0]
@@ -32,7 +32,7 @@ func _ready():
 			if int(e.get("score", 0)) > int(best.get("score", 0)):
 				best = e
 
-		# Affichage optionnel dans l'UI si BestLabel existe
+		# Optional UI display if BestLabel exists
 		if best_label:
 			var bt = int(best.get("duration", 0))
 			var bm = bt / 60

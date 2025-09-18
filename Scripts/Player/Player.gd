@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal died
 
-# --- Mouvements & Combat ---
+# --- Movement & Combat ---
 @export var speed: float = 100.0
 @export var attack_interval: float = 1.0
 @export var attack_range: float = 100.0
@@ -20,7 +20,7 @@ signal died
 var level: int = 1
 var xp: int = 0
 
-# --- Upgrades (valeurs dynamiques modifiées par UpgradeManager) ---
+# --- Upgrades (runtime values modified by UpgradeManager) ---
 var arrow_count: int = 1
 var multi_shot: int = 1
 var xp_multiplier: float = 1.0
@@ -31,7 +31,7 @@ var arrow_pierce: int = 0
 var crit_chance: float = 0.0
 var crit_multiplier: float = 2.0
 
-# --- Références ---
+# --- References ---
 var animated_sprite: AnimatedSprite2D
 var attack_timer: Timer
 var hud: Node
@@ -43,7 +43,7 @@ func _ready():
 	animated_sprite.play("idle_down")
 	add_to_group("player")
 
-	# Ajouter le gestionnaire d’upgrades à la scène
+	# Add the UpgradeManager to the scene
 	add_child(upgrade_manager)
 
 	hud = get_tree().get_first_node_in_group("hud")
@@ -52,7 +52,7 @@ func _ready():
 		hud.update_xp(xp, xp_to_next_level)
 		hud.update_health(health, max_health)
 
-	# Timer auto-attaque
+	# Auto-attack timer
 	attack_timer = Timer.new()
 	attack_timer.wait_time = attack_interval
 	attack_timer.autostart = true
@@ -60,7 +60,7 @@ func _ready():
 	add_child(attack_timer)
 	attack_timer.timeout.connect(_auto_attack)
 
-	# Timer régénération lente
+	# Slow regeneration timer
 	regen_timer = Timer.new()
 	regen_timer.wait_time = 2.0
 	regen_timer.autostart = false
@@ -69,7 +69,7 @@ func _ready():
 	add_child(regen_timer)
 
 # ==========================
-#       Déplacements
+#       MOVEMENT
 # ==========================
 func _physics_process(_delta):
 	var input_vector = Vector2(
@@ -99,7 +99,7 @@ func _play_idle_animation():
 		animated_sprite.play(current_anim.replace("walk", "idle"))
 
 # ==========================
-#       Auto-attaque
+#       AUTO-ATTACK
 # ==========================
 func _auto_attack():
 	var enemies = get_tree().get_nodes_in_group("enemies")
@@ -169,7 +169,7 @@ func _apply_upgrade(choice: String):
 	flash_gold()
 
 # ==========================
-#       VIE & DÉGÂTS
+#       HEALTH & DAMAGE
 # ==========================
 func take_damage(amount: int):
 	if has_shield:
@@ -183,23 +183,23 @@ func take_damage(amount: int):
 	if health <= 0: die()
 
 func heal_from_vampirism(damage_dealt: int):
-	if vampirism > 0.0 and health < max_health:  # ✅ uniquement si pas full vie
+	if vampirism > 0.0 and health < max_health:  # only if not at full health
 		var heal_amount = max(1, round(damage_dealt * vampirism))
 		var new_health = min(max_health, health + heal_amount)
 
-		if new_health > health:  # ✅ seulement si ça soigne vraiment
+		if new_health > health:  # only if it actually heals
 			health = new_health
 			if hud: hud.update_health(health, max_health)
 			flash_green()
 
 func _on_regen_tick():
-	if health < max_health:  # ✅ bloque la regen si déjà full vie
+	if health < max_health:  # block regen if already at full health
 		health += 1
 		if hud: hud.update_health(health, max_health)
 		flash_green()
 
 # ==========================
-#   FEEDBACK VISUELS
+#   VISUAL FEEDBACK
 # ==========================
 func flash_red():
 	modulate = Color(1, 0.3, 0.3)
@@ -233,5 +233,5 @@ func spawn_particles(particles_scene: PackedScene):
 		p.emitting = true
 
 func die():
-	emit_signal("died")  # ✅ on prévient le Main que le joueur est mort
-	queue_free()         # ✅ optionnel : détruit le Player
+	emit_signal("died")  # notify Main that the player died
+	queue_free()         # optionally free the Player
