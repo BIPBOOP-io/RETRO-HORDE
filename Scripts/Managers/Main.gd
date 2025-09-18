@@ -29,7 +29,14 @@ func _ready():
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
+		if _is_levelup_open():
+			get_viewport().set_input_as_handled()
+			return
 		_toggle_pause()
+
+func _is_levelup_open() -> bool:
+	var menu = get_tree().get_first_node_in_group("levelup_menu")
+	return menu != null and menu.visible
 
 func _toggle_pause():
 	# If the game is paused by another system (e.g. LevelUp menu), don't interfere

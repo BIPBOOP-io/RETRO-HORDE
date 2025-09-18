@@ -46,3 +46,15 @@ func _on_quit_pressed():
 	# Intentionally do not save the run when quitting from pause.
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://Scenes/UI/MainMenu.tscn")
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Only react to ESC when the pause menu is currently visible
+	if not visible:
+		return
+	if event.is_action_pressed("ui_cancel"):
+		# If currently in the options sub-menu, go back to root first.
+		if options_menu.visible:
+			_show_root()
+		else:
+			_on_resume_pressed()
+		get_viewport().set_input_as_handled()
