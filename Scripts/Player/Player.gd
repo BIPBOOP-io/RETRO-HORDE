@@ -13,6 +13,12 @@ signal died
 @export var sprint_multiplier: float = 1.5  # applies to move speed and anim speed
 var is_sprinting: bool = false
 
+# Stamina
+@export var max_stamina: float = 100.0
+@export var stamina: float = 100.0
+@export var stamina_drain_per_sec: float = 20.0
+@export var stamina_regen_per_sec: float = 12.0
+
 # --- Stats & XP ---
 @export var max_health: int = 10
 @export var health: int = 10
@@ -35,6 +41,18 @@ var arrow_pierce: int = 0
 var crit_chance: float = 0.0
 var crit_multiplier: float = 2.0
 
+# --- Special ability (Giant Arrow) ---
+@export var special_cooldown: float = 8.0
+@export var special_arrow_scene: PackedScene
+@export var special_scale: float = 2.0
+@export var special_damage_mult: float = 4.0
+@export var special_speed_mult: float = 1.2
+@export var special_max_distance: float = 300.0
+@export var special_pierce: int = 3
+@export var special_knockback_mult: float = 3.0
+var special_ready: bool = true
+var special_timer: Timer
+
 # --- References ---
 var animated_sprite: AnimatedSprite2D
 var attack_timer: Timer
@@ -55,6 +73,10 @@ func _ready():
 		hud.update_level(level)
 		hud.update_xp(xp, xp_to_next_level)
 		hud.update_health(health, max_health)
+		if hud.has_method("update_stamina"):
+			hud.update_stamina(stamina, max_stamina)
+		if hud.has_method("update_special"):
+			hud.update_special(special_cooldown, special_cooldown)
 
 	# Auto-attack timer
 	attack_timer = Timer.new()
@@ -72,10 +94,18 @@ func _ready():
 	regen_timer.timeout.connect(_on_regen_tick)
 	add_child(regen_timer)
 
+	# Special ability cooldown timer
+	special_timer = Timer.new()
+	special_timer.wait_time = special_cooldown
+	special_timer.one_shot = true
+	special_timer.autostart = false
+	special_timer.timeout.connect(_on_special_ready)
+	add_child(special_timer)
+
 # ==========================
 #       MOVEMENT
 # ==========================
-func _physics_process(_delta):
+func _physics_process(delta):
 	var input_vector = Vector2(
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
@@ -93,9 +123,82 @@ func _physics_process(_delta):
 		animated_sprite.speed_scale = sprint_multiplier if is_sprinting else 1.0
 		_play_walk_animation(input_vector)
 
+	_update_stamina(delta)
+	_update_special_bar()
+
+func _update_stamina(delta: float) -> void:
+	# Drain while sprinting, regen otherwise
+	if not has_node("/root/Settings"): # safe-guard
+		return
+	if is_sprinting:
+		stamina = max(0.0, stamina - stamina_drain_per_sec * delta)
+	else:
+		stamina = min(max_stamina, stamina + stamina_regen_per_sec * delta)
+	if hud and hud.has_method("update_stamina"):
+		hud.update_stamina(stamina, max_stamina)
+
+func _update_special_bar() -> void:
+	if not hud or not hud.has_method("update_special"):
+		return
+	if special_ready:
+		hud.update_special(special_cooldown, special_cooldown)
+	else:
+		var elapsed := special_cooldown - special_timer.time_left
+		hud.update_special(elapsed, special_cooldown)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("special"):
+		_try_fire_special()
+
+func _try_fire_special():
+	if not special_ready:
+		return
+	var dir = _get_best_target_direction()
+	if dir == Vector2.ZERO:
+		return
+	_fire_giant_arrow(dir)
+	special_ready = false
+	special_timer.wait_time = special_cooldown
+	special_timer.start()
+
+func _on_special_ready():
+	special_ready = true
+
+func _get_best_target_direction() -> Vector2:
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	if enemies.is_empty():
+		return Vector2.ZERO
+	var closest = null
+	var closest_dist = INF
+	for e in enemies:
+		var d = global_position.distance_to(e.global_position)
+		if d < closest_dist:
+			closest_dist = d
+			closest = e
+	if closest:
+		return (closest.global_position - global_position).normalized()
+	return Vector2.ZERO
+
+func _fire_giant_arrow(dir: Vector2):
+	var scene: PackedScene = special_arrow_scene if special_arrow_scene else arrow_scene
+	if scene == null:
+		return
+	var arrow = scene.instantiate()
+	arrow.global_position = global_position
+	arrow.direction = dir
+	arrow.damage = int(arrow_damage * special_damage_mult)
+	arrow.speed = float(arrow.speed) * special_speed_mult
+	arrow.max_distance = special_max_distance
+	arrow.pierce_left = special_pierce
+	arrow.knockback_multiplier = knockback_multiplier * special_knockback_mult
+	arrow.crit_chance = crit_chance
+	arrow.crit_multiplier = crit_multiplier
+	arrow.scale = Vector2.ONE * special_scale
+	get_parent().add_child(arrow)
+
 func _can_sprint() -> bool:
-	# Placeholder for future stamina system
-	return true
+	# Allow sprint only if some stamina remains
+	return stamina > 0.1
 
 func _play_walk_animation(dir: Vector2):
 	if abs(dir.x) > abs(dir.y):
