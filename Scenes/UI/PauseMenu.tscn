@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://paus3m3nu"]
+[gd_scene load_steps=5 format=3 uid="uid://paus3m3nu"]
 
 [ext_resource type="Script" uid="uid://cubnvwx0cff7n" path="res://Scripts/UI/PauseMenu.gd" id="1_pause"]
 [ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_title"]
+[ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_2bpff"]
 [ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_hud"]
 
 [node name="PauseMenu" type="CanvasLayer"]
@@ -48,14 +49,20 @@ uppercase = true
 
 [node name="ResumeButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2bpff")
+theme_override_font_sizes/font_size = 20
 text = "RESUME"
 
 [node name="OptionsButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2bpff")
+theme_override_font_sizes/font_size = 20
 text = "OPTIONS"
 
 [node name="QuitButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2bpff")
+theme_override_font_sizes/font_size = 20
 text = "QUIT"
 
 [node name="OptionsMenu" type="VBoxContainer" parent="Panel"]
@@ -95,9 +102,12 @@ uppercase = true
 
 [node name="LayoutOption" type="OptionButton" parent="Panel/OptionsMenu/LayoutRow"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2bpff")
 
 [node name="BackButton" type="Button" parent="Panel/OptionsMenu"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2bpff")
+theme_override_font_sizes/font_size = 20
 text = "BACK"
 
 [connection signal="pressed" from="Panel/RootMenu/ResumeButton" to="." method="_on_resume_pressed"]
