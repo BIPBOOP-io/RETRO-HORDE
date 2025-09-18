@@ -55,10 +55,11 @@ func _on_body_entered(body: Node):
 			if player and player.has_method("heal_from_vampirism"):
 				player.heal_from_vampirism(final_damage)
 
-		# Pierce handling
-		pierce_left -= 1
-		if pierce_left < 0:
-			queue_free()
+		# Pierce handling: negative means infinite pierce
+		if pierce_left >= 0:
+			pierce_left -= 1
+			if pierce_left < 0:
+				queue_free()
 
 # ==========================
 #   Floating text feedback

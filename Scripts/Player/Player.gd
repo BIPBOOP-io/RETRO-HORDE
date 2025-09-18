@@ -49,8 +49,8 @@ var crit_multiplier: float = 2.0
 @export var special_scale: float = 2.0
 @export var special_damage_mult: float = 4.0
 @export var special_speed_mult: float = 1.2
-@export var special_max_distance: float = 300.0
-@export var special_pierce: int = 3
+@export var special_max_distance: float = 5000.0
+@export var special_pierce: int = -1
 @export var special_knockback_mult: float = 3.0
 var special_ready: bool = false
 var special_timer: Timer
@@ -179,6 +179,11 @@ func _update_special_bar() -> void:
 	if hud and hud.has_method("update_special"):
 		hud.update_special(elapsed_val, max_val)
 	if special_bar_2d and special_bar_2d.has_method("set_values"):
+		# Color cue: slightly lighter purple when ready
+		if special_ready:
+			special_bar_2d.fill_color = Color(0.68, 0.45, 0.98, 1.0)
+		else:
+			special_bar_2d.fill_color = Color(0.58, 0.3, 0.9, 1.0)
 		special_bar_2d.set_values(elapsed_val, max_val)
 
 func _unhandled_input(event: InputEvent) -> void:
