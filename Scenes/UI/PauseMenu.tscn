@@ -1,0 +1,106 @@
+[gd_scene load_steps=4 format=3 uid="uid://paus3m3nu"]
+
+[ext_resource type="Script" uid="uid://cubnvwx0cff7n" path="res://Scripts/UI/PauseMenu.gd" id="1_pause"]
+[ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_title"]
+[ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_hud"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 2
+layer = 100
+script = ExtResource("1_pause")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -120.0
+offset_right = 180.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="RootMenu" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -70.0
+offset_right = 140.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Title" type="Label" parent="Panel/RootMenu"]
+layout_mode = 2
+text = "PAUSED"
+label_settings = ExtResource("2_title")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="ResumeButton" type="Button" parent="Panel/RootMenu"]
+layout_mode = 2
+text = "RESUME"
+
+[node name="OptionsButton" type="Button" parent="Panel/RootMenu"]
+layout_mode = 2
+text = "OPTIONS"
+
+[node name="QuitButton" type="Button" parent="Panel/RootMenu"]
+layout_mode = 2
+text = "QUIT"
+
+[node name="OptionsMenu" type="VBoxContainer" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -80.0
+offset_right = 150.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="OptionsTitle" type="Label" parent="Panel/OptionsMenu"]
+layout_mode = 2
+text = "OPTIONS"
+label_settings = ExtResource("2_title")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="LayoutRow" type="HBoxContainer" parent="Panel/OptionsMenu"]
+layout_mode = 2
+alignment = 1
+
+[node name="LayoutLabel" type="Label" parent="Panel/OptionsMenu/LayoutRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Keyboard layout"
+label_settings = ExtResource("3_hud")
+uppercase = true
+
+[node name="LayoutOption" type="OptionButton" parent="Panel/OptionsMenu/LayoutRow"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="Panel/OptionsMenu"]
+layout_mode = 2
+text = "BACK"
+
+[connection signal="pressed" from="Panel/RootMenu/ResumeButton" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Panel/RootMenu/OptionsButton" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Panel/RootMenu/QuitButton" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Panel/OptionsMenu/BackButton" to="." method="_on_options_back_pressed"]

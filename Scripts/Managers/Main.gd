@@ -3,6 +3,7 @@ extends Node2D
 @onready var player: CharacterBody2D = $Player
 @onready var spawner: Node2D = $EnemySpawner
 @onready var hud: CanvasLayer = $Hud
+@onready var pause_menu: CanvasLayer = $CanvasLayer/PauseMenu
 
 var survival_time: int = 0
 var kills: int = 0
@@ -25,6 +26,21 @@ func _ready():
 	if hud:
 		hud.update_timer(survival_time)
 		hud.update_kills(kills)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		_toggle_pause()
+
+func _toggle_pause():
+	# If the game is paused by another system (e.g. LevelUp menu), don't interfere
+	if get_tree().paused and not pause_menu.visible:
+		return
+	if not pause_menu.visible:
+		pause_menu.visible = true
+		get_tree().paused = true
+	else:
+		get_tree().paused = false
+		pause_menu.visible = false
 
 # ==========================
 #        TIMER
