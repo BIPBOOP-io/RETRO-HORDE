@@ -1,18 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://c0d3opt10ns"]
 
-[ext_resource type="Script" path="res://Scripts/UI/Options.gd" id="1_opts"]
-[ext_resource type="LabelSettings" path="res://Assets/TItles.tres" id="2_title"]
-[ext_resource type="LabelSettings" path="res://Assets/HUD.tres" id="3_hud"]
-[ext_resource type="FontFile" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="4_font"]
+[ext_resource type="Script" uid="uid://t4xg37o3y7sy" path="res://Scripts/UI/OptionsMenu.gd" id="1_n4jkg"]
+[ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_esydt"]
+[ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_qcylp"]
+[ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="4_mwawp"]
 
-[node name="Options" type="Control"]
+[node name="OptionsMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_opts")
+script = ExtResource("1_n4jkg")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -34,7 +34,7 @@ alignment = 1
 [node name="Title" type="Label" parent="Margin/VBox"]
 layout_mode = 2
 text = "OPTIONS"
-label_settings = ExtResource("2_title")
+label_settings = ExtResource("2_esydt")
 horizontal_alignment = 1
 uppercase = true
 
@@ -46,14 +46,14 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Keyboard layout"
-label_settings = ExtResource("3_hud")
+label_settings = ExtResource("3_qcylp")
 horizontal_alignment = 2
 
 [node name="LayoutOption" type="OptionButton" parent="Margin/VBox/Row"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-theme_override_fonts/font = ExtResource("4_font")
+theme_override_fonts/font = ExtResource("4_mwawp")
 theme_override_font_sizes/font_size = 24
 
 [node name="Buttons" type="HBoxContainer" parent="Margin/VBox"]
@@ -64,7 +64,6 @@ alignment = 1
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("4_font")
+theme_override_fonts/font = ExtResource("4_mwawp")
 theme_override_font_sizes/font_size = 24
 text = "BACK"
-

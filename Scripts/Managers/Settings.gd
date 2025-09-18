@@ -51,12 +51,8 @@ func apply_input_layout() -> void:
 		_add_key_event("ui_down", KEY_S)
 		_add_key_event("ui_right", KEY_D)
 
-	# Optional: also register by physical positions (WASD positions)
-	# This helps when OS layout differs from selected layout.
-	_add_physical_key_event("ui_up", KEY_W)
-	_add_physical_key_event("ui_left", KEY_A)
-	_add_physical_key_event("ui_down", KEY_S)
-	_add_physical_key_event("ui_right", KEY_D)
+	# Note: we do NOT add physical scancode bindings here to keep
+	# the selected layout exclusive (no dual Z/W behavior).
 
 func _clear_key_events(action: String) -> void:
 	var to_remove: Array = []
@@ -72,11 +68,6 @@ func _add_key_event(action: String, keycode: int) -> void:
 	e.pressed = false
 	InputMap.action_add_event(action, e)
 
-func _add_physical_key_event(action: String, physical_keycode: int) -> void:
-	var e := InputEventKey.new()
-	e.physical_keycode = physical_keycode
-	e.pressed = false
-	InputMap.action_add_event(action, e)
 
 func _load_config() -> void:
 	var cfg := ConfigFile.new()
