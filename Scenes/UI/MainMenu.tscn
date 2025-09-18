@@ -43,7 +43,6 @@ grow_vertical = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="UI"]
 z_index = 5
 layout_mode = 2
-theme_override_constants/separation = 15
 alignment = 1
 
 [node name="BackgroundSpawner" type="Node2D" parent="UI/VBoxContainer"]
@@ -62,7 +61,6 @@ horizontal_alignment = 1
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 20
 alignment = 1
 
 [node name="PlayButton" type="Button" parent="UI/VBoxContainer/VBoxContainer"]
