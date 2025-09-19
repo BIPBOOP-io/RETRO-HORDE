@@ -47,6 +47,7 @@ alignment = 1
 
 [node name="BackgroundSpawner" type="Node2D" parent="UI/VBoxContainer"]
 z_index = 6
+position = Vector2(262, 228)
 script = ExtResource("2_72sra")
 background_enemy_scene = ExtResource("2_mjmdf")
 enemy_count = 10
