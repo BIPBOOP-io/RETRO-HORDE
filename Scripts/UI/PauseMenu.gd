@@ -57,4 +57,4 @@ func _unhandled_input(event: InputEvent) -> void:
 			_show_root()
 		else:
 			_on_resume_pressed()
-		get_viewport().set_input_as_handled()
+			get_viewport().set_input_as_handled()
