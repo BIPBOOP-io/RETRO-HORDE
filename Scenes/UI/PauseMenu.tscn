@@ -44,23 +44,29 @@ uppercase = true
 [node name="ResumeButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_2bpff")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 30
 text = "RESUME"
+flat = true
 
 [node name="OptionsButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_2bpff")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 30
 text = "OPTIONS"
+flat = true
 
 [node name="QuitButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_2bpff")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 30
 text = "QUIT"
+flat = true
 
 [node name="OptionsMenu" type="VBoxContainer" parent="Panel"]
 visible = false
@@ -105,9 +111,11 @@ theme_override_fonts/font = ExtResource("3_2bpff")
 [node name="BackButton" type="Button" parent="Panel/OptionsMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_2bpff")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 30
 text = "BACK"
+flat = true
 
 [connection signal="pressed" from="Panel/RootMenu/ResumeButton" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Panel/RootMenu/OptionsButton" to="." method="_on_options_pressed"]

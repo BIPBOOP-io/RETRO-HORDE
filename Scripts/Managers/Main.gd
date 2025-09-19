@@ -51,7 +51,7 @@ func _retry_bind_player():
 				player.died.connect(on_player_died)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("pause"):
 		if _is_levelup_open():
 			get_viewport().set_input_as_handled()
 			return

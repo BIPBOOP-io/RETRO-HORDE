@@ -4,9 +4,14 @@ extends CanvasLayer
 @onready var options_menu: VBoxContainer = $Panel/OptionsMenu
 @onready var layout_option: OptionButton = $Panel/OptionsMenu/LayoutRow/LayoutOption
 
+var _buttons: Array[Button] = []
+var _focus_index: int = 0
+const HOVER_COLOR := Color(1, 0.4, 0.254902, 1)
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	_show_root()
+	_setup_buttons()
 	_populate_layouts()
 
 func _show_root():
@@ -48,13 +53,70 @@ func _on_quit_pressed():
 	get_tree().change_scene_to_file("res://Scenes/UI/MainMenu.tscn")
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Only react to ESC when the pause menu is currently visible
+	# Only react when visible
 	if not visible:
 		return
-	if event.is_action_pressed("ui_cancel"):
-		# If currently in the options sub-menu, go back to root first.
+	# ESC closes, P also closes
+	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("pause"):
 		if options_menu.visible:
 			_show_root()
 		else:
 			_on_resume_pressed()
+		get_viewport().set_input_as_handled()
+		return
+	# Keyboard navigation (root menu only)
+	if not options_menu.visible:
+		if event.is_action_pressed("ui_up"):
+			_move_focus(-1)
 			get_viewport().set_input_as_handled()
+			return
+		if event.is_action_pressed("ui_down"):
+			_move_focus(1)
+			get_viewport().set_input_as_handled()
+			return
+		if event.is_action_pressed("ui_accept"):
+			get_viewport().set_input_as_handled()
+			_activate_focused()
+
+func _setup_buttons():
+	_buttons.clear()
+	if root_menu:
+		var children = root_menu.get_children()
+		for i in range(children.size()):
+			var c = children[i]
+			if c is Button:
+				var b: Button = c
+				b.focus_mode = Control.FOCUS_NONE
+				if not b.mouse_entered.is_connected(_on_button_mouse_entered):
+					b.mouse_entered.connect(_on_button_mouse_entered.bind(b))
+				_buttons.append(b)
+	if _buttons.size() > 0:
+		_focus_index = 0
+		_apply_highlight()
+
+func _move_focus(dir: int):
+	if _buttons.is_empty():
+		return
+	_focus_index = int((_focus_index + dir + _buttons.size()) % _buttons.size())
+	_apply_highlight()
+
+func _activate_focused():
+	if _buttons.is_empty():
+		return
+	_buttons[_focus_index].emit_signal("pressed")
+
+func _apply_highlight():
+	for i in range(_buttons.size()):
+		var b := _buttons[i]
+		if i == _focus_index:
+			b.add_theme_color_override("font_color", HOVER_COLOR)
+			b.add_theme_color_override("font_hover_color", HOVER_COLOR)
+		else:
+			b.add_theme_color_override("font_color", Color(1,1,1,1))
+			b.add_theme_color_override("font_hover_color", Color(1,1,1,1))
+
+func _on_button_mouse_entered(b: Button) -> void:
+	var idx := _buttons.find(b)
+	if idx != -1:
+		_focus_index = idx
+		_apply_highlight()
