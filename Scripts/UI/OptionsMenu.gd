@@ -25,3 +25,8 @@ func _on_layout_selected(index: int):
 
 func _on_back_pressed():
 	get_tree().change_scene_to_file("res://Scenes/UI/MainMenu.tscn")
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		accept_event()
+		_on_back_pressed()
