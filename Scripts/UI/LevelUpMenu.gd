@@ -9,6 +9,8 @@ signal upgrade_chosen(upgrade: String)
 var upgrades: Array = []
 var _buttons: Array[Button] = []
 var _focus_index: int = 0
+var _selection_locked: bool = false
+var _base_texts: Array[String] = ["", "", ""]
 const HOVER_COLOR := Color(1, 0.4, 0.254902, 1)
 var _base_colors := {}
 
@@ -18,12 +20,13 @@ func _ready():
 	_buttons = [option1, option2, option3]
 	for b in _buttons:
 		if b:
-			b.focus_mode = Control.FOCUS_ALL
+			b.focus_mode = Control.FOCUS_NONE
 			if not b.mouse_entered.is_connected(_on_option_mouse_entered):
 				b.mouse_entered.connect(_on_option_mouse_entered.bind(b))
 
 func show_upgrades(options: Array):
 	upgrades = options
+	_selection_locked = false
 
 	# If there are no options, close the menu without pausing
 	if upgrades.is_empty():
@@ -59,6 +62,7 @@ func show_upgrades(options: Array):
 				upgrade_manager.upgrades_level[upgrade_id],
 				int(data.get("max_level", 1))
 			]
+			_base_texts[i] = btn.text
 
 			# color based on rarity (keep text color; selection uses focus style)
 			var rarity = str(data.get("rarity", "common"))
@@ -82,13 +86,13 @@ func show_upgrades(options: Array):
 
 	# focus the first available option
 	_focus_first_available()
+	_apply_selection_visuals()
 
 func _focus_first_available():
 	_focus_index = 0
 	var vis = _get_visible_buttons()
 	if vis.size() > 0:
 		_focus_index = 0
-		vis[0].grab_focus()
 
 func _get_visible_buttons() -> Array[Button]:
 	var res: Array[Button] = []
@@ -102,12 +106,10 @@ func _move_focus(dir: int):
 	if vis.is_empty():
 		return
 	# Sync with actual focused item if any, then wrap-around
-	var current: Control = get_viewport().gui_get_focus_owner()
-	var idx2 := vis.find(current)
-	if idx2 != -1:
-		_focus_index = idx2
+	# We don't rely on Control focus anymore (buttons have FOCUS_NONE)
 	_focus_index = int((_focus_index + dir + vis.size()) % vis.size())
-	vis[_focus_index].grab_focus()
+	# No grab_focus here; selection is handled by index
+	_apply_selection_visuals()
 
 func _activate_focused():
 	var vis: Array[Button] = _get_visible_buttons()
@@ -125,12 +127,34 @@ func _on_option_mouse_entered(b: Button) -> void:
 	var idx := vis.find(b)
 	if idx != -1:
 		_focus_index = idx
-		b.grab_focus()
+		# No grab_focus; keep keyboard selection index-only
+		_apply_selection_visuals()
 
 func _apply_highlight():
 	pass
 
+func _apply_selection_visuals():
+	# Adds a simple chevron to the selected option without changing rarity colors
+	for i in range(_buttons.size()):
+		var btn = _buttons[i]
+		if btn == null:
+			continue
+		if not btn.visible or btn.disabled:
+			continue
+		var base: String
+		if i < _base_texts.size():
+			base = _base_texts[i]
+		else:
+			base = btn.text
+		if i == _focus_index:
+			btn.text = "» " + base + " «"
+		else:
+			btn.text = base
+
 func _on_option_pressed(index: int):
+	if _selection_locked:
+		return
+	_selection_locked = true
 	emit_signal("upgrade_chosen", upgrades[index])
 	visible = false
 	get_tree().paused = false
