@@ -18,7 +18,9 @@ func _ready():
 	_buttons = [option1, option2, option3]
 	for b in _buttons:
 		if b:
-			b.focus_mode = Control.FOCUS_NONE   # no default white focus frame
+			b.focus_mode = Control.FOCUS_ALL
+			if not b.mouse_entered.is_connected(_on_option_mouse_entered):
+				b.mouse_entered.connect(_on_option_mouse_entered.bind(b))
 
 func show_upgrades(options: Array):
 	upgrades = options
@@ -58,7 +60,7 @@ func show_upgrades(options: Array):
 				int(data.get("max_level", 1))
 			]
 
-			# color based on rarity
+			# color based on rarity (keep text color; selection uses focus style)
 			var rarity = str(data.get("rarity", "common"))
 			var base_col := Color(1,1,1)
 			match rarity:
@@ -69,10 +71,10 @@ func show_upgrades(options: Array):
 				"legendary": base_col = Color(1,0.6,0)
 			btn.add_theme_color_override("font_color", base_col)
 			btn.add_theme_color_override("font_hover_color", base_col)
+			btn.add_theme_color_override("font_focus_color", base_col)
 			_base_colors[btn] = base_col
-			# Sync keyboard selection with mouse hover
-			if not btn.mouse_entered.is_connected(_on_option_mouse_entered):
-				btn.mouse_entered.connect(_on_option_mouse_entered.bind(btn))
+			# Tooltip with rarity
+			btn.tooltip_text = rarity.capitalize()
 		else:
 			btn.disabled = true
 			btn.visible = false
@@ -80,13 +82,13 @@ func show_upgrades(options: Array):
 
 	# focus the first available option
 	_focus_first_available()
-	_apply_highlight()
 
 func _focus_first_available():
 	_focus_index = 0
 	var vis = _get_visible_buttons()
 	if vis.size() > 0:
 		_focus_index = 0
+		vis[0].grab_focus()
 
 func _get_visible_buttons() -> Array[Button]:
 	var res: Array[Button] = []
@@ -99,9 +101,13 @@ func _move_focus(dir: int):
 	var vis: Array[Button] = _get_visible_buttons()
 	if vis.is_empty():
 		return
-	# Wrap-around navigation, keep our own index only
+	# Sync with actual focused item if any, then wrap-around
+	var current: Control = get_viewport().gui_get_focus_owner()
+	var idx2 := vis.find(current)
+	if idx2 != -1:
+		_focus_index = idx2
 	_focus_index = int((_focus_index + dir + vis.size()) % vis.size())
-	_apply_highlight()
+	vis[_focus_index].grab_focus()
 
 func _activate_focused():
 	var vis: Array[Button] = _get_visible_buttons()
@@ -116,19 +122,10 @@ func _on_option_mouse_entered(b: Button) -> void:
 	var idx := vis.find(b)
 	if idx != -1:
 		_focus_index = idx
-		_apply_highlight()
+		b.grab_focus()
 
 func _apply_highlight():
-	var vis := _get_visible_buttons()
-	for i in range(vis.size()):
-		var b := vis[i]
-		if i == _focus_index:
-			b.add_theme_color_override("font_color", HOVER_COLOR)
-			b.add_theme_color_override("font_hover_color", HOVER_COLOR)
-		else:
-			if _base_colors.has(b):
-				b.add_theme_color_override("font_color", _base_colors[b])
-				b.add_theme_color_override("font_hover_color", _base_colors[b])
+	pass
 
 func _on_option_pressed(index: int):
 	emit_signal("upgrade_chosen", upgrades[index])

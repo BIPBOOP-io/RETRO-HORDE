@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bl242skrucamv"]
 
 [ext_resource type="Script" uid="uid://qcdkieaivgfq" path="res://Scripts/UI/MainMenu.gd" id="1_g18y6"]
-[ext_resource type="Script" uid="uid://bqe472hrtenbq" path="res://Scripts/Enemies/BackgroundEnemySpawner.gd" id="2_72sra"]
+[ext_resource type="Script" path="res://Scripts/Enemies/BackgroundEnemySpawner.gd" id="2_72sra"]
 [ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="2_mjmdf"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_744d7"]
 
