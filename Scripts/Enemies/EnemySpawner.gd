@@ -8,6 +8,7 @@ extends Node2D
 
 var player: CharacterBody2D
 var timer: Timer
+var main
 
 func _ready():
 	timer = Timer.new()
@@ -20,6 +21,9 @@ func _ready():
 
 func set_player(p: CharacterBody2D):
 	player = p
+
+func set_main(m):
+	main = m
 
 func _spawn_enemy():
 	if not player:
@@ -41,7 +45,13 @@ func _spawn_enemy():
 	var enemy = enemy_scene.instantiate()
 	enemy.global_position = spawn_pos
 	enemy.set_player(player)
+	if enemy.has_signal("killed"):
+		enemy.killed.connect(Callable(self, "_on_enemy_killed"))
 	get_parent().add_child(enemy)
 
 	# Progressive scaling: decrease interval over time
 	timer.wait_time = max(min_interval, timer.wait_time * difficulty_ramp)
+
+func _on_enemy_killed(_enemy):
+	if main and main.has_method("register_kill"):
+		main.register_kill()

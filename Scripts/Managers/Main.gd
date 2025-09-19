@@ -19,6 +19,8 @@ func _ready():
 			player = p
 	if spawner and player:
 		spawner.set_player(player)
+		if spawner.has_method("set_main"):
+			spawner.set_main(self)
 
 	# Listen to player's "died" signal when available
 	if player and not player.died.is_connected(on_player_died):
@@ -47,6 +49,8 @@ func _retry_bind_player():
 			player = p
 			if spawner:
 				spawner.set_player(player)
+				if spawner.has_method("set_main"):
+					spawner.set_main(self)
 			if not player.died.is_connected(on_player_died):
 				player.died.connect(on_player_died)
 

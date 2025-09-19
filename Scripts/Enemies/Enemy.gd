@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal killed(enemy)
+
 @export var speed: float = 60.0
 @export var max_hp: int = 3
 @export var damage: int = 1
@@ -53,12 +55,7 @@ func die():
 	if xp_orb_small or xp_orb_medium or xp_orb_big:
 		var spawn_pos = global_position
 		call_deferred("_spawn_xp_orb", spawn_pos)
-
-	# Inform Main about a kill
-	var main = get_tree().get_first_node_in_group("main")
-	if main and main.has_method("register_kill"):
-		main.register_kill()
-
+	emit_signal("killed", self)
 	call_deferred("queue_free")
 
 # Time-based scaling of XP orb sizes

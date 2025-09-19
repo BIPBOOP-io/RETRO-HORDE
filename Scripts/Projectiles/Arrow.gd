@@ -22,12 +22,13 @@ var crit_multiplier: float = 2.0
 
 func _ready():
 	if direction != Vector2.ZERO:
+		direction = direction.normalized()
 		rotation = direction.angle()
 
 func _physics_process(delta):
 	if direction == Vector2.ZERO: return
 
-	var move = direction.normalized() * speed * delta
+	var move = direction * speed * delta
 	position += move
 	traveled_distance += move.length()
 

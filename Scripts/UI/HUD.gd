@@ -67,3 +67,22 @@ func update_timer(seconds: int):
 func update_kills(kills: int):
 	if kills_label == null: kills_label = $Control/MarginContainer/VBoxContainer/KillsLabel
 	kills_label.text = "Kills : %d" % kills
+
+# ==========================
+#       TOAST (UPGRADES)
+# ==========================
+func show_upgrade_toast(text: String):
+	var lbl := Label.new()
+	lbl.text = "+ " + text
+	lbl.add_theme_color_override("font_color", Color(1,1,1,1))
+	lbl.add_theme_color_override("font_outline_color", Color(0,0,0,1))
+	lbl.add_theme_constant_override("outline_size", 8)
+	add_child(lbl)
+	lbl.top_level = true
+	var vp_size = get_viewport().get_visible_rect().size
+	lbl.position = Vector2(vp_size.x - 280, vp_size.y - 100)
+	var tween = create_tween()
+	lbl.modulate.a = 1.0
+	tween.tween_property(lbl, "position:y", lbl.position.y - 30, 1.2)
+	tween.parallel().tween_property(lbl, "modulate:a", 0.0, 1.2)
+	tween.tween_callback(lbl.queue_free)

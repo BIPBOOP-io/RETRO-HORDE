@@ -209,11 +209,11 @@ func _get_best_target_direction() -> Vector2:
 	if enemies.is_empty():
 		return Vector2.ZERO
 	var closest = null
-	var closest_dist = INF
+	var closest_dist_sq: float = INF
 	for e in enemies:
-		var d = global_position.distance_to(e.global_position)
-		if d < closest_dist:
-			closest_dist = d
+		var d2 = global_position.distance_squared_to(e.global_position)
+		if d2 < closest_dist_sq:
+			closest_dist_sq = d2
 			closest = e
 	if closest:
 		return (closest.global_position - global_position).normalized()
@@ -266,14 +266,14 @@ func _auto_attack():
 	if enemies.is_empty(): return
 
 	var closest_enemy = null
-	var closest_dist = INF
+	var closest_dist_sq: float = INF
 	for e in enemies:
-		var dist = global_position.distance_to(e.global_position)
-		if dist < closest_dist:
-			closest_dist = dist
+		var dist_sq = global_position.distance_squared_to(e.global_position)
+		if dist_sq < closest_dist_sq:
+			closest_dist_sq = dist_sq
 			closest_enemy = e
 
-	if closest_enemy and closest_dist <= attack_range:
+	if closest_enemy and closest_dist_sq <= attack_range * attack_range:
 		var dir = (closest_enemy.global_position - global_position).normalized()
 		for i in range(multi_shot):
 			var delay = i * 0.3
@@ -327,6 +327,8 @@ func level_up():
 func _apply_upgrade(choice: String):
 	upgrade_manager.apply_upgrade(self, choice)
 	flash_gold()
+	if hud and hud.has_method("show_upgrade_toast"):
+		hud.show_upgrade_toast(upgrade_manager.get_title(choice))
 
 # ==========================
 #       HEALTH & DAMAGE

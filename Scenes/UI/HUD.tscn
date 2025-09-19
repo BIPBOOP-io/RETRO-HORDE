@@ -49,55 +49,6 @@ gradient = SubResource("Gradient_stamina")
 [node name="Hud" type="CanvasLayer" groups=["hud"]]
 script = ExtResource("1_omqfp")
 
-[node name="XpBar" type="TextureProgressBar" parent="."]
-z_index = 2
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.046
-offset_top = 356.0
-offset_bottom = 356.32
-grow_horizontal = 2
-nine_patch_stretch = true
-texture_under = SubResource("GradientTexture2D_qc5w2")
-texture_progress = SubResource("GradientTexture2D_xaom8")
-
-[node name="SpecialBar" type="TextureProgressBar" parent="."]
-visible = false
-z_index = 2
-anchors_preset = -1
-anchor_top = 0.046
-anchor_right = 1.0
-anchor_bottom = 0.07
-grow_horizontal = 2
-nine_patch_stretch = true
-texture_under = SubResource("GradientTexture2D_qc5w2")
-texture_progress = SubResource("GradientTexture1D_special")
-
-[node name="HpBar" type="TextureProgressBar" parent="."]
-visible = false
-anchors_preset = -1
-anchor_top = 0.981
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 0.519897
-grow_horizontal = 2
-grow_vertical = 0
-nine_patch_stretch = true
-texture_under = SubResource("GradientTexture1D_4bm6u")
-texture_progress = SubResource("GradientTexture1D_lelo4")
-
-[node name="StaminaBar" type="TextureProgressBar" parent="."]
-visible = false
-anchors_preset = -1
-anchor_top = 0.955
-anchor_right = 1.0
-anchor_bottom = 0.981
-grow_horizontal = 2
-grow_vertical = 0
-nine_patch_stretch = true
-texture_under = SubResource("GradientTexture1D_4bm6u")
-texture_progress = SubResource("GradientTexture1D_stamina")
-
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchor_top = 0.046
@@ -150,3 +101,52 @@ text = "Kills : 00"
 label_settings = ExtResource("2_qc5w2")
 horizontal_alignment = 2
 uppercase = true
+
+[node name="XpBar" type="TextureProgressBar" parent="."]
+z_index = 2
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.046
+offset_top = 356.0
+offset_bottom = 356.32
+grow_horizontal = 2
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture2D_qc5w2")
+texture_progress = SubResource("GradientTexture2D_xaom8")
+
+[node name="SpecialBar" type="TextureProgressBar" parent="."]
+visible = false
+z_index = 2
+anchors_preset = -1
+anchor_top = 0.046
+anchor_right = 1.0
+anchor_bottom = 0.07
+grow_horizontal = 2
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture2D_qc5w2")
+texture_progress = SubResource("GradientTexture1D_special")
+
+[node name="HpBar" type="TextureProgressBar" parent="."]
+visible = false
+anchors_preset = -1
+anchor_top = 0.981
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.519897
+grow_horizontal = 2
+grow_vertical = 0
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture1D_4bm6u")
+texture_progress = SubResource("GradientTexture1D_lelo4")
+
+[node name="StaminaBar" type="TextureProgressBar" parent="."]
+visible = false
+anchors_preset = -1
+anchor_top = 0.955
+anchor_right = 1.0
+anchor_bottom = 0.981
+grow_horizontal = 2
+grow_vertical = 0
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture1D_4bm6u")
+texture_progress = SubResource("GradientTexture1D_stamina")
