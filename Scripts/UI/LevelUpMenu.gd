@@ -115,7 +115,10 @@ func _activate_focused():
 		return
 	var btn: Button = vis[_focus_index]
 	if btn:
-		btn.emit_signal("pressed")
+		# Map back to original button index to avoid relying on pressed connections
+		var orig_idx := _buttons.find(btn)
+		if orig_idx != -1:
+			_on_option_pressed(orig_idx)
 
 func _on_option_mouse_entered(b: Button) -> void:
 	var vis := _get_visible_buttons()

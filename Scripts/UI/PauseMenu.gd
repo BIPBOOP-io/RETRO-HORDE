@@ -3,6 +3,7 @@ extends CanvasLayer
 @onready var root_menu: VBoxContainer = $Panel/RootMenu
 @onready var options_menu: VBoxContainer = $Panel/OptionsMenu
 @onready var layout_option: OptionButton = $Panel/OptionsMenu/LayoutRow/LayoutOption
+@onready var upgrades_label: Label = $Panel/UpgradeContainer/MarginContainer/UpgradesList
 
 var _buttons: Array[Button] = []
 var _focus_index: int = 0
@@ -13,10 +14,13 @@ func _ready():
 	_show_root()
 	_setup_buttons()
 	_populate_layouts()
+	if not self.visibility_changed.is_connected(_on_visibility_changed):
+		self.visibility_changed.connect(_on_visibility_changed)
 
 func _show_root():
 	root_menu.visible = true
 	options_menu.visible = false
+	_refresh_upgrades()
 
 func _show_options():
 	root_menu.visible = false
@@ -77,6 +81,34 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.is_action_pressed("ui_accept"):
 			get_viewport().set_input_as_handled()
 			_activate_focused()
+
+func _on_visibility_changed():
+	if visible and not options_menu.visible:
+		_refresh_upgrades()
+
+func _refresh_upgrades():
+	if upgrades_label == null:
+		return
+	var player = get_tree().get_first_node_in_group("player")
+	if player == null:
+		upgrades_label.text = ""
+		return
+	var um = player.get("upgrade_manager")
+	if um == null:
+		upgrades_label.text = ""
+		return
+	var levels = um.get("upgrades_level")
+	if typeof(levels) != TYPE_DICTIONARY:
+		upgrades_label.text = ""
+		return
+	var lines: Array[String] = []
+	for id in levels.keys():
+		var lvl: int = int(levels[id])
+		if lvl > 0:
+			var title: String = str(um.get_title(id))
+			lines.append("%s Lv %d" % [title, lvl])
+	lines.sort()
+	upgrades_label.text = ("\n".join(lines)) if lines.size() > 0 else ""
 
 func _setup_buttons():
 	_buttons.clear()
