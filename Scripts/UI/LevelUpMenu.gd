@@ -134,22 +134,50 @@ func _apply_highlight():
 	pass
 
 func _apply_selection_visuals():
-	# Adds a simple chevron to the selected option without changing rarity colors
+	# Use separate chevron labels to avoid changing text spacing
 	for i in range(_buttons.size()):
-		var btn = _buttons[i]
+		var btn: Button = _buttons[i]
 		if btn == null:
 			continue
 		if not btn.visible or btn.disabled:
 			continue
-		var base: String
+		# Restore base text
 		if i < _base_texts.size():
-			base = _base_texts[i]
-		else:
-			base = btn.text
-		if i == _focus_index:
-			btn.text = "» " + base + " «"
-		else:
-			btn.text = base
+			btn.text = _base_texts[i]
+		# Ensure chevrons exist
+		var l: Label = btn.get_node_or_null("ChevronLeft")
+		var r: Label = btn.get_node_or_null("ChevronRight")
+		if l == null:
+			l = Label.new()
+			l.name = "ChevronLeft"
+			l.text = "»"
+			l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			l.anchor_left = 0.0
+			l.anchor_right = 0.0
+			l.anchor_top = 0.5
+			l.anchor_bottom = 0.5
+			l.offset_left = 8
+			l.offset_top = -12
+			l.offset_bottom = 12
+			btn.add_child(l)
+		if r == null:
+			r = Label.new()
+			r.name = "ChevronRight"
+			r.text = "«"
+			r.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			r.anchor_left = 1.0
+			r.anchor_right = 1.0
+			r.anchor_top = 0.5
+			r.anchor_bottom = 0.5
+			r.offset_left = -24
+			r.offset_right = -8
+			r.offset_top = -12
+			r.offset_bottom = 12
+			btn.add_child(r)
+		# Update visibility every time, not only when created
+		var is_selected := (i == _focus_index)
+		l.visible = is_selected
+		r.visible = is_selected
 
 func _on_option_pressed(index: int):
 	if _selection_locked:
