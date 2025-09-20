@@ -336,7 +336,6 @@ func _apply_upgrade(choice: String):
 func take_damage(amount: int):
 	if has_shield:
 		has_shield = false
-		print("Bouclier absorbé !")
 		return
 
 	health -= amount
