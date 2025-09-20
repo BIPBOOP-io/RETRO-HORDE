@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var options_menu: VBoxContainer = $Panel/OptionsMenu
 @onready var layout_option: OptionButton = $Panel/OptionsMenu/LayoutRow/LayoutOption
 @onready var upgrades_label: Label = $Panel/UpgradeContainer/MarginContainer/UpgradesList
+@onready var upgrades_box: VBoxContainer = $Panel/UpgradeContainer/MarginContainer/UpgradeListBox if has_node("Panel/UpgradeContainer/MarginContainer/UpgradeListBox") else null
 
 var _buttons: Array[Button] = []
 var _focus_index: int = 0
@@ -112,10 +113,55 @@ func _refresh_upgrades():
 		var la = int(a["lvl"]) ; var lb = int(b["lvl"])
 		if la == lb: return str(a["title"]) < str(b["title"]) ;
 		return la > lb)
-	var lines: Array[String] = []
-	for e in entries:
-		lines.append("%s Lv %d" % [str(e["title"]), int(e["lvl"])])
-	upgrades_label.text = ("\n".join(lines)) if lines.size() > 0 else ""
+	if upgrades_box:
+		# Clear and rebuild colored list
+		for c in upgrades_box.get_children():
+			c.queue_free()
+		var player2 = get_tree().get_first_node_in_group("player")
+		var um2 = player2.get("upgrade_manager") if player2 else null
+		var tmpl: Label = upgrades_label  # use existing label as style template
+		for e in entries:
+			var line = Label.new()
+			var t: String = str(e["title"]) ; var lv: int = int(e["lvl"]) 
+			line.text = "%s Lv %d" % [t, lv]
+			var color: Color = Color(1,1,1,1)
+			if um2 and um2.has_method("get_upgrade_color"):
+				# find id by title (exact match)
+				var id_for_title := ""
+				for id in um2.upgrades_data.keys():
+					if um2.get_title(id) == t:
+						id_for_title = id
+						break
+				if id_for_title != "":
+					color = um2.get_upgrade_color(id_for_title)
+			# copy visual style from template but with per-line color
+			if tmpl:
+				if tmpl.label_settings != null:
+					var ls = tmpl.label_settings.duplicate()
+					ls.font_color = color
+					line.label_settings = ls
+				else:
+					var tf = tmpl.get_theme_font("font")
+					if tf: line.add_theme_font_override("font", tf)
+					var fs = tmpl.get_theme_font_size("font_size")
+					if fs > 0: line.add_theme_font_size_override("font_size", fs)
+					line.add_theme_color_override("font_color", color)
+				line.horizontal_alignment = tmpl.horizontal_alignment
+				line.vertical_alignment = tmpl.vertical_alignment
+				line.autowrap_mode = tmpl.autowrap_mode
+			else:
+				line.add_theme_color_override("font_color", color)
+			upgrades_box.add_child(line)
+		if upgrades_label:
+			upgrades_label.visible = false
+			upgrades_label.text = ""
+		upgrades_box.visible = entries.size() > 0
+	else:
+		var lines: Array[String] = []
+		for e in entries:
+			lines.append("%s Lv %d" % [str(e["title"]), int(e["lvl"])])
+		upgrades_label.text = ("\n".join(lines)) if lines.size() > 0 else ""
+		upgrades_label.visible = true
 
 func _setup_buttons():
 	_buttons.clear()

@@ -92,6 +92,10 @@ theme_override_font_sizes/font_size = 24
 text = "test"
 label_settings = ExtResource("3_hud")
 
+[node name="UpgradeListBox" type="VBoxContainer" parent="Panel/UpgradeContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
 [node name="OptionsMenu" type="VBoxContainer" parent="Panel"]
 visible = false
 z_index = 2

@@ -90,3 +90,24 @@ func apply_upgrade(player: Node, choice: String):
 # Helper to get an upgrade title
 func get_title(id: String) -> String:
 	return upgrades_data.get(id, {}).get("title", id)
+
+# Returns a color associated with a rarity keyword
+func get_rarity_color(rarity: String) -> Color:
+	match rarity:
+		"common":
+			return Color(1,1,1)
+		"uncommon":
+			return Color(0.2, 0.9, 0.2)
+		"rare":
+			return Color(0.4,0.6,1)
+		"epic":
+			return Color(0.7,0.3,0.9)
+		"legendary":
+			return Color(1,0.6,0)
+		_:
+			return Color(1,1,1)
+
+# Convenience: color for a given upgrade id
+func get_upgrade_color(id: String) -> Color:
+	var rarity := str(upgrades_data.get(id, {}).get("rarity", "common"))
+	return get_rarity_color(rarity)

@@ -64,15 +64,9 @@ func show_upgrades(options: Array):
 			]
 			_base_texts[i] = btn.text
 
-			# color based on rarity (keep text color; selection uses focus style)
+			# color based on rarity (centralized in UpgradeManager)
 			var rarity = str(data.get("rarity", "common"))
-			var base_col := Color(1,1,1)
-			match rarity:
-				"common": base_col = Color(1,1,1)
-				"uncommon": base_col = Color(0.2, 0.9, 0.2)
-				"rare": base_col = Color(0.4,0.6,1)
-				"epic": base_col = Color(0.7,0.3,0.9)
-				"legendary": base_col = Color(1,0.6,0)
+			var base_col: Color = upgrade_manager.get_rarity_color(rarity)
 			btn.add_theme_color_override("font_color", base_col)
 			btn.add_theme_color_override("font_hover_color", base_col)
 			btn.add_theme_color_override("font_focus_color", base_col)
