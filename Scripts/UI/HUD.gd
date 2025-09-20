@@ -60,6 +60,7 @@ func update_special(current: float, max_value: float):
 # ==========================
 func update_timer(seconds: int):
 	if timer_label == null: timer_label = $Control/MarginContainer/VBoxContainer/TimerLabel
+	@warning_ignore("integer_division")
 	var minutes = seconds / 60
 	var secs = seconds % 60
 	timer_label.text = "%02d:%02d" % [minutes, secs]

@@ -59,6 +59,7 @@ func _sort_by_score_desc(a: Dictionary, b: Dictionary) -> bool:
 	return int(a.get("score", 0)) > int(b.get("score", 0))
 
 func _format_time(seconds: int) -> String:
+	@warning_ignore("integer_division")
 	var m: int = int(seconds / 60)
 	var s: int = seconds % 60
 	return "%02d:%02d" % [m, s]
