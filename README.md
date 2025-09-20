@@ -3,7 +3,7 @@
 **RETRO HORDE** is an arcade-inspired survival game prototype built with **Godot Engine 4**.  
 You play as a lone hero facing endless waves of enemies, leveling up, and choosing upgrades to survive as long as possible.  
 
-<img width="1072" height="680" alt="IMG_MainMenu" src="https://github.com/user-attachments/assets/2831a0e9-35d0-4499-b866-ea95c4ae888e" />
+<img width="2168" height="1452" alt="image" src="https://github.com/user-attachments/assets/8fcf6a7a-4978-440e-8a3f-721517dda666" />
 
 ## 🎮 Features (current)
 - Fast-paced **retro/arcade survival gameplay**  
