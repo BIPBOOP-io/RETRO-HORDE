@@ -14,6 +14,7 @@ func _ready():
 	var score = int(data.get("score", (kills * 10) + (lvl * 100) + (t * 2))) # fallback for older runs
 
 	# Time format
+	@warning_ignore("integer_division")
 	var m = t / 60
 	var s = t % 60
 	time_label.text  = "TIME : %02d:%02d" % [m, s]
@@ -35,6 +36,7 @@ func _ready():
 		# Optional UI display if BestLabel exists
 		if best_label:
 			var bt = int(best.get("duration", 0))
+			@warning_ignore("integer_division")
 			var bm = bt / 60
 			var bs = bt % 60
 			best_label.text = "RECORD :\n %d PTS | %d KILLS | LEVEL %d | TIME : %02d:%02d" % [
