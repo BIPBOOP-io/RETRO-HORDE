@@ -101,13 +101,20 @@ func _refresh_upgrades():
 	if typeof(levels) != TYPE_DICTIONARY:
 		upgrades_label.text = ""
 		return
-	var lines: Array[String] = []
+	var entries: Array = []
 	for id in levels.keys():
 		var lvl: int = int(levels[id])
 		if lvl > 0:
 			var title: String = str(um.get_title(id))
-			lines.append("%s Lv %d" % [title, lvl])
-	lines.sort()
+			entries.append({"title": title, "lvl": lvl})
+	# sort by level desc then title asc
+	entries.sort_custom(func(a, b):
+		var la = int(a["lvl"]) ; var lb = int(b["lvl"])
+		if la == lb: return str(a["title"]) < str(b["title"]) ;
+		return la > lb)
+	var lines: Array[String] = []
+	for e in entries:
+		lines.append("%s Lv %d" % [str(e["title"]), int(e["lvl"])])
 	upgrades_label.text = ("\n".join(lines)) if lines.size() > 0 else ""
 
 func _setup_buttons():
