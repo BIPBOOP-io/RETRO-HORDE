@@ -208,3 +208,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("special"):
 		accept_event()
 		_activate_focused()
+		return
+	# Quick select via number keys 1-3
+	if event is InputEventKey and event.pressed and not event.echo:
+		var key := (event as InputEventKey).physical_keycode
+		var vis = _get_visible_buttons()
+		var idx := -1
+		if key == KEY_1: idx = 0
+		elif key == KEY_2: idx = 1
+		elif key == KEY_3: idx = 2
+		if idx >= 0 and idx < vis.size():
+			accept_event()
+			var btn: Button = vis[idx]
+			var orig_idx := _buttons.find(btn)
+			if orig_idx != -1:
+				_on_option_pressed(orig_idx)
