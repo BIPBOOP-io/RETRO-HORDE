@@ -106,12 +106,13 @@ func _refresh_upgrades():
 	for id in levels.keys():
 		var lvl: int = int(levels[id])
 		if lvl > 0:
-			var title: String = str(um.get_title(id))
-			entries.append({"title": title, "lvl": lvl})
-	# sort by level desc then title asc
+			entries.append({"id": str(id), "lvl": lvl})
+	# sort by level desc then title asc (using UpgradeManager titles)
 	entries.sort_custom(func(a, b):
-		var la = int(a["lvl"]) ; var lb = int(b["lvl"])
-		if la == lb: return str(a["title"]) < str(b["title"]) ;
+		var la = int(a["lvl"]) ; var lb = int(b["lvl"]) ;
+		if la == lb:
+			var ida: String = str(a["id"]) ; var idb: String = str(b["id"]) ;
+			return str(um.get_title(ida)) < str(um.get_title(idb)) ;
 		return la > lb)
 	if upgrades_box:
 		# Clear and rebuild colored list
@@ -122,18 +123,12 @@ func _refresh_upgrades():
 		var tmpl: Label = upgrades_label  # use existing label as style template
 		for e in entries:
 			var line = Label.new()
-			var t: String = str(e["title"]) ; var lv: int = int(e["lvl"]) 
-			line.text = "%s Lv %d" % [t, lv]
+			var id_str: String = str(e["id"]) ; var lv: int = int(e["lvl"]) 
+			var title_str: String = um2.get_title(id_str) if um2 else str(e["id"]) 
+			line.text = "%s Lv %d" % [title_str, lv]
 			var color: Color = Color(1,1,1,1)
 			if um2 and um2.has_method("get_upgrade_color"):
-				# find id by title (exact match)
-				var id_for_title := ""
-				for id in um2.upgrades_data.keys():
-					if um2.get_title(id) == t:
-						id_for_title = id
-						break
-				if id_for_title != "":
-					color = um2.get_upgrade_color(id_for_title)
+				color = um2.get_upgrade_color(id_str)
 			# copy visual style from template but with per-line color
 			if tmpl:
 				if tmpl.label_settings != null:
@@ -159,7 +154,8 @@ func _refresh_upgrades():
 	else:
 		var lines: Array[String] = []
 		for e in entries:
-			lines.append("%s Lv %d" % [str(e["title"]), int(e["lvl"])])
+			var id_str: String = str(e["id"]) ; var lv: int = int(e["lvl"]) 
+			lines.append("%s Lv %d" % [str(um.get_title(id_str)), lv])
 		upgrades_label.text = ("\n".join(lines)) if lines.size() > 0 else ""
 		upgrades_label.visible = true
 
