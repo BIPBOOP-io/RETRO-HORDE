@@ -276,6 +276,9 @@ func _play_idle_animation():
 	# ==========================
 
 func _fire_arrow_salvo(dir: Vector2, delay: float):
+	if attack_ctrl:
+		attack_ctrl.fire_arrow_salvo(dir, delay)
+		return
 	if delay > 0: await get_tree().create_timer(delay).timeout
 
 	var spread = 10.0
@@ -285,6 +288,10 @@ func _fire_arrow_salvo(dir: Vector2, delay: float):
 		_spawn_arrow(dir.rotated(angle_offset))
 
 func _spawn_arrow(direction: Vector2):
+	if attack_ctrl:
+		# The controller now owns the spawn logic; keep this as fallback
+		attack_ctrl._spawn_arrow(direction)
+		return
 	var arrow = arrow_scene.instantiate()
 	arrow.global_position = global_position
 	arrow.direction = direction

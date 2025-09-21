@@ -53,8 +53,30 @@ func _on_attack_tick() -> void:
         var dir: Vector2 = (closest_enemy.global_position - player.global_position).normalized()
         for i in range(player.multi_shot):
             var delay = i * 0.3
-            if player.has_method("_fire_arrow_salvo"):
-                player._fire_arrow_salvo(dir, delay)
+            fire_arrow_salvo(dir, delay)
+
+func fire_arrow_salvo(dir: Vector2, delay: float) -> void:
+    if delay > 0:
+        await get_tree().create_timer(delay).timeout
+    var spread = 10.0
+    var half = (player.arrow_count - 1) / 2.0
+    for i in range(player.arrow_count):
+        var angle_offset = (i - half) * deg_to_rad(spread)
+        _spawn_arrow(dir.rotated(angle_offset))
+
+func _spawn_arrow(direction: Vector2) -> void:
+    if player.arrow_scene == null:
+        return
+    var arrow = player.arrow_scene.instantiate()
+    arrow.global_position = player.global_position
+    arrow.direction = direction
+    arrow.damage = player.arrow_damage
+    arrow.knockback_multiplier = player.knockback_multiplier
+    arrow.pierce_left = player.arrow_pierce
+    arrow.crit_chance = player.crit_chance
+    arrow.crit_multiplier = player.crit_multiplier
+    if player.get_parent():
+        player.get_parent().add_child(arrow)
 
 func fire_special(dir: Vector2, params: Dictionary = {}):
     # Placeholder for a future migration of the giant arrow logic.
