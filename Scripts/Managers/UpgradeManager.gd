@@ -65,7 +65,10 @@ func apply_upgrade(player: Node, choice: String):
 			player.attack_range += 30
 		"firerate":
 			player.attack_interval = max(0.2, player.attack_interval - 0.1)
-			player.attack_timer.wait_time = player.attack_interval
+			if player.has_variable("attack_ctrl") and player.attack_ctrl != null and player.attack_ctrl.has_method("set_attack_interval"):
+				player.attack_ctrl.set_attack_interval(player.attack_interval)
+			elif player.has_variable("attack_timer") and player.attack_timer != null:
+				player.attack_timer.wait_time = player.attack_interval
 		"damage":
 			player.arrow_damage += 1
 		"extra_arrow":

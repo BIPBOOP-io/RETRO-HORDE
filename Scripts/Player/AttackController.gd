@@ -33,11 +33,29 @@ func stop_auto_attack() -> void:
         attack_timer.stop()
 
 func _on_attack_tick() -> void:
-    # Placeholder: keep current Player.gd implementation for now.
-    # You can migrate Player._auto_attack() here and call it instead.
-    pass
+    if player == null:
+        return
+    var enemies: Array = []
+    if get_enemies.is_valid():
+        enemies = get_enemies.call()
+    if enemies.is_empty():
+        return
+
+    var closest_enemy = null
+    var closest_dist_sq: float = INF
+    for e in enemies:
+        var dist_sq = player.global_position.distance_squared_to(e.global_position)
+        if dist_sq < closest_dist_sq:
+            closest_dist_sq = dist_sq
+            closest_enemy = e
+
+    if closest_enemy and closest_dist_sq <= player.attack_range * player.attack_range:
+        var dir: Vector2 = (closest_enemy.global_position - player.global_position).normalized()
+        for i in range(player.multi_shot):
+            var delay = i * 0.3
+            if player.has_method("_fire_arrow_salvo"):
+                player._fire_arrow_salvo(dir, delay)
 
 func fire_special(dir: Vector2, params: Dictionary = {}):
     # Placeholder for a future migration of the giant arrow logic.
     pass
-

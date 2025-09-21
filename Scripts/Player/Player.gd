@@ -94,13 +94,17 @@ func _ready():
 	if special_bar_2d and special_bar_2d.has_method("set_values"):
 		special_bar_2d.set_values(0.0, special_cooldown)
 
-	# Auto-attack timer
-	attack_timer = Timer.new()
-	attack_timer.wait_time = attack_interval
-	attack_timer.autostart = true
-	attack_timer.one_shot = false
-	add_child(attack_timer)
-	attack_timer.timeout.connect(_auto_attack)
+	# Auto-attack handled by AttackController if present
+	if attack_ctrl:
+		attack_ctrl.start_auto_attack()
+	else:
+		# Fallback to local timer if controller not present
+		attack_timer = Timer.new()
+		attack_timer.wait_time = attack_interval
+		attack_timer.autostart = true
+		attack_timer.one_shot = false
+		add_child(attack_timer)
+		attack_timer.timeout.connect(_auto_attack)
 
 	# Slow regeneration timer
 	regen_timer = Timer.new()
