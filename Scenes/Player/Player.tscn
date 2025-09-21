@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://dfgof8pxal3hl"]
+[gd_scene load_steps=44 format=3 uid="uid://dfgof8pxal3hl"]
 
 [ext_resource type="Texture2D" uid="uid://deb4m2n5k7ucx" path="res://Assets/Sprites/Player/Beastmaster/Beastmaster_idle.png" id="1_ft8w5"]
 [ext_resource type="Script" uid="uid://boynubp0bfq22" path="res://Scripts/Player/Player.gd" id="1_h54ih"]
@@ -7,8 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dfmjiasifebcu" path="res://Scenes/Effects/HealParticles.tscn" id="3_4wape"]
 [ext_resource type="PackedScene" uid="uid://bthcdsld7ke43" path="res://Scenes/Effects/LevelUpParticles.tscn" id="4_t26db"]
 [ext_resource type="Script" uid="uid://x20yyse5f7xf" path="res://Scripts/UI/Bar2D.gd" id="5_bar2d"]
-[ext_resource type="Script" path="res://Scripts/Player/AttackController.gd" id="6_ac"]
-[ext_resource type="Script" path="res://Scripts/Player/HealthComponent.gd" id="7_hc"]
+[ext_resource type="Script" uid="uid://x31owgd5op8m" path="res://Scripts/Player/AttackController.gd" id="6_ac"]
+[ext_resource type="Script" uid="uid://cajnb7xc31tbf" path="res://Scripts/Player/HealthComponent.gd" id="7_hc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dewec"]
 atlas = ExtResource("1_ft8w5")
