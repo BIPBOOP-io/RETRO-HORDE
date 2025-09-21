@@ -67,6 +67,7 @@ var enemy_provider: Node = null
 @onready var stamina_bar_2d: Node2D = $StaminaBar2D
 @onready var attack_ctrl: AttackController = $AttackController if has_node("AttackController") else null
 @onready var health_comp: HealthComponent = $HealthComponent if has_node("HealthComponent") else null
+@onready var feedback: Feedback = $Feedback if has_node("Feedback") else null
 
 func _ready():
 	animated_sprite = $AnimatedSprite2D
@@ -131,6 +132,8 @@ func _ready():
 		attack_ctrl.setup(self, Callable(self, "_get_enemies"), attack_interval)
 	if health_comp:
 		health_comp.setup(self, hud, 2.0)
+	if feedback:
+		feedback.setup(self)
 
 # ==========================
 #       MOVEMENT
@@ -329,11 +332,13 @@ func level_up():
 		if not menu.upgrade_chosen.is_connected(_apply_upgrade):
 			menu.upgrade_chosen.connect(_apply_upgrade)
 		menu.show_upgrades(upgrades)
-	flash_gold()
+	if feedback:
+		feedback.flash_gold()
 
 func _apply_upgrade(choice: String):
 	upgrade_manager.apply_upgrade(self, choice)
-	flash_gold()
+	if feedback:
+		feedback.flash_gold()
 	if hud and hud.has_method("show_upgrade_toast"):
 		hud.show_upgrade_toast(upgrade_manager.get_title(choice))
 
@@ -351,8 +356,9 @@ func take_damage(amount: int):
 	if hud: hud.update_health(health, max_health)
 	if health_bar_2d and health_bar_2d.has_method("set_values"):
 		health_bar_2d.set_values(health, max_health)
-	flash_red()
-	shake_camera()
+	if feedback:
+		feedback.flash_red()
+		feedback.shake_camera()
 	if health <= 0: die()
 
 func heal_from_vampirism(damage_dealt: int):
@@ -367,7 +373,8 @@ func heal_from_vampirism(damage_dealt: int):
 			if hud: hud.update_health(health, max_health)
 			if health_bar_2d and health_bar_2d.has_method("set_values"):
 				health_bar_2d.set_values(health, max_health)
-			flash_green()
+			if feedback:
+				feedback.flash_green()
 
 func _on_regen_tick():
 	if health_comp:
@@ -378,34 +385,8 @@ func _on_regen_tick():
 		if hud: hud.update_health(health, max_health)
 		if health_bar_2d and health_bar_2d.has_method("set_values"):
 			health_bar_2d.set_values(health, max_health)
-		flash_green()
-
-# ==========================
-#   VISUAL FEEDBACK
-# ==========================
-func flash_red():
-	modulate = Color(1, 0.3, 0.3)
-	var tween = create_tween()
-	tween.tween_property(self, "modulate", Color(1, 1, 1), 0.2)
-
-func flash_green():
-	modulate = Color(0.3, 1, 0.3)
-	var tween = create_tween()
-	tween.tween_property(self, "modulate", Color(1, 1, 1), 0.2)
-
-func flash_gold():
-	modulate = Color(1, 0.85, 0.2)
-	var tween = create_tween()
-	tween.tween_property(self, "modulate", Color(1, 1, 1), 0.4)
-
-func shake_camera():
-	var cam = get_viewport().get_camera_2d()
-	if cam:
-		var tween = create_tween()
-		tween.tween_property(cam, "offset", Vector2(10, 0), 0.05).as_relative()
-		tween.tween_property(cam, "offset", Vector2(-20, 0), 0.1).as_relative()
-		tween.tween_property(cam, "offset", Vector2(10, 0), 0.05).as_relative()
-		tween.tween_property(cam, "offset", Vector2(0, 0), 0.05)
+		if feedback:
+			feedback.flash_green()
 
 func spawn_particles(particles_scene: PackedScene):
 	if particles_scene:
