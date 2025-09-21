@@ -65,6 +65,8 @@ var enemy_provider: Node = null
 @onready var health_bar_2d: Node2D = $HealthBar2D
 @onready var special_bar_2d: Node2D = $SpecialBar2D
 @onready var stamina_bar_2d: Node2D = $StaminaBar2D
+@onready var attack_ctrl: AttackController = $AttackController if has_node("AttackController") else null
+@onready var health_comp: HealthComponent = $HealthComponent if has_node("HealthComponent") else null
 
 func _ready():
 	animated_sprite = $AnimatedSprite2D
@@ -118,6 +120,12 @@ func _ready():
 	# Start special on cooldown at match start
 	special_ready = false
 	special_timer.start()
+
+	# Optional controllers (skeletons). They do nothing yet until logic is migrated.
+	if attack_ctrl:
+		attack_ctrl.setup(self, Callable(self, "_get_enemies"), attack_interval)
+	if health_comp:
+		health_comp.setup(self, hud, 2.0)
 
 # ==========================
 #       MOVEMENT
