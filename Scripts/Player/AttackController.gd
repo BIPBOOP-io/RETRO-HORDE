@@ -78,6 +78,30 @@ func _spawn_arrow(direction: Vector2) -> void:
 	if player.get_parent():
 		player.get_parent().add_child(arrow)
 
-func fire_special(_dir: Vector2, _params: Dictionary = {}):
-	# Placeholder for a future migration of the giant arrow logic.
-	pass
+func fire_special(dir: Vector2, _params: Dictionary = {}):
+	if player == null:
+		return
+	if player.arrow_scene == null:
+		return
+	# Instantiate a special (giant) arrow using player's special parameters
+	var arrow = player.arrow_scene.instantiate()
+	arrow.global_position = player.global_position
+	arrow.direction = dir.normalized()
+	# Scale and stats
+	if arrow.has_variable("speed"):
+		arrow.speed = float(arrow.speed) * player.special_speed_mult
+	if arrow.has_variable("max_distance"):
+		arrow.max_distance = player.special_max_distance
+	if arrow.has_variable("pierce_left"):
+		arrow.pierce_left = player.special_pierce
+	if arrow.has_variable("damage"):
+		arrow.damage = int(player.arrow_damage * player.special_damage_mult)
+	if arrow.has_variable("knockback_multiplier"):
+		arrow.knockback_multiplier = player.knockback_multiplier * player.special_knockback_mult
+	if arrow.has_variable("crit_chance"):
+		arrow.crit_chance = player.crit_chance
+	if arrow.has_variable("crit_multiplier"):
+		arrow.crit_multiplier = player.crit_multiplier
+	arrow.scale = Vector2.ONE * player.special_scale
+	if player.get_parent():
+		player.get_parent().add_child(arrow)

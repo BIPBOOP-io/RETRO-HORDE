@@ -234,6 +234,9 @@ func _get_best_target_direction() -> Vector2:
 	return Vector2.ZERO
 
 func _fire_giant_arrow(dir: Vector2):
+	if attack_ctrl:
+		attack_ctrl.fire_special(dir)
+		return
 	var scene: PackedScene = special_arrow_scene if special_arrow_scene else arrow_scene
 	if scene == null:
 		return
