@@ -61,6 +61,7 @@ var attack_timer: Timer
 var hud: Node
 var regen_timer: Timer
 @onready var upgrade_manager: UpgradeManager = preload("res://Scripts/Managers/UpgradeManager.gd").new()
+var enemy_provider: Node = null
 @onready var health_bar_2d: Node2D = $HealthBar2D
 @onready var special_bar_2d: Node2D = $SpecialBar2D
 @onready var stamina_bar_2d: Node2D = $StaminaBar2D
@@ -205,7 +206,7 @@ func _on_special_ready():
 	special_ready = true
 
 func _get_best_target_direction() -> Vector2:
-	var enemies = get_tree().get_nodes_in_group("enemies")
+	var enemies = _get_enemies()
 	if enemies.is_empty():
 		return Vector2.ZERO
 	var closest = null
@@ -258,26 +259,9 @@ func _play_idle_animation():
 	if "walk" in current_anim:
 		animated_sprite.play(current_anim.replace("walk", "idle"))
 
-# ==========================
-#       AUTO-ATTACK
-# ==========================
-func _auto_attack():
-	var enemies = get_tree().get_nodes_in_group("enemies")
-	if enemies.is_empty(): return
-
-	var closest_enemy = null
-	var closest_dist_sq: float = INF
-	for e in enemies:
-		var dist_sq = global_position.distance_squared_to(e.global_position)
-		if dist_sq < closest_dist_sq:
-			closest_dist_sq = dist_sq
-			closest_enemy = e
-
-	if closest_enemy and closest_dist_sq <= attack_range * attack_range:
-		var dir = (closest_enemy.global_position - global_position).normalized()
-		for i in range(multi_shot):
-			var delay = i * 0.3
-			_fire_arrow_salvo(dir, delay)
+	# ==========================
+	#       AUTO-ATTACK
+	# ==========================
 
 func _fire_arrow_salvo(dir: Vector2, delay: float):
 	if delay > 0: await get_tree().create_timer(delay).timeout
@@ -403,3 +387,28 @@ func spawn_particles(particles_scene: PackedScene):
 func die():
 	emit_signal("died")  # notify Main that the player died
 	queue_free()         # optionally free the Player
+func _auto_attack():
+	var enemies = _get_enemies()
+	if enemies.is_empty(): return
+
+	var closest_enemy = null
+	var closest_dist_sq: float = INF
+	for e in enemies:
+		var dist_sq = global_position.distance_squared_to(e.global_position)
+		if dist_sq < closest_dist_sq:
+			closest_dist_sq = dist_sq
+			closest_enemy = e
+
+	if closest_enemy and closest_dist_sq <= attack_range * attack_range:
+		var dir = (closest_enemy.global_position - global_position).normalized()
+		for i in range(multi_shot):
+			var delay = i * 0.3
+			_fire_arrow_salvo(dir, delay)
+
+func set_enemy_provider(p: Node) -> void:
+	enemy_provider = p
+
+func _get_enemies() -> Array:
+	if enemy_provider and enemy_provider.has_method("get_enemies"):
+		return enemy_provider.get_enemies()
+	return get_tree().get_nodes_in_group("enemies")

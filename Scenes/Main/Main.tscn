@@ -14,12 +14,36 @@ script = ExtResource("1_cmk6n")
 [node name="Player" parent="." instance=ExtResource("1_p8rbg")]
 z_index = 5
 position = Vector2(960, 540)
+speed = null
+attack_interval = null
+attack_range = null
+arrow_damage = null
+sprint_multiplier = null
+max_stamina = null
+stamina = null
+stamina_drain_per_sec = null
+stamina_regen_per_sec = null
+stamina_ready_fraction = null
+max_health = null
+health = null
+xp_to_next_level = null
+special_cooldown = null
+special_scale = null
+special_damage_mult = null
+special_speed_mult = null
+special_max_distance = null
+special_pierce = null
+special_knockback_mult = null
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
 [node name="EnemySpawner" parent="." instance=ExtResource("4_i3fi7")]
 z_index = 5
 enemy_scene = ExtResource("2_qtv3y")
+spawn_interval = null
+spawn_margin = null
+min_interval = null
+difficulty_ramp = null
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 2
