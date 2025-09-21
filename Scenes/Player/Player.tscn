@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dfmjiasifebcu" path="res://Scenes/Effects/HealParticles.tscn" id="3_4wape"]
 [ext_resource type="PackedScene" uid="uid://bthcdsld7ke43" path="res://Scenes/Effects/LevelUpParticles.tscn" id="4_t26db"]
 [ext_resource type="Script" uid="uid://x20yyse5f7xf" path="res://Scripts/UI/Bar2D.gd" id="5_bar2d"]
+[ext_resource type="Script" path="res://Scripts/Player/AttackController.gd" id="6_ac"]
+[ext_resource type="Script" path="res://Scripts/Player/HealthComponent.gd" id="7_hc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dewec"]
 atlas = ExtResource("1_ft8w5")
@@ -316,3 +318,9 @@ script = ExtResource("5_bar2d")
 size = Vector2(44, 4)
 fill_color = Color(1, 0.85, 0, 1)
 hide_when_full = true
+
+[node name="AttackController" type="Node" parent="."]
+script = ExtResource("6_ac")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("7_hc")
