@@ -106,13 +106,14 @@ func _ready():
 		add_child(attack_timer)
 		attack_timer.timeout.connect(_auto_attack)
 
-	# Slow regeneration timer
-	regen_timer = Timer.new()
-	regen_timer.wait_time = 2.0
-	regen_timer.autostart = false
-	regen_timer.one_shot = false
-	regen_timer.timeout.connect(_on_regen_tick)
-	add_child(regen_timer)
+	# Slow regeneration timer (fallback if no health component)
+	if health_comp == null:
+		regen_timer = Timer.new()
+		regen_timer.wait_time = 2.0
+		regen_timer.autostart = false
+		regen_timer.one_shot = false
+		regen_timer.timeout.connect(_on_regen_tick)
+		add_child(regen_timer)
 
 	# Special ability cooldown timer
 	special_timer = Timer.new()
@@ -337,10 +338,12 @@ func _apply_upgrade(choice: String):
 #       HEALTH & DAMAGE
 # ==========================
 func take_damage(amount: int):
+	if health_comp:
+		health_comp.damage(amount)
+		return
 	if has_shield:
 		has_shield = false
 		return
-
 	health -= amount
 	if hud: hud.update_health(health, max_health)
 	if health_bar_2d and health_bar_2d.has_method("set_values"):
@@ -350,10 +353,12 @@ func take_damage(amount: int):
 	if health <= 0: die()
 
 func heal_from_vampirism(damage_dealt: int):
+	if health_comp:
+		health_comp.apply_vampirism(damage_dealt)
+		return
 	if vampirism > 0.0 and health < max_health:  # only if not at full health
 		var heal_amount = max(1, round(damage_dealt * vampirism))
 		var new_health = min(max_health, health + heal_amount)
-
 		if new_health > health:  # only if it actually heals
 			health = new_health
 			if hud: hud.update_health(health, max_health)
@@ -362,6 +367,9 @@ func heal_from_vampirism(damage_dealt: int):
 			flash_green()
 
 func _on_regen_tick():
+	if health_comp:
+		health_comp._on_regen_tick()
+		return
 	if health < max_health:  # block regen if already at full health
 		health += 1
 		if hud: hud.update_health(health, max_health)
