@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c8xa3or1a7jk4"]
+[gd_scene load_steps=8 format=3 uid="uid://c8xa3or1a7jk4"]
 
 [ext_resource type="Script" uid="uid://viwcms5ga2qk" path="res://Scripts/UI/MainMenuTest.gd" id="1_4jqr8"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="2_04clx"]
@@ -6,6 +6,8 @@
 [ext_resource type="LabelSettings" uid="uid://bikre5jifcmb0" path="res://Assets/HUD2.tres" id="3_wefij"]
 [ext_resource type="Script" uid="uid://bqe472hrtenbq" path="res://Scripts/Enemies/BackgroundEnemySpawner.gd" id="5_nxm3x"]
 [ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="6_f87uj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nxm3x"]
 
 [node name="MainMenuTest" type="Control"]
 layout_mode = 3
@@ -64,6 +66,7 @@ theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_04clx")
 theme_override_font_sizes/font_size = 31
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nxm3x")
 toggle_mode = true
 text = "PLAY"
 flat = true
@@ -83,6 +86,7 @@ theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_04clx")
 theme_override_font_sizes/font_size = 31
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nxm3x")
 text = "UPGRADES"
 flat = true
 alignment = 0
@@ -101,6 +105,7 @@ theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_04clx")
 theme_override_font_sizes/font_size = 31
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nxm3x")
 text = "OPTIONS"
 flat = true
 alignment = 0
@@ -118,6 +123,7 @@ theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_04clx")
 theme_override_font_sizes/font_size = 31
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nxm3x")
 text = "QUIT"
 flat = true
 alignment = 0
@@ -143,7 +149,7 @@ z_index = 6
 position = Vector2(-1, 0)
 script = ExtResource("5_nxm3x")
 background_enemy_scene = ExtResource("6_f87uj")
-enemy_count = 30
+enemy_count = 20
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Center/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Center/UpgradesButton" to="." method="_on_upgrades_pressed"]

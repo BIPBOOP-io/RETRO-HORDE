@@ -1,5 +1,6 @@
 extends Node
 var score_data: Dictionary = {}  # time, kills, level, etc.
+var previous_scene: String = ""  # track where to return after options
 
 # ================================
 #   Global constants
