@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://v8k2l0syin5i"]
+[gd_scene load_steps=5 format=3 uid="uid://v8k2l0syin5i"]
 
+[ext_resource type="Script" uid="uid://c53c5uuw02ho2" path="res://Scripts/UI/OptionsMenuTest.gd" id="1_1ed7d"]
 [ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="1_8gy0u"]
 [ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="2_1ed7d"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="2_7dg7f"]
@@ -11,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_1ed7d")
 
 [node name="OptionsMenuTestMarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -37,10 +39,10 @@ uppercase = true
 [node name="MarginContainer" type="MarginContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="TabContainer" type="TabContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer"]
 layout_mode = 2
@@ -52,6 +54,12 @@ current_tab = 0
 
 [node name="GENERAL" type="TabBar" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../ACCESSIBILITY")
+focus_neighbor_top = NodePath("../../../BackButton")
+focus_neighbor_right = NodePath("../AUDIO")
+focus_neighbor_bottom = NodePath("GeneralMarginContainer/GeneralVBoxContainer/LanguageHBoxContainer/LanguageOptionButton")
+focus_next = NodePath("../AUDIO")
+focus_previous = NodePath("../ACCESSIBILITY")
 metadata/_tab_index = 0
 
 [node name="GeneralMarginContainer" type="MarginContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/GENERAL"]
@@ -84,6 +92,8 @@ uppercase = true
 [node name="LanguageOptionButton" type="OptionButton" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/GENERAL/GeneralMarginContainer/GeneralVBoxContainer/LanguageHBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../..")
+focus_neighbor_bottom = NodePath("../../ResetHBoxContainer/ResetButton")
 theme_override_fonts/font = ExtResource("2_7dg7f")
 selected = 0
 item_count = 5
@@ -112,12 +122,20 @@ uppercase = true
 [node name="ResetButton" type="Button" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/GENERAL/GeneralMarginContainer/GeneralVBoxContainer/ResetHBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../LanguageHBoxContainer/LanguageOptionButton")
+focus_neighbor_bottom = NodePath("../../../../../../../BackButton")
 theme_override_fonts/font = ExtResource("2_7dg7f")
 text = "RESET"
 
 [node name="AUDIO" type="TabBar" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+focus_neighbor_left = NodePath("../GENERAL")
+focus_neighbor_top = NodePath("../../../BackButton")
+focus_neighbor_right = NodePath("../VIDEO")
+focus_neighbor_bottom = NodePath("AudioMarginContainer/AudioVBoxContainer/MasterVolumeHBoxContainer/MasterVolumeHSlider")
+focus_next = NodePath("../VIDEO")
+focus_previous = NodePath("../GENERAL")
 metadata/_tab_index = 1
 
 [node name="AudioMarginContainer" type="MarginContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/AUDIO"]
@@ -136,6 +154,12 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 theme_override_constants/separation = 8
 
+[node name="ResetButton" type="Button" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/AUDIO/AudioMarginContainer/AudioVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("2_7dg7f")
+text = "RESET"
+
 [node name="MasterVolumeHBoxContainer" type="HBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/AUDIO/AudioMarginContainer/AudioVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -152,6 +176,8 @@ uppercase = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../..")
+focus_neighbor_bottom = NodePath("../../MusicVolumeHBoxContainer/MusicVolumeHSlider")
 value = 100.0
 
 [node name="MusicVolumeHBoxContainer" type="HBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/AUDIO/AudioMarginContainer/AudioVBoxContainer"]
@@ -169,6 +195,8 @@ uppercase = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../MasterVolumeHBoxContainer/MasterVolumeHSlider")
+focus_neighbor_bottom = NodePath("../../SFXVolumeHBoxContainer/SFXVolumeHSlider")
 value = 100.0
 
 [node name="SFXVolumeHBoxContainer" type="HBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/AUDIO/AudioMarginContainer/AudioVBoxContainer"]
@@ -186,6 +214,8 @@ uppercase = true
 layout_mode = 2
 size_flags_horizontal = 7
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../MusicVolumeHBoxContainer/MusicVolumeHSlider")
+focus_neighbor_bottom = NodePath("../../MuteAllHBoxContainer/MuteAllCheckBox")
 value = 100.0
 
 [node name="MuteAllHBoxContainer" type="HBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/AUDIO/AudioMarginContainer/AudioVBoxContainer"]
@@ -201,10 +231,18 @@ uppercase = true
 
 [node name="MuteAllCheckBox" type="CheckBox" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/AUDIO/AudioMarginContainer/AudioVBoxContainer/MuteAllHBoxContainer"]
 layout_mode = 2
+focus_neighbor_top = NodePath("../../SFXVolumeHBoxContainer/SFXVolumeHSlider")
+focus_neighbor_bottom = NodePath("../../../../../../../BackButton")
 
 [node name="VIDEO" type="TabBar" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+focus_neighbor_left = NodePath("../AUDIO")
+focus_neighbor_top = NodePath("../../../BackButton")
+focus_neighbor_right = NodePath("../CONTROLS")
+focus_neighbor_bottom = NodePath("VideoMarginContainer/VideoVBoxContainer/FullscreenHBoxContainer/FullscreenCheckBox")
+focus_next = NodePath("../CONTROLS")
+focus_previous = NodePath("../AUDIO")
 metadata/_tab_index = 2
 
 [node name="VideoMarginContainer" type="MarginContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/VIDEO"]
@@ -222,6 +260,12 @@ theme_override_constants/margin_bottom = 20
 [node name="VideoVBoxContainer" type="VBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/VIDEO/VideoMarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
+
+[node name="ResetButton" type="Button" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/VIDEO/VideoMarginContainer/VideoVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("2_7dg7f")
+text = "RESET"
 
 [node name="FullscreenHBoxContainer" type="HBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/VIDEO/VideoMarginContainer/VideoVBoxContainer"]
 layout_mode = 2
@@ -298,6 +342,12 @@ popup/item_0/id = 0
 [node name="CONTROLS" type="TabBar" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+focus_neighbor_left = NodePath("../VIDEO")
+focus_neighbor_top = NodePath("../../../BackButton")
+focus_neighbor_right = NodePath("../ACCESSIBILITY")
+focus_neighbor_bottom = NodePath("ControlsMarginContainer/ControlsVBoxContainer/RebindHBoxContainer/RebindButton")
+focus_next = NodePath("../ACCESSIBILITY")
+focus_previous = NodePath("../VIDEO")
 metadata/_tab_index = 3
 
 [node name="ControlsMarginContainer" type="MarginContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/CONTROLS"]
@@ -315,6 +365,12 @@ theme_override_constants/margin_bottom = 20
 [node name="ControlsVBoxContainer" type="VBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/CONTROLS/ControlsMarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
+
+[node name="ResetButton" type="Button" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/CONTROLS/ControlsMarginContainer/ControlsVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("2_7dg7f")
+text = "RESET"
 
 [node name="RebindHBoxContainer" type="HBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/CONTROLS/ControlsMarginContainer/ControlsVBoxContainer"]
 layout_mode = 2
@@ -374,6 +430,12 @@ popup/item_2/id = 2
 [node name="ACCESSIBILITY" type="TabBar" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+focus_neighbor_left = NodePath("../CONTROLS")
+focus_neighbor_top = NodePath("../../../BackButton")
+focus_neighbor_right = NodePath("../GENERAL")
+focus_neighbor_bottom = NodePath("AccessibilityMarginContainer/AccessibilityVBoxContainer/UIScaleHBoxContainer/UIScaleHSlider")
+focus_next = NodePath("../GENERAL")
+focus_previous = NodePath("../CONTROLS")
 metadata/_tab_index = 4
 
 [node name="AccessibilityMarginContainer" type="MarginContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY"]
@@ -391,6 +453,12 @@ theme_override_constants/margin_bottom = 20
 [node name="AccessibilityVBoxContainer" type="VBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
+
+[node name="ResetButton" type="Button" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("2_7dg7f")
+text = "RESET"
 
 [node name="UIScaleHBoxContainer" type="HBoxContainer" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer"]
 layout_mode = 2
@@ -439,17 +507,25 @@ uppercase = true
 
 [node name="ColorblindModeOptionButton" type="OptionButton" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/ColorblindModeHBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_7dg7f")
+selected = 0
+item_count = 1
+popup/item_0/text = "DISABLED"
+popup/item_0/id = 0
 
 [node name="BackButton" type="Button" parent="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer"]
 layout_mode = 2
-focus_mode = 0
+focus_neighbor_bottom = NodePath("../MarginContainer/TabContainer/GENERAL")
+focus_next = NodePath("../MarginContainer/TabContainer/GENERAL")
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.4, 0.25490198, 1)
 theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_7dg7f")
 theme_override_font_sizes/font_size = 30
 text = "BACK"
 flat = true
+
+[connection signal="pressed" from="OptionsMenuTestMarginContainer/OptionsMenuTestVBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
