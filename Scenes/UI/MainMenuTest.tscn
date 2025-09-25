@@ -134,13 +134,13 @@ alignment = 0
 [node name="Footer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Footer"]
+[node name="PublisherLabel" type="Label" parent="MarginContainer/VBoxContainer/Footer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "BIPBOOP.io"
 label_settings = ExtResource("3_wefij")
 
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/Footer"]
+[node name="VersionLabel" type="Label" parent="MarginContainer/VBoxContainer/Footer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "v.0.1"
