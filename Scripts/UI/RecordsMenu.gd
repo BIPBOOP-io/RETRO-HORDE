@@ -26,43 +26,65 @@ func _unhandled_input(event: InputEvent) -> void:
 		accept_event()
 		_on_back_button_pressed()
 
-func _populate_list():
+# --------------------------
+#   Data
+# --------------------------
+
+func _populate_list() -> void:
 	# Clear existing rows
 	for c in list_container.get_children():
 		c.queue_free()
 
-	var stats: Array = SaveManager.load_stats()
+	# Ajout d’un label temporaire "Loading..."
+	var loading := Label.new()
+	loading.text = "Loading leaderboard..."
+	list_container.add_child(loading)
 
-	if stats.is_empty():
-		var empty = Label.new()
+	# Récupération depuis Supabase
+	_populate_from_supabase()
+
+# Charge le leaderboard Supabase
+func _populate_from_supabase() -> void:
+	var rows: Array = await Score.get_leaderboard("survival_time", 50, true)
+
+	# Clear "Loading..." message
+	for c in list_container.get_children():
+		c.queue_free()
+
+	if rows.is_empty():
+		var empty := Label.new()
 		empty.text = "No records yet."
 		list_container.add_child(empty)
 		return
 
-	# Sort by score (descending)
-	stats.sort_custom(Callable(self, "_sort_by_score_desc"))
-
-	# Keep max 50 entries
-	stats = stats.slice(0, min(50, stats.size()))
-
-	# Add rows
+	# Ajoute les rows à la liste
 	var i := 0
-	for run in stats:
+	for run in rows:
 		var row = row_scene.instantiate()
 		list_container.add_child(row)
+
+		# Récupération sécurisée des champs (selon ton schema Supabase)
+		@warning_ignore("shadowed_variable_base_class")
+		var name: String = run.get("player_name", "Player")
+		var kills: int = int(run.get("kills", 0))
+		var level: int = int(run.get("level", 1))
+		var time_sec: int = int(run.get("survival_time", 0))
+		var date_str: String = run.get("created_at", "")
+
 		row.set_data(
-			run.get("name", "Player"),        # Nom
-			int(run.get("score", 0)),         # Score
-			int(run.get("kills", 0)),         # Kills
-			int(run.get("level", 1)),         # Level
-			_format_time(int(run.get("duration", 0))),  # formatted time
-			_format_date(run.get("date", "")),         # formatted date
-			i % 2 == 1                                     # alternate background
+			name,
+			kills,                        # Score (ici kills)
+			kills,                        # Colonne kills
+			level,                        # Colonne level
+			_format_time(time_sec),       # Temps formaté
+			_format_date(date_str),       # Date formatée
+			i % 2 == 1                    # Alternance background
 		)
 		i += 1
 
-func _sort_by_score_desc(a: Dictionary, b: Dictionary) -> bool:
-	return int(a.get("score", 0)) > int(b.get("score", 0))
+# --------------------------
+#   Helpers
+# --------------------------
 
 func _format_time(seconds: int) -> String:
 	@warning_ignore("integer_division")

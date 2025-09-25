@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Global="*res://Scripts/Global.gd"
 Settings="*res://Scripts/Managers/Settings.gd"
 SceneLoader="*res://Scripts/SceneLoader.gd"
+Score="*res://Scripts/Net/ScoreService.gd"
 
 [display]
 
