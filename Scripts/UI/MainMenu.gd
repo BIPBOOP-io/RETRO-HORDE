@@ -6,9 +6,6 @@ const OPTIONS_SCENE := preload("res://Scenes/UI/OptionsMenu.tscn")
 
 @onready var play_button = $MarginContainer/VBoxContainer/Center/PlayButton
 
-func _ready() -> void:
-	play_button.grab_focus()
-
 func _on_play_pressed() -> void:
 	SceneLoader.go_to(MAIN_SCENE, SceneLoader.Direction.DOWN)
 
