@@ -60,9 +60,13 @@ func _ready():
 #   Network
 # --------------------------
 
-func _send_score(player_name: String, kills: int, level: int, duration: int, device: String, version: String) -> void:
+func _send_score(player_name: String, kills: int, level: int, duration: int, device: String, version: String = "") -> void:
+	# Récupérer la version du projet si non fournie
+	if version == "" or version == "EMPTY":
+		version = str(ProjectSettings.get_setting("application/config/version", "dev"))
+
 	await Score.submit_score(player_name, kills, level, duration, device, version)
-	print("✅ Score sent to Supabase for %s" % player_name)
+	print("✅ Score sent to Supabase for %s (v%s)" % [player_name, version])
 
 
 # --------------------------
