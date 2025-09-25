@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=3 uid="uid://c0d3opt10ns"]
+
+[ext_resource type="Script" uid="uid://t4xg37o3y7sy" path="res://Scripts/UI/OptionsMenuOLD.gd" id="1_ce27k"]
+[ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_8mn5x"]
+[ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_7muvw"]
+[ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="4_ramw2"]
+
+[node name="OptionsMenuOLD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ce27k")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "OPTIONS"
+label_settings = ExtResource("2_8mn5x")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Row" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LayoutLabel" type="Label" parent="Margin/VBox/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Keyboard layout"
+label_settings = ExtResource("3_7muvw")
+horizontal_alignment = 2
+uppercase = true
+
+[node name="LayoutOption" type="OptionButton" parent="Margin/VBox/Row"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("4_ramw2")
+theme_override_font_sizes/font_size = 24
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" type="Button" parent="Margin/VBox/Buttons"]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_ramw2")
+theme_override_font_sizes/font_size = 30
+text = "BACK"
+flat = true
