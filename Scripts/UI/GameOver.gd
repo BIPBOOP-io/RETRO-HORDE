@@ -33,7 +33,6 @@ func _ready():
 			if int(e.get("score", 0)) > int(best.get("score", 0)):
 				best = e
 
-		# Optional UI display if BestLabel exists
 		if best_label:
 			var bt = int(best.get("duration", 0))
 			@warning_ignore("integer_division")
@@ -45,6 +44,30 @@ func _ready():
 				int(best.get("level", 1)),
 				bm, bs
 			]
+
+	# --- ENVOI DU SCORE EN LIGNE ---
+	var player_name: String = "Guest"
+	if "player_name" in Global:
+		player_name = Global.player_name
+
+	var device: String = OS.get_name().to_lower()
+	var version: String = ProjectSettings.get_setting("application/config/version", "dev")
+
+	_send_score(player_name, kills, lvl, t, device, version)
+
+
+# --------------------------
+#   Network
+# --------------------------
+
+func _send_score(player_name: String, kills: int, level: int, duration: int, device: String, version: String) -> void:
+	await Score.submit_score(player_name, kills, level, duration, device, version)
+	print("✅ Score sent to Supabase for %s" % player_name)
+
+
+# --------------------------
+#   Navigation
+# --------------------------
 
 func _on_replay_button_pressed():
 	get_tree().change_scene_to_file("res://Scenes/Main/Main.tscn")
