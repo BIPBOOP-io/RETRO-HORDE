@@ -4,21 +4,27 @@ extends Control
 @onready var back_button: Button = $Margin/VBox/Buttons/BackButton
 @onready var title_label: Label = $Margin/VBox/Title
 
-# Load RecordRow scene for better control over row design
 var row_scene: PackedScene = preload("res://Scenes/UI/RecordRow.tscn")
 
-func _ready():
+func _ready() -> void:
 	title_label.text = "Records"
-	back_button.pressed.connect(_on_back_pressed)
+	back_button.pressed.connect(_on_back_button_pressed)
 	_populate_list()
 
-func _on_back_pressed():
-	get_tree().change_scene_to_file("res://Scenes/UI/MainMenu.tscn")
+# --------------------------
+#   Navigation
+# --------------------------
+
+func _on_back_button_pressed() -> void:
+	if Global.previous_scene != "":
+		SceneLoader.change_scene_to_file(Global.previous_scene, SceneLoader.Direction.LEFT)
+	else:
+		get_tree().quit()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		accept_event()
-		_on_back_pressed()
+		_on_back_button_pressed()
 
 func _populate_list():
 	# Clear existing rows

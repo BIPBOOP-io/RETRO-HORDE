@@ -10,14 +10,13 @@ func _ready() -> void:
 	play_button.grab_focus()
 
 func _on_play_pressed() -> void:
-	SceneLoader.change_scene_to_packed(MAIN_SCENE, SceneLoader.Direction.UP)
+	SceneLoader.go_to(MAIN_SCENE, SceneLoader.Direction.UP)
 
 func _on_upgrades_pressed() -> void:
-	SceneLoader.change_scene_to_packed(RECORDS_SCENE)
+	SceneLoader.go_to(RECORDS_SCENE, SceneLoader.Direction.RIGHT)
 
 func _on_options_pressed() -> void:
-	Global.previous_scene = get_tree().current_scene.scene_file_path
-	SceneLoader.change_scene_to_packed(OPTIONS_SCENE)
+	SceneLoader.go_to(OPTIONS_SCENE, SceneLoader.Direction.RIGHT)
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()

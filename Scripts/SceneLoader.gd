@@ -72,3 +72,11 @@ func _animate(target: Vector2, callback: Callable) -> void:
 	var tween := create_tween()
 	tween.tween_property(slide_panel, "position", target, SLIDE_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_callback(callback)
+	
+func go_to(scene: PackedScene, direction: int = Direction.RIGHT) -> void:
+	Global.previous_scene = get_tree().current_scene.scene_file_path
+	change_scene_to_packed(scene, direction)
+
+func go_to_file(path: String, direction: int = Direction.RIGHT) -> void:
+	Global.previous_scene = get_tree().current_scene.scene_file_path
+	change_scene_to_file(path, direction)
