@@ -10,7 +10,7 @@ func _ready() -> void:
 	play_button.grab_focus()
 
 func _on_play_pressed() -> void:
-	SceneLoader.change_scene_to_packed(MAIN_SCENE)
+	SceneLoader.change_scene_to_packed(MAIN_SCENE, SceneLoader.Direction.UP)
 
 func _on_upgrades_pressed() -> void:
 	SceneLoader.change_scene_to_packed(RECORDS_SCENE)

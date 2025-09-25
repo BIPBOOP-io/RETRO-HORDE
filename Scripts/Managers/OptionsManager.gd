@@ -181,6 +181,6 @@ func _connect_signals() -> void:
 
 func _on_back_button_pressed() -> void:
 	if Global.previous_scene != "":
-		get_tree().change_scene_to_file(Global.previous_scene)
+		SceneLoader.change_scene_to_file(Global.previous_scene, SceneLoader.Direction.LEFT)
 	else:
-		get_tree().quit() # fallback
+		get_tree().quit()
