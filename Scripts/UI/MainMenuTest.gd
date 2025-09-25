@@ -10,7 +10,7 @@ func _ready() -> void:
 	play_button.grab_focus()
 
 func _on_play_pressed() -> void:
-	SceneLoader.go_to(MAIN_SCENE, SceneLoader.Direction.UP)
+	SceneLoader.go_to(MAIN_SCENE, SceneLoader.Direction.DOWN)
 
 func _on_upgrades_pressed() -> void:
 	SceneLoader.go_to(RECORDS_SCENE, SceneLoader.Direction.RIGHT)
