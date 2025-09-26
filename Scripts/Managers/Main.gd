@@ -115,9 +115,21 @@ func _go_to_game_over():
 #   End of run score data
 # ==========================
 func get_score_data() -> Dictionary:
+	var upgrades: Dictionary = {}
+	if player != null:
+		var um = player.get("upgrade_manager")
+		if um != null:
+			var levels = um.get("upgrades_level")
+			if typeof(levels) == TYPE_DICTIONARY:
+				for id in levels.keys():
+					var lv: int = int(levels[id])
+					if lv > 0:
+						upgrades[str(id)] = lv
+
 	return {
 		"duration": survival_time,  # use the variable directly
 		"kills": kills,
 		"level": player.level,
-		"date": Time.get_datetime_string_from_system()
+		"date": Time.get_datetime_string_from_system(),
+		"upgrades": upgrades
 	}

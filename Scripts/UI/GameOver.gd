@@ -54,8 +54,11 @@ func _send_score(player_name: String, kills: int, level: int, duration: int, dev
 		"level": level,
 		"duration": duration
 	})))
+	var upgrades: Dictionary = {}
+	if Global.score_data.has("upgrades") and typeof(Global.score_data.upgrades) == TYPE_DICTIONARY:
+		upgrades = Global.score_data.upgrades
 
-	await Score.submit_score(player_name, kills, level, duration, device, version, computed_score)
+	await Score.submit_score(player_name, kills, level, duration, device, version, computed_score, upgrades)
 	print("✅ Score sent to Supabase for %s (v%s)" % [player_name, version])
 	_score_sent = true
 

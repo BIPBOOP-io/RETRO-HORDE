@@ -58,7 +58,7 @@ func _request(method: int, path: String, body: Dictionary = {}) -> Dictionary:
 	var data: Variant = _parse_response(body_bytes)
 	return {"ok": code >= 200 and code < 300, "code": code, "data": data}
 
-func submit_score(player_name: String, kills: int, level: int, survival_time: int, device: String = "", version: String = "", total_score: int = 0) -> bool:
+func submit_score(player_name: String, kills: int, level: int, survival_time: int, device: String = "", version: String = "", total_score: int = 0, upgrades: Dictionary = {}) -> bool:
 	var body: Dictionary = {
 		"player_name": player_name,
 		"total_score": total_score,
@@ -66,8 +66,9 @@ func submit_score(player_name: String, kills: int, level: int, survival_time: in
 		"level": level,
 		"survival_time": survival_time,
 		"device": device,
-		"version": version
-	}
+			"version": version,
+			"upgrades": upgrades
+		}
 	var res: Dictionary = await _request(HTTPClient.METHOD_POST, "/rest/v1/%s" % TABLE, body)
 	if not res.ok:
 		printerr("submit_score failed: ", res)
