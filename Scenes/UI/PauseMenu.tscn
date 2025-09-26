@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://paus3m3nu"]
+[gd_scene load_steps=6 format=3 uid="uid://paus3m3nu"]
 
 [ext_resource type="Script" uid="uid://cubnvwx0cff7n" path="res://Scripts/UI/PauseMenu.gd" id="1_pause"]
 [ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_title"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="3_2bpff"]
 [ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_hud"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2bpff"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 2
@@ -19,6 +21,7 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="RootMenu" type="VBoxContainer" parent="Panel"]
+visible = false
 z_index = 2
 layout_mode = 1
 anchors_preset = 8
@@ -45,6 +48,10 @@ uppercase = true
 [node name="ResumeButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.2627451, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_2bpff")
 theme_override_font_sizes/font_size = 30
@@ -54,6 +61,10 @@ flat = true
 [node name="OptionsButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.2627451, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_2bpff")
 theme_override_font_sizes/font_size = 30
@@ -63,6 +74,10 @@ flat = true
 [node name="QuitButton" type="Button" parent="Panel/RootMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.2627451, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_2bpff")
 theme_override_font_sizes/font_size = 30
@@ -97,7 +112,6 @@ layout_mode = 2
 theme_override_constants/separation = 6
 
 [node name="OptionsMenu" type="VBoxContainer" parent="Panel"]
-visible = false
 z_index = 2
 layout_mode = 1
 anchors_preset = 8
@@ -140,9 +154,14 @@ theme_override_fonts/font = ExtResource("3_2bpff")
 [node name="BackButton" type="Button" parent="Panel/OptionsMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.2627451, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_2bpff")
 theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2bpff")
 text = "BACK"
 flat = true
 
