@@ -14,11 +14,24 @@ signal killed(enemy)
 @export var die_anim_duration: float = 0.4
 
 # Attack trigger and hitbox config
-@export var attack_trigger_distance: float = 28.0
+@export var attack_trigger_distance: float = 40.0
 @export var attack_windup: float = 0.12
 @export var attack_active: float = 0.10
 @export var attack_recovery: float = 0.2
 @export var attack_hitbox_offset: float = 16.0
+@export var attack_cancel_factor: float = 1.1 # cancel if player moves beyond trigger*factor during windup
+@export var attack_player_knockback: float = 180.0
+@export var self_knockback_on_attack: float = 40.0
+
+# Debug
+@export var debug_show_range: bool = false
+@export var debug_color_trigger: Color = Color(1, 0.3, 0.3, 0.5)
+@export var debug_color_active: Color = Color(1, 0.8, 0.2, 0.7)
+
+# Optional frame-marker control for attack timing (per animation frames)
+@export var use_frame_markers: bool = false
+@export var active_frame_start: int = 1
+@export var active_frame_end: int = 3
 
 # XP orb scene references
 @export var xp_orb_small: PackedScene
@@ -40,6 +53,8 @@ var attack_fx: AnimatedSprite2D
 var attack_area: Area2D
 var attack_shape: CollisionShape2D
 var _attack_has_hit: bool = false
+var _marker_active: bool = false
+var _settings: Node = null
 
 func _ready():
 	current_hp = max_hp
@@ -52,6 +67,12 @@ func _ready():
 			attack_area.body_entered.connect(_on_attack_area_body_entered)
 	# Allow first attack immediately if in range (no initial cooldown wait)
 	last_attack_time = -damage_cooldown
+	if has_node("/root/Settings"):
+		_settings = get_node("/root/Settings")
+	if animated_sprite and not animated_sprite.frame_changed.is_connected(_on_anim_frame_changed):
+		animated_sprite.frame_changed.connect(_on_anim_frame_changed)
+	if animated_sprite and not animated_sprite.animation_finished.is_connected(_on_anim_finished):
+		animated_sprite.animation_finished.connect(_on_anim_finished)
 	if animated_sprite and animated_sprite.sprite_frames != null and animated_sprite.sprite_frames.has_animation("idle_down"):
 		animated_sprite.play("idle_down")
 	add_to_group("enemies")
@@ -77,6 +98,8 @@ func _physics_process(delta):
 
 	# Gradual reduction of knockback
 	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 200 * delta)
+	if debug_show_range:
+		queue_redraw()
 
 func apply_knockback(dir: Vector2, force: float):
 	var effective_force = force / max(0.001, knockback_resistance)
@@ -213,23 +236,44 @@ func _start_attack() -> void:
 		elif attack_fx.sprite_frames and attack_fx.sprite_frames.has_animation("attackfx"):
 			attack_fx.play("attackfx")
 	_attack_has_hit = false
-	# Windup
-	await get_tree().create_timer(attack_windup).timeout
-	# Activate hitbox during active frames
+	if use_frame_markers and animated_sprite:
+		# Timing will be handled by frame_changed + animation_finished callbacks
+		await get_tree().create_timer(attack_windup).timeout # small anticipation pause
+		if player != null and (player.global_position - global_position).length() > attack_trigger_distance * attack_cancel_factor:
+			if attack_fx:
+				attack_fx.visible = false
+			if state != State.DIE:
+				state = State.WALK
+			return
+		# After windup, wait for animation_finished to end attack; frames will drive hitbox
+		return
+	else:
+		# Timer-based window
+		# Windup
+		await get_tree().create_timer(attack_windup).timeout
+		if player != null and (player.global_position - global_position).length() > attack_trigger_distance * attack_cancel_factor:
+			if attack_fx:
+				attack_fx.visible = false
+			if state != State.DIE:
+				state = State.WALK
+			return
+		# Activate hitbox during active frames
 	if attack_area:
 		_position_attack_area()
 		attack_area.set_deferred("monitoring", true)
 		attack_area.set_deferred("monitorable", true)
-	await get_tree().create_timer(attack_active).timeout
-	if attack_area:
-		attack_area.set_deferred("monitoring", false)
-		attack_area.set_deferred("monitorable", false)
-	# Recovery
-	await get_tree().create_timer(attack_recovery).timeout
-	if attack_fx:
-		attack_fx.visible = false
-	if state != State.DIE:
-		state = State.WALK
+		# Also apply immediately if already overlapping (enter signal won't fire)
+		call_deferred("_apply_attack_overlap_damage")
+		await get_tree().create_timer(attack_active).timeout
+		if attack_area:
+			attack_area.set_deferred("monitoring", false)
+			attack_area.set_deferred("monitorable", false)
+		# Recovery
+		await get_tree().create_timer(attack_recovery).timeout
+		if attack_fx:
+			attack_fx.visible = false
+		if state != State.DIE:
+			state = State.WALK
 
 func _start_hit() -> void:
 	if state == State.DIE:
@@ -255,4 +299,79 @@ func _on_attack_area_body_entered(body: Node) -> void:
 		return
 	if body and body.is_in_group("player") and body.has_method("take_damage"):
 		body.take_damage(damage)
+	# Apply knockback to player and slight recoil to enemy
+		var dir: Vector2 = Vector2.ZERO
+		if body is Node2D:
+			dir = ((body as Node2D).global_position - global_position).normalized()
+		if body.has_method("apply_knockback") and attack_player_knockback > 0.0:
+			body.apply_knockback(dir, attack_player_knockback)
+		if self_knockback_on_attack > 0.0:
+			apply_knockback(-dir, self_knockback_on_attack)
 		_attack_has_hit = true
+
+func _apply_attack_overlap_damage() -> void:
+	if state != State.ATTACK or attack_area == null or _attack_has_hit == true:
+		return
+	if not attack_area.monitoring:
+		return
+	var bodies: Array = attack_area.get_overlapping_bodies() if attack_area.has_method("get_overlapping_bodies") else []
+	for b in bodies:
+		if b and b.is_in_group("player"):
+			_on_attack_area_body_entered(b)
+			break
+
+func _draw() -> void:
+	var dbg: bool = debug_show_range
+	if not dbg and is_instance_valid(_settings):
+		if _settings.has_method("is_enemy_debug_on"):
+			dbg = bool(_settings.is_enemy_debug_on())
+	if not dbg:
+		return
+	# Trigger range circle around enemy
+	draw_arc(Vector2.ZERO, attack_trigger_distance, 0.0, TAU, 48, debug_color_trigger, 2.0)
+	# Active hitbox circle preview at offset (only if circle shape is used)
+	if attack_area and attack_shape and attack_shape.shape is CircleShape2D:
+		var r: float = (attack_shape.shape as CircleShape2D).radius
+		var pos := Vector2.ZERO
+		match last_dir_str:
+			"left": pos = Vector2(-attack_hitbox_offset, 0)
+			"right": pos = Vector2(attack_hitbox_offset, 0)
+			"up": pos = Vector2(0, -attack_hitbox_offset)
+			_: pos = Vector2(0, attack_hitbox_offset)
+		draw_arc(pos, r, 0.0, TAU, 32, debug_color_active, 2.0)
+
+func _on_anim_frame_changed() -> void:
+	if not use_frame_markers:
+		return
+	if state != State.ATTACK:
+		return
+	if animated_sprite == null:
+		return
+	var an := animated_sprite.animation
+	if an == null or not an.begins_with("attack"):
+		return
+	var f := animated_sprite.frame
+	if f >= active_frame_start and f <= active_frame_end:
+		if not _marker_active:
+			_position_attack_area()
+			if attack_area:
+				attack_area.set_deferred("monitoring", true)
+				attack_area.set_deferred("monitorable", true)
+			_marker_active = true
+	else:
+		if _marker_active:
+			if attack_area:
+				attack_area.set_deferred("monitoring", false)
+				attack_area.set_deferred("monitorable", false)
+			_marker_active = false
+
+func _on_anim_finished() -> void:
+	if state == State.ATTACK:
+		if attack_area:
+			attack_area.set_deferred("monitoring", false)
+			attack_area.set_deferred("monitorable", false)
+		_marker_active = false
+		if attack_fx:
+			attack_fx.visible = false
+		if state != State.DIE:
+			state = State.WALK

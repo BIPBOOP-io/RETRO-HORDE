@@ -6,10 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://dtmpgqucbckgj" path="res://Scenes/Pickups/XpOrbSmall.tscn" id="2_468r6"]
 [ext_resource type="PackedScene" uid="uid://4bkawpubrcbc" path="res://Scenes/Pickups/XpOrbMedium.tscn" id="3_0fmw3"]
 [ext_resource type="PackedScene" uid="uid://hfht55v8k40n" path="res://Scenes/Pickups/XpOrbBig.tscn" id="4_n01f6"]
-[ext_resource type="Texture2D" uid="uid://b3w7a74tdo0j5" path="res://Assets/Sprites/Enemies/Wildlings/Goblin_attack_NOhitbox.png" id="5_k4v85"]
+[ext_resource type="Texture2D" uid="uid://b3w7a74tdo0j5" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Goblin_attack_NOhitbox.png" id="5_k4v85"]
 [ext_resource type="Texture2D" uid="uid://5q4ydk0q2kf7" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Goblin_die.png" id="5_n01f6"]
 [ext_resource type="Texture2D" uid="uid://b6rc5rdg8lnkj" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Goblin_hit.png" id="6_ntxe4"]
-[ext_resource type="Texture2D" uid="uid://deoytpobwski6" path="res://Assets/Sprites/Enemies/Wildlings/Goblin_attack_hitbox.png" id="10_k4v85"]
+[ext_resource type="Texture2D" uid="uid://deoytpobwski6" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Goblin_attack_hitbox.png" id="10_k4v85"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f5p5p"]
 atlas = ExtResource("5_k4v85")
@@ -708,6 +708,7 @@ z_index = 1
 script = ExtResource("1_7kucs")
 speed = 50.0
 max_hp = 2
+debug_show_range = true
 xp_orb_small = ExtResource("2_468r6")
 xp_orb_medium = ExtResource("3_0fmw3")
 xp_orb_big = ExtResource("4_n01f6")
@@ -733,7 +734,7 @@ sprite_frames = SubResource("SpriteFrames_ntxe4")
 animation = &"attackfx_down"
 
 [node name="AttackArea" type="Area2D" parent="."]
-position = Vector2(0, 36)
+position = Vector2(0, 41)
 monitoring = false
 monitorable = false
 

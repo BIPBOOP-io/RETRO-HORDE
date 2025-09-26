@@ -4,6 +4,7 @@ const CONFIG_PATH := "user://settings.cfg"
 
 # Supported layouts: "qwerty" or "azerty"
 var layout: String = "qwerty"
+var debug_enemy_ranges: bool = false
 
 func _ready():
 	_load_config()
@@ -83,8 +84,17 @@ func _load_config() -> void:
 	var err := cfg.load(CONFIG_PATH)
 	if err == OK:
 		layout = str(cfg.get_value("input", "layout", layout)).to_lower()
+		debug_enemy_ranges = bool(cfg.get_value("debug", "enemy_ranges", debug_enemy_ranges))
 
 func _save_config() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("input", "layout", layout)
+	cfg.set_value("debug", "enemy_ranges", debug_enemy_ranges)
 	cfg.save(CONFIG_PATH)
+
+func is_enemy_debug_on() -> bool:
+	return debug_enemy_ranges
+
+func set_enemy_debug(on: bool) -> void:
+	debug_enemy_ranges = on
+	_save_config()

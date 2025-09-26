@@ -68,6 +68,7 @@ var enemy_provider: Node = null
 @onready var attack_ctrl: AttackController = $AttackController if has_node("AttackController") else null
 @onready var health_comp: HealthComponent = $HealthComponent if has_node("HealthComponent") else null
 @onready var feedback: Feedback = $Feedback if has_node("Feedback") else null
+var knockback_velocity: Vector2 = Vector2.ZERO
 
 func _ready():
 	animated_sprite = $AnimatedSprite2D
@@ -146,8 +147,10 @@ func _physics_process(delta):
 
 	is_sprinting = Input.is_action_pressed("sprint") and input_vector != Vector2.ZERO and _can_sprint()
 	var current_speed = speed * (sprint_multiplier if is_sprinting else 1.0)
-	velocity = input_vector * current_speed
+	velocity = input_vector * current_speed + knockback_velocity
 	move_and_slide()
+	# Gradually reduce knockback
+	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 400 * delta)
 
 	if input_vector == Vector2.ZERO:
 		animated_sprite.speed_scale = 1.0
@@ -360,6 +363,10 @@ func take_damage(amount: int):
 		feedback.flash_red()
 		feedback.shake_camera()
 	if health <= 0: die()
+
+func apply_knockback(dir: Vector2, force: float) -> void:
+	if dir.length() > 0.001 and force > 0.0:
+		knockback_velocity = dir.normalized() * force
 
 func heal_from_vampirism(damage_dealt: int):
 	if health_comp:

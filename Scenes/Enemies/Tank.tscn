@@ -1,12 +1,12 @@
 [gd_scene load_steps=90 format=3 uid="uid://bk73k6act4tyx"]
 
 [ext_resource type="PackedScene" uid="uid://ddq00jv2jmlxp" path="res://Scenes/Enemies/Enemy.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://co0j15uj8p2k5" path="res://Assets/Sprites/Enemies/Wildlings/Ogre_idle.png" id="2_bpdn3"]
-[ext_resource type="Texture2D" uid="uid://ckripxvy218xv" path="res://Assets/Sprites/Enemies/Wildlings/Ogre_attack_NOhitbox.png" id="2_gshqm"]
-[ext_resource type="Texture2D" uid="uid://c1b1l8obxqp6" path="res://Assets/Sprites/Enemies/Wildlings/Ogre_die.png" id="2_xck7o"]
-[ext_resource type="Texture2D" uid="uid://crs2hatbg4b4l" path="res://Assets/Sprites/Enemies/Wildlings/Ogre_hit.png" id="3_h0cu3"]
-[ext_resource type="Texture2D" uid="uid://b4j1lthxqibsc" path="res://Assets/Sprites/Enemies/Wildlings/Ogre_walk.png" id="3_xck7o"]
-[ext_resource type="Texture2D" uid="uid://dhdsc1a1ygjgb" path="res://Assets/Sprites/Enemies/Wildlings/Ogre_attack_hitbox.png" id="7_0j628"]
+[ext_resource type="Texture2D" uid="uid://co0j15uj8p2k5" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_idle.png" id="2_bpdn3"]
+[ext_resource type="Texture2D" uid="uid://ckripxvy218xv" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_attack_NOhitbox.png" id="2_gshqm"]
+[ext_resource type="Texture2D" uid="uid://c1b1l8obxqp6" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_die.png" id="2_xck7o"]
+[ext_resource type="Texture2D" uid="uid://crs2hatbg4b4l" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_hit.png" id="3_h0cu3"]
+[ext_resource type="Texture2D" uid="uid://b4j1lthxqibsc" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_walk.png" id="3_xck7o"]
+[ext_resource type="Texture2D" uid="uid://dhdsc1a1ygjgb" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_attack_hitbox.png" id="7_0j628"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rjgn4"]
 atlas = ExtResource("2_gshqm")
@@ -282,7 +282,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hpnci")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_down",
 "speed": 5.0
 }, {
@@ -302,7 +302,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_nkjc1")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_left",
 "speed": 5.0
 }, {
@@ -322,7 +322,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_jnux8")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_right",
 "speed": 5.0
 }, {
@@ -342,7 +342,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_uwi7n")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_up",
 "speed": 5.0
 }, {
@@ -638,7 +638,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lun2i")
 }],
-"loop": true,
+"loop": false,
 "name": &"attackfx_down",
 "speed": 5.0
 }, {
@@ -655,7 +655,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_64ofw")
 }],
-"loop": true,
+"loop": false,
 "name": &"attackfx_left",
 "speed": 5.0
 }, {
@@ -672,7 +672,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ya05e")
 }],
-"loop": true,
+"loop": false,
 "name": &"attackfx_right",
 "speed": 5.0
 }, {
@@ -689,7 +689,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_s8cdq")
 }],
-"loop": true,
+"loop": false,
 "name": &"attackfx_up",
 "speed": 5.0
 }]
@@ -699,6 +699,17 @@ max_hp = 8
 damage = 3
 damage_cooldown = 1.2
 knockback_resistance = 2.0
+attack_trigger_distance = 80.0
+attack_windup = 0.35
+attack_active = 0.15
+attack_recovery = 0.45
+attack_hitbox_offset = 36.0
+attack_cancel_factor = 1.25
+use_frame_markers = true
+active_frame_start = 2
+active_frame_end = 4
+attack_player_knockback = 260.0
+self_knockback_on_attack = 80.0
 
 [node name="AnimatedSprite2D" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_ldd0o")
@@ -708,4 +719,4 @@ visible = false
 sprite_frames = SubResource("SpriteFrames_d4uh2")
 
 [node name="AttackArea" parent="." index="4"]
-position = Vector2(0, 47)
+position = Vector2(0, 54)
