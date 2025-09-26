@@ -14,7 +14,7 @@ func _headers_json() -> PackedStringArray:
 
 func _make_http() -> HTTPRequest:
 	var http := HTTPRequest.new()
-	http.accept_gzip = true
+	http.accept_gzip = false
 	add_child(http)
 	return http
 
@@ -23,7 +23,7 @@ func _parse_response(body: PackedByteArray) -> Variant:
 	if text.strip_edges() == "":
 		return {}
 	
-	var parse = JSON.parse_string(text)  # pas typé, peut être Array ou Dictionary
+	var parse = JSON.parse_string(text)
 	
 	if typeof(parse) == TYPE_DICTIONARY and parse.has("error"):
 		if parse.error != OK:
@@ -31,7 +31,6 @@ func _parse_response(body: PackedByteArray) -> Variant:
 			return {}
 		return parse.result
 	
-	# Si c’est déjà un Array ou Dictionary brut (cas Supabase SELECT)
 	return parse
 
 func _request(method: int, path: String, body: Dictionary = {}) -> Dictionary:
@@ -81,7 +80,11 @@ func get_leaderboard(order_by: String = "survival_time", limit: int = 20, descen
 		printerr("get_leaderboard failed: ", res)
 		return []
 	
-	if typeof(res.data) == TYPE_ARRAY:
+	if res.data is Array:
+		return res.data
+	elif res.data is PackedStringArray or res.data is PackedInt32Array or res.data is PackedByteArray:
 		return res.data
 	else:
+		printerr("Unexpected data type from Supabase: ", typeof(res.data))
+		print_debug("Leaderboard raw data: ", res.data)
 		return []
