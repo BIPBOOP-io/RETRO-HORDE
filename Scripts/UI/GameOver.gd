@@ -89,11 +89,11 @@ func _ensure_submit() -> void:
 
 func _on_replay_button_pressed():
 	await _ensure_submit()
-	SceneLoader.change_scene_to_file("res://Scenes/Main/Main.tscn", SceneLoader.Direction.DOWN)
+	SceneLoader.go_to_file("res://Scenes/Main/Main.tscn", SceneLoader.Direction.DOWN)
 
 func _on_main_menu_button_pressed():
 	await _ensure_submit()
-	SceneLoader.change_scene_to_file("res://Scenes/UI/MainMenu.tscn", SceneLoader.Direction.UP)
+	SceneLoader.go_to_file("res://Scenes/UI/MainMenu.tscn", SceneLoader.Direction.UP)
 
 # --------------------------
 #   Name input handlers
