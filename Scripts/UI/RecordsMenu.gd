@@ -31,23 +31,18 @@ func _unhandled_input(event: InputEvent) -> void:
 # --------------------------
 
 func _populate_list() -> void:
-	# Clear existing rows
 	for c in list_container.get_children():
 		c.queue_free()
 
-	# Ajout d’un label temporaire "Loading..."
 	var loading := Label.new()
 	loading.text = "Loading leaderboard..."
 	list_container.add_child(loading)
 
-	# Récupération depuis Supabase
 	_populate_from_supabase()
 
-# Charge le leaderboard Supabase
 func _populate_from_supabase() -> void:
-	var rows: Array = await Score.get_leaderboard("survival_time", 50, true)
+	var rows: Array = await Score.get_leaderboard("total_score", 50, true)
 
-	# Clear "Loading..." message
 	for c in list_container.get_children():
 		c.queue_free()
 
@@ -57,15 +52,13 @@ func _populate_from_supabase() -> void:
 		list_container.add_child(empty)
 		return
 
-	# Ajoute les rows à la liste
 	var i := 0
 	for run in rows:
 		var row = row_scene.instantiate()
 		list_container.add_child(row)
 
-		# Récupération sécurisée des champs (selon ton schema Supabase)
-		@warning_ignore("shadowed_variable_base_class")
 		var name: String = run.get("player_name", "Player")
+		var score: int = int(run.get("total_score", 0))
 		var kills: int = int(run.get("kills", 0))
 		var level: int = int(run.get("level", 1))
 		var time_sec: int = int(run.get("survival_time", 0))
@@ -73,12 +66,12 @@ func _populate_from_supabase() -> void:
 
 		row.set_data(
 			name,
-			kills,                        # Score (ici kills)
-			kills,                        # Colonne kills
-			level,                        # Colonne level
-			_format_time(time_sec),       # Temps formaté
-			_format_date(date_str),       # Date formatée
-			i % 2 == 1                    # Alternance background
+			score,
+			kills,
+			level,
+			_format_time(time_sec),
+			_format_date(date_str),
+			i % 2 == 1
 		)
 		i += 1
 
@@ -93,17 +86,93 @@ func _format_time(seconds: int) -> String:
 	return "%02d:%02d" % [m, s]
 
 func _format_date(date_str: String) -> String:
-	if "T" in date_str:
-		var parts: Array = date_str.split("T")
-		if parts.size() >= 2:
-			var d: String = str(parts[0])
-			var t: String = str(parts[1])
-			var dparts: Array = d.split("-")
-			if dparts.size() == 3:
-				var y: String = dparts[0]
-				var m: String = dparts[1]
-				var day: String = dparts[2]
-				var yy: String = y.substr(max(0, y.length() - 2), 2)
-				var hhmm: String = t.substr(0, 5)
-				return "%s.%s.%s %s" % [day, m, yy, hhmm]
-	return date_str
+	if date_str == "":
+		return ""
+
+	# Try to parse Supabase ISO 8601 (UTC) first.
+	var utc_dict: Dictionary = Time.get_datetime_dict_from_datetime_string(date_str, true)
+
+	# If parsing fails (e.g., due to fractional seconds or timezone suffix),
+	# normalize the string to "YYYY-MM-DD HH:MM:SS" without TZ and try again.
+	if utc_dict.is_empty():
+		var s := date_str.strip_edges()
+		# Replace 'T' with space
+		var t := s.find("T")
+		if t != -1:
+			s = s.substr(0, t) + " " + s.substr(t + 1)
+		# Drop fractional seconds
+		var dot_idx := s.find(".")
+		if dot_idx != -1:
+			s = s.substr(0, dot_idx)
+		# Remove trailing 'Z' or timezone offset like +02:00 / -05:00
+		# (Search for +/- only after the original 'T' position to avoid date dashes.)
+		var tz_cut := -1
+		if t != -1:
+			var after_t := s.substr(t)
+			var plus_rel := after_t.find("+")
+			var minus_rel := after_t.find("-")
+			if plus_rel != -1:
+				tz_cut = t + plus_rel
+			elif minus_rel != -1:
+				tz_cut = t + minus_rel
+		if s.ends_with("Z"):
+			s = s.substr(0, s.length() - 1)
+		elif tz_cut != -1:
+			s = s.substr(0, tz_cut)
+
+		utc_dict = Time.get_datetime_dict_from_datetime_string(s, true)
+
+	if utc_dict.is_empty():
+		# As a last resort, return the raw server string.
+		return date_str
+
+	# Convert UTC → local using system timezone (handles DST automatically).
+	var unix_time: int = Time.get_unix_time_from_datetime_dict(utc_dict)
+	var local_dict: Dictionary = Time.get_datetime_dict_from_unix_time(unix_time)
+
+	# Determine current app/user locale. Prefer game locale, fallback to OS.
+	var locale: String = TranslationServer.get_locale().to_lower()
+	if locale == "" or locale == "en":
+		# If not explicitly set, try OS locale for better regional defaults.
+		if OS.has_method("get_locale"):
+			var os_loc = OS.get_locale()
+			if typeof(os_loc) == TYPE_STRING and os_loc != "":
+				locale = String(os_loc).to_lower()
+
+	# Normalize some common region codes.
+	var is_en_gb := locale.begins_with("en_gb") or locale.begins_with("en-gb")
+	var is_en_us := locale.begins_with("en_us") or locale.begins_with("en-us") or locale == "en"
+	var is_fr := locale.begins_with("fr")
+	var is_de := locale.begins_with("de")
+	var is_es := locale.begins_with("es")
+	var is_it := locale.begins_with("it")
+	var is_east_asia := locale.begins_with("ja") or locale.begins_with("zh") or locale.begins_with("ko")
+
+	var yy: int = int(local_dict.year) % 100
+
+	# Apply region-appropriate formatting.
+	if is_fr or is_es or is_it or is_en_gb:
+		# dd/MM/yy HH:mm (France, Spain, Italy, UK)
+		return "%02d/%02d/%02d %02d:%02d" % [
+			local_dict.day, local_dict.month, yy, local_dict.hour, local_dict.minute
+		]
+	elif is_de:
+		# dd.MM.yy HH:mm (Germany)
+		return "%02d.%02d.%02d %02d:%02d" % [
+			local_dict.day, local_dict.month, yy, local_dict.hour, local_dict.minute
+		]
+	elif is_en_us:
+		# MM/dd/yy HH:mm (US)
+		return "%02d/%02d/%02d %02d:%02d" % [
+			local_dict.month, local_dict.day, yy, local_dict.hour, local_dict.minute
+		]
+	elif is_east_asia:
+		# yy/MM/dd HH:mm (JP/CN/KR common ordering)
+		return "%02d/%02d/%02d %02d:%02d" % [
+			yy, local_dict.month, local_dict.day, local_dict.hour, local_dict.minute
+		]
+	else:
+		# Fallback: full ISO-like local with 24h time
+		return "%04d-%02d-%02d %02d:%02d" % [
+			local_dict.year, local_dict.month, local_dict.day, local_dict.hour, local_dict.minute
+		]

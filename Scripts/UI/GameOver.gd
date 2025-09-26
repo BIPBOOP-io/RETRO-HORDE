@@ -61,11 +61,12 @@ func _ready():
 # --------------------------
 
 func _send_score(player_name: String, kills: int, level: int, duration: int, device: String, version: String = "") -> void:
-	# Récupérer la version du projet si non fournie
 	if version == "" or version == "EMPTY":
 		version = str(ProjectSettings.get_setting("application/config/version", "dev"))
 
-	await Score.submit_score(player_name, kills, level, duration, device, version)
+	var total_score := int(Global.score_data.get("score", (kills * 10) + (level * 100) + (duration * 2)))
+
+	await Score.submit_score(player_name, kills, level, duration, device, version, total_score)
 	print("✅ Score sent to Supabase for %s (v%s)" % [player_name, version])
 
 
