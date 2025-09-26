@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://5q4ydk0q2kf7" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Goblin_die.png" id="5_n01f6"]
 [ext_resource type="Texture2D" uid="uid://b6rc5rdg8lnkj" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Goblin_hit.png" id="6_ntxe4"]
 [ext_resource type="Texture2D" uid="uid://deoytpobwski6" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Goblin_attack_hitbox.png" id="10_k4v85"]
+[ext_resource type="Script" path="res://Scripts/Enemies/EnemyAttack.gd" id="11_attack"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f5p5p"]
 atlas = ExtResource("5_k4v85")
@@ -739,6 +740,11 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(0, -18)
+scale = Vector2(1.7999995, 2.8799987)
 shape = SubResource("CircleShape2D_qwcx1")
 
 [connection signal="body_entered" from="Hitbox" to="." method="_on_Hitbox_body_entered"]
+
+[node name="Attack" type="Node" parent="."]
+script = ExtResource("11_attack")

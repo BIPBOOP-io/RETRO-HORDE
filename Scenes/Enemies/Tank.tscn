@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://bk73k6act4tyx"]
+[gd_scene load_steps=91 format=3 uid="uid://bk73k6act4tyx"]
 
 [ext_resource type="PackedScene" uid="uid://ddq00jv2jmlxp" path="res://Scenes/Enemies/Enemy.tscn" id="1"]
 [ext_resource type="Texture2D" uid="uid://co0j15uj8p2k5" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_idle.png" id="2_bpdn3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://crs2hatbg4b4l" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_hit.png" id="3_h0cu3"]
 [ext_resource type="Texture2D" uid="uid://b4j1lthxqibsc" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_walk.png" id="3_xck7o"]
 [ext_resource type="Texture2D" uid="uid://dhdsc1a1ygjgb" path="res://Assets/Sprites/fantasyrpg/fantasyrpgmonsterpack_rpgassetmegabundle_softwarebundle/2x/Wildlings/Ogre_attack_hitbox.png" id="7_0j628"]
+[ext_resource type="Script" uid="uid://cupuctedfajsm" path="res://Scripts/Enemies/EnemyAttack.gd" id="11_attack_t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rjgn4"]
 atlas = ExtResource("2_gshqm")
@@ -705,18 +706,22 @@ attack_active = 0.15
 attack_recovery = 0.45
 attack_hitbox_offset = 36.0
 attack_cancel_factor = 1.25
+attack_player_knockback = 260.0
+self_knockback_on_attack = 80.0
 use_frame_markers = true
 active_frame_start = 2
 active_frame_end = 4
-attack_player_knockback = 260.0
-self_knockback_on_attack = 80.0
+attack_hitbox_radius = 20.0
 
 [node name="AnimatedSprite2D" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_ldd0o")
 
 [node name="AttackFX" parent="." index="3"]
-visible = false
 sprite_frames = SubResource("SpriteFrames_d4uh2")
 
 [node name="AttackArea" parent="." index="4"]
 position = Vector2(0, 54)
+scale = Vector2(1.5999992, 1)
+
+[node name="Attack2" type="Node" parent="." index="6"]
+script = ExtResource("11_attack_t")
