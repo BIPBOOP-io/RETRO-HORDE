@@ -28,10 +28,12 @@ func _ready():
 
 	# Prefill player name input
 	if name_edit:
-		var default_name := "Guest"
+		# Do not prefill with "Guest" to avoid forcing deletion.
+		# If a custom name was previously set, prefill it; else leave blank and use placeholder.
 		if "player_name" in Global:
-			default_name = String(Global.player_name)
-		name_edit.text = default_name
+			var stored := String(Global.player_name).strip_edges()
+			if stored != "" and stored.to_lower() != "guest":
+				name_edit.text = stored
 		name_edit.text_submitted.connect(_on_name_submitted)
 		name_edit.focus_exited.connect(_on_name_focus_exited)
 		name_edit.grab_focus()
