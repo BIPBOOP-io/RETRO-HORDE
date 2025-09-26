@@ -23,7 +23,8 @@ var animated_sprite: AnimatedSprite2D
 func _ready():
 	current_hp = max_hp
 	animated_sprite = $AnimatedSprite2D
-	animated_sprite.play("idle_down")
+	if animated_sprite and animated_sprite.sprite_frames != null and animated_sprite.sprite_frames.has_animation("idle_down"):
+		animated_sprite.play("idle_down")
 	add_to_group("enemies")
 
 func _physics_process(delta):
@@ -99,15 +100,17 @@ func _spawn_xp_orb(pos: Vector2):
 	get_parent().add_child(orb)
 
 func _play_walk_animation(dir: Vector2):
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return
 	if abs(dir.x) > abs(dir.y):
-		if dir.x > 0:
+		if dir.x > 0 and animated_sprite.sprite_frames.has_animation("walk_right"):
 			animated_sprite.play("walk_right")
-		else:
+		elif animated_sprite.sprite_frames.has_animation("walk_left"):
 			animated_sprite.play("walk_left")
 	else:
-		if dir.y > 0:
+		if dir.y > 0 and animated_sprite.sprite_frames.has_animation("walk_down"):
 			animated_sprite.play("walk_down")
-		else:
+		elif animated_sprite.sprite_frames.has_animation("walk_up"):
 			animated_sprite.play("walk_up")
 
 func _on_Hitbox_body_entered(body: Node):

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://Scenes/Enemies/Enemy.tscn" id="1"]
+
+[node name="Tank" instance=ExtResource("1")]
+# Tweaked Tank stats (editable in Inspector)
+speed = 35.0
+max_hp = 8
+damage = 3
+damage_cooldown = 1.2
+knockback_resistance = 2.0

@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var enemy_scene: PackedScene
+@export var enemy_scenes: Array[PackedScene] = [] # optional list to spawn from multiple types
 @export var spawn_interval: float = 2.0      # initial delay between spawns
 @export var spawn_margin: float = 50.0
 @export var min_interval: float = 0.5        # maximum spawn speed (cap)
@@ -43,7 +44,17 @@ func _spawn_enemy():
 		2: spawn_pos = player.global_position + Vector2(-half_w - spawn_margin, randf_range(-half_h, half_h)) # left
 		3: spawn_pos = player.global_position + Vector2(half_w + spawn_margin, randf_range(-half_h, half_h))  # right
 
-	var enemy = enemy_scene.instantiate()
+	var candidate_scenes: Array[PackedScene] = []
+	if enemy_scene != null:
+		candidate_scenes.append(enemy_scene)
+	for s in enemy_scenes:
+		if s != null:
+			candidate_scenes.append(s)
+	if candidate_scenes.is_empty():
+		return
+
+	var chosen: PackedScene = candidate_scenes[randi() % candidate_scenes.size()]
+	var enemy = chosen.instantiate()
 	enemy.global_position = spawn_pos
 	enemy.set_player(player)
 	if enemy.has_signal("killed"):
