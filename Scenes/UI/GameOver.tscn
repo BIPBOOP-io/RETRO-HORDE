@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://ejm5mrbfhj15"]
+[gd_scene load_steps=7 format=3 uid="uid://ejm5mrbfhj15"]
 
 [ext_resource type="Script" uid="uid://cqexdu7jlfng3" path="res://Scripts/UI/GameOver.gd" id="1_n002h"]
 [ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="2_6pbke"]
 [ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_34bmr"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="4_wpfos"]
 [ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="5_ielvo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ielvo"]
 
 [node name="GameOver" type="Control"]
 layout_mode = 3
@@ -32,7 +34,7 @@ custom_minimum_size = Vector2(470, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_constants/separation = 40
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="GameOverTitle" type="Label" parent="Margin/VBoxContainer"]
@@ -70,58 +72,65 @@ text = "Score :"
 label_settings = ExtResource("2_6pbke")
 horizontal_alignment = 1
 
-[node name="NameRow" type="HBoxContainer" parent="Margin/VBoxContainer"]
+[node name="NameRow" type="VBoxContainer" parent="Margin/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="NameLabel" type="Label" parent="Margin/VBoxContainer/NameRow"]
 layout_mode = 2
-size_flags_horizontal = 2
-text = "NAME"
+size_flags_horizontal = 3
+text = "Enter your name"
 label_settings = ExtResource("2_6pbke")
-horizontal_alignment = 2
+horizontal_alignment = 1
 uppercase = true
 
 [node name="NameEdit" type="LineEdit" parent="Margin/VBoxContainer/NameRow"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 placeholder_text = "Guest"
+alignment = 1
 max_length = 16
 caret_blink = true
 caret_blink_interval = 0.55
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Margin/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 60
+theme_override_constants/separation = 30
 alignment = 1
-
-[node name="ReplayButton" type="Button" parent="Margin/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 4
-mouse_default_cursor_shape = 2
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("4_wpfos")
-theme_override_font_sizes/font_size = 20
-text = "TRY AGAIN"
 
 [node name="MainMenuButton" type="Button" parent="Margin/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_default_cursor_shape = 2
-theme_override_constants/outline_size = 5
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.4, 0.25490198, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.25490198, 1)
+theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("4_wpfos")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ielvo")
 text = "GIVE UP"
+flat = true
 
-[node name="BestLabel" type="Label" parent="Margin/VBoxContainer"]
+[node name="ReplayButton" type="Button" parent="Margin/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
-text = "Record :"
-label_settings = ExtResource("2_6pbke")
-horizontal_alignment = 1
+size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.4, 0.25490198, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.25490198, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_wpfos")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ielvo")
+text = "TRY AGAIN"
+flat = true
 
 [node name="BackgroundEnemy" parent="Margin/VBoxContainer" instance=ExtResource("5_ielvo")]
 
-[connection signal="pressed" from="Margin/VBoxContainer/HBoxContainer2/ReplayButton" to="." method="_on_replay_button_pressed"]
 [connection signal="pressed" from="Margin/VBoxContainer/HBoxContainer2/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="Margin/VBoxContainer/HBoxContainer2/ReplayButton" to="." method="_on_replay_button_pressed"]
