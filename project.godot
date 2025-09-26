@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Retro Horde"
-config/version="0.3.4-alpha"
+config/version="0.3.5-alpha"
 run/main_scene="uid://c8xa3or1a7jk4"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
