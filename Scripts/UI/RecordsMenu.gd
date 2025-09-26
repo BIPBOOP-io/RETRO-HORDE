@@ -57,15 +57,19 @@ func _populate_from_supabase() -> void:
 		var row = row_scene.instantiate()
 		list_container.add_child(row)
 
-		var name: String = run.get("player_name", "Player")
-		var score: int = int(run.get("total_score", 0))
+		var player_name: String = run.get("player_name", "Player")
 		var kills: int = int(run.get("kills", 0))
 		var level: int = int(run.get("level", 1))
 		var time_sec: int = int(run.get("survival_time", 0))
 		var date_str: String = run.get("created_at", "")
+		var score: int = int(run.get("total_score", Global.calculate_score({
+			"kills": kills,
+			"level": level,
+			"duration": time_sec
+		})))
 
 		row.set_data(
-			name,
+			player_name,
 			score,
 			kills,
 			level,

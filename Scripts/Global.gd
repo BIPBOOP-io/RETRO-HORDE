@@ -1,6 +1,7 @@
 extends Node
 var score_data: Dictionary = {}  # time, kills, level, etc.
 var previous_scene: String = ""  # track where to return after options
+var player_name: String = "Guest" # persisted player display name
 
 # ================================
 #   Global constants
@@ -30,7 +31,7 @@ const GROUPS = {
 }
 
 # Global score formula
-static func calculate_score(data: Dictionary) -> int:
+func calculate_score(data: Dictionary) -> int:
 	var kills    = int(data.get("kills", 0))
 	var level    = int(data.get("level", 1))
 	var duration = int(data.get("duration", 0))

@@ -70,6 +70,27 @@ text = "Score :"
 label_settings = ExtResource("2_6pbke")
 horizontal_alignment = 1
 
+[node name="NameRow" type="HBoxContainer" parent="Margin/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NameLabel" type="Label" parent="Margin/VBoxContainer/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "NAME"
+label_settings = ExtResource("2_6pbke")
+horizontal_alignment = 2
+uppercase = true
+
+[node name="NameEdit" type="LineEdit" parent="Margin/VBoxContainer/NameRow"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Guest"
+max_length = 16
+caret_blink = true
+caret_blink_interval = 0.55
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="Margin/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 60

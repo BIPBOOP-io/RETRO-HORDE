@@ -5,6 +5,9 @@ extends Control
 @onready var level_label: Label = $Margin/VBoxContainer/HBoxContainer/LevelLabel
 @onready var score_label: Label = $Margin/VBoxContainer/ScoreLabel if has_node("Margin/VBoxContainer/ScoreLabel") else null
 @onready var best_label:  Label = $Margin/VBoxContainer/BestLabel if has_node("Margin/VBoxContainer/BestLabel") else null
+@onready var name_edit:   LineEdit = $Margin/VBoxContainer/NameRow/NameEdit if has_node("Margin/VBoxContainer/NameRow/NameEdit") else null
+
+var _score_sent: bool = false
 
 func _ready():
 	var data = Global.score_data
@@ -23,6 +26,16 @@ func _ready():
 
 	if score_label:
 		score_label.text = "SCORE : %d" % score
+
+	# Prefill player name input
+	if name_edit:
+		var default_name := "Guest"
+		if "player_name" in Global:
+			default_name = String(Global.player_name)
+		name_edit.text = default_name
+		name_edit.text_submitted.connect(_on_name_submitted)
+		name_edit.focus_exited.connect(_on_name_focus_exited)
+		name_edit.grab_focus()
 
 	# --- Best score (arcade-style) ---
 	var all_stats: Array = SaveManager.load_stats()
@@ -45,15 +58,7 @@ func _ready():
 				bm, bs
 			]
 
-	# --- ENVOI DU SCORE EN LIGNE ---
-	var player_name: String = "Guest"
-	if "player_name" in Global:
-		player_name = Global.player_name
-
-	var device: String = OS.get_name().to_lower()
-	var version: String = ProjectSettings.get_setting("application/config/version", "dev")
-
-	_send_score(player_name, kills, lvl, t, device, version)
+	# Do not send score immediately; wait for user name entry or action.
 
 
 # --------------------------
@@ -64,10 +69,30 @@ func _send_score(player_name: String, kills: int, level: int, duration: int, dev
 	if version == "" or version == "EMPTY":
 		version = str(ProjectSettings.get_setting("application/config/version", "dev"))
 
-	var total_score := int(Global.score_data.get("score", (kills * 10) + (level * 100) + (duration * 2)))
+	var computed_score := int(Global.score_data.get("score", Global.calculate_score({
+		"kills": kills,
+		"level": level,
+		"duration": duration
+	})))
 
-	await Score.submit_score(player_name, kills, level, duration, device, version, total_score)
+	await Score.submit_score(player_name, kills, level, duration, device, version, computed_score)
 	print("✅ Score sent to Supabase for %s (v%s)" % [player_name, version])
+	_score_sent = true
+
+func _ensure_submit() -> void:
+	if _score_sent:
+		return
+	var data = Global.score_data
+	var t     = int(data.get("duration", 0))
+	var kills = int(data.get("kills", 0))
+	var lvl   = int(data.get("level", 1))
+	var device: String = OS.get_name().to_lower()
+	var version: String = ProjectSettings.get_setting("application/config/version", "dev")
+	var player_name: String = name_edit.text if name_edit else ("%s" % ("Guest"))
+	if player_name.strip_edges() == "":
+		player_name = "Guest"
+	Global.player_name = player_name
+	await _send_score(player_name, kills, lvl, t, device, version)
 
 
 # --------------------------
@@ -75,7 +100,25 @@ func _send_score(player_name: String, kills: int, level: int, duration: int, dev
 # --------------------------
 
 func _on_replay_button_pressed():
+	await _ensure_submit()
 	get_tree().change_scene_to_file("res://Scenes/Main/Main.tscn")
 
 func _on_main_menu_button_pressed():
+	await _ensure_submit()
 	get_tree().change_scene_to_file("res://Scenes/UI/MainMenu.tscn")
+
+# --------------------------
+#   Name input handlers
+# --------------------------
+
+func _on_name_submitted(new_text: String) -> void:
+	if new_text.strip_edges() != "":
+		Global.player_name = new_text.strip_edges()
+		# Optionally auto-submit upon Enter
+		await _ensure_submit()
+
+func _on_name_focus_exited() -> void:
+	if name_edit:
+		var t := name_edit.text.strip_edges()
+		if t != "":
+			Global.player_name = t
