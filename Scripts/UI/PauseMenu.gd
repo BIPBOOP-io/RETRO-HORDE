@@ -55,7 +55,7 @@ func _on_options_back_pressed():
 func _on_quit_pressed():
 	# Intentionally do not save the run when quitting from pause.
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://Scenes/UI/MainMenu.tscn")
+	SceneLoader.go_to_file("res://Scenes/UI/MainMenu.tscn", SceneLoader.Direction.UP)
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Only react when visible
