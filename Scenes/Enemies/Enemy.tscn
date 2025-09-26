@@ -137,6 +137,66 @@ region = Rect2(96, 96, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_dkrmf"]
 animations = [{
+"frames": [],
+"loop": true,
+"name": &"attack_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_up",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"die_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"die_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"die_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"die_up",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit_up",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kpr8r")
@@ -292,7 +352,7 @@ xp_orb_big = ExtResource("4_n01f6")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_dkrmf")
-animation = &"idle_down"
+animation = &"hit_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_ntwgn")

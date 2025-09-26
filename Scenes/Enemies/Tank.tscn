@@ -134,6 +134,66 @@ region = Rect2(192, 192, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ldd0o"]
 animations = [{
+"frames": [],
+"loop": true,
+"name": &"attack_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"attack_up",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"die_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"die_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"die_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"die_up",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hit_up",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gshqm")
@@ -279,3 +339,4 @@ knockback_resistance = 2.0
 
 [node name="AnimatedSprite2D" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_ldd0o")
+animation = &"die_right"
