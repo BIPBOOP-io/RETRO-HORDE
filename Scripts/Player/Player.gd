@@ -45,7 +45,10 @@ var multi_shot: int = 1
 var xp_multiplier: float = 1.0
 var knockback_multiplier: float = 1.0
 var vampirism: float = 0.0
-var has_shield: bool = false
+var _has_shield: bool = false
+var has_shield: bool:
+	set = set_has_shield,
+	get = get_has_shield
 var arrow_pierce: int = 0
 var crit_chance: float = 0.0
 var crit_multiplier: float = 2.0
@@ -138,6 +141,9 @@ func _ready():
 			"ready_fraction": stamina_ready_fraction,
 		})
 
+	# Ensure shield tint reflects initial state (usually false)
+	set_has_shield(has_shield)
+
 # ==========================
 #       MOVEMENT
 # ==========================
@@ -180,12 +186,12 @@ func _update_special_bar() -> void:
 	var prog: Dictionary = attack_ctrl.get_special_progress()
 	var elapsed_val: float = float(prog.get("elapsed", 0.0))
 	var max_val: float = float(prog.get("max", special_cooldown))
-	var ready: bool = bool(prog.get("ready", false))
+	var is_ready: bool = bool(prog.get("ready", false))
 	if hud and hud.has_method("update_special"):
 		hud.update_special(elapsed_val, max_val)
 	if special_bar_2d and special_bar_2d.has_method("set_values"):
 		# Color cue: slightly lighter purple when ready
-		special_bar_2d.fill_color = Color(0.68, 0.45, 0.98, 1.0) if ready else Color(0.58, 0.3, 0.9, 1.0)
+		special_bar_2d.fill_color = Color(0.68, 0.45, 0.98, 1.0) if is_ready else Color(0.58, 0.3, 0.9, 1.0)
 		special_bar_2d.set_values(elapsed_val, max_val)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -282,13 +288,11 @@ func level_up():
 		if not menu.upgrade_chosen.is_connected(_apply_upgrade):
 			menu.upgrade_chosen.connect(_apply_upgrade)
 		menu.show_upgrades(upgrades)
-	if feedback:
-		feedback.flash_gold()
+	# Removed upgrade orange flash; reserved color used for shield tint
 
 func _apply_upgrade(choice: String):
 	upgrade_manager.apply_upgrade(self, choice)
-	if feedback:
-		feedback.flash_gold()
+	# Removed upgrade orange flash; reserved color used for shield tint
 	if hud and hud.has_method("show_upgrade_toast"):
 		hud.show_upgrade_toast(upgrade_manager.get_title(choice))
 
@@ -358,6 +362,19 @@ func spawn_particles(particles_scene: PackedScene):
 		p.global_position = global_position
 		get_parent().add_child(p)
 		p.emitting = true
+
+const SHIELD_TINT := Color(1, 0.5, 0, 1) # orange while shield is active
+
+func set_has_shield(on: bool) -> void:
+	_has_shield = on
+	if feedback:
+		if on:
+			feedback.set_tint(SHIELD_TINT)
+		else:
+			feedback.clear_tint()
+
+func get_has_shield() -> bool:
+	return _has_shield
 
 func die():
 	if fsm:

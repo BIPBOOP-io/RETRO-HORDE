@@ -516,20 +516,6 @@ item_count = 1
 popup/item_0/text = "DISABLED"
 popup/item_0/id = 0
 
-[node name="BackButton" type="Button" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer"]
-layout_mode = 2
-focus_neighbor_bottom = NodePath("../MarginContainer/TabContainer/GENERAL")
-focus_next = NodePath("../MarginContainer/TabContainer/GENERAL")
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 0.4, 0.25490198, 1)
-theme_override_colors/font_hover_color = Color(1, 0.4, 0.254902, 1)
-theme_override_constants/outline_size = 10
-theme_override_fonts/font = ExtResource("4_mwawp")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_1ed7d")
-text = "BACK"
-flat = true
 [node name="HealFeedbackHBoxContainer" type="HBoxContainer" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -543,3 +529,19 @@ uppercase = true
 
 [node name="HealFeedbackCheckBox" type="CheckBox" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/HealFeedbackHBoxContainer"]
 layout_mode = 2
+
+[node name="BackButton" type="Button" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../MarginContainer/TabContainer/GENERAL")
+focus_next = NodePath("../MarginContainer/TabContainer/GENERAL")
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.2627451, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0.2627451, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_mwawp")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1ed7d")
+text = "BACK"
+flat = true

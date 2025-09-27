@@ -50,6 +50,14 @@ func stop_auto_attack() -> void:
 func _on_attack_tick() -> void:
 	if player == null:
 		return
+	# Skip auto-attack while player input is not allowed (e.g., during HIT/CAST/DIE)
+	var allow := true
+	if player.has_node("PlayerStateMachine"):
+		var pfsm = player.get_node("PlayerStateMachine")
+		if pfsm and pfsm.has_method("allow_input"):
+			allow = pfsm.allow_input()
+	if not allow:
+		return
 	var enemies: Array = []
 	if get_enemies.is_valid():
 		enemies = get_enemies.call()
