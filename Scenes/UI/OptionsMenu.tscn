@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://v8k2l0syin5i"]
+[gd_scene load_steps=8 format=3 uid="uid://v8k2l0syin5i"]
 
 [ext_resource type="Script" uid="uid://mhdnbkmh002u" path="res://Scripts/Managers/OptionsManager.gd" id="1_n4jkg"]
 [ext_resource type="LabelSettings" uid="uid://cuug347ylb7m7" path="res://Assets/TItles.tres" id="2_esydt"]
 [ext_resource type="LabelSettings" uid="uid://b8tlir45d4qoa" path="res://Assets/HUD.tres" id="3_qcylp"]
 [ext_resource type="FontFile" uid="uid://bym20gfvfp1uq" path="res://Assets/Fonts/Jersey10-Regular.ttf" id="4_mwawp"]
+[ext_resource type="Script" uid="uid://bqe472hrtenbq" path="res://Scripts/Enemies/BackgroundEnemySpawner.gd" id="5_qcylp"]
+[ext_resource type="PackedScene" uid="uid://ey8mhb2634kr" path="res://Scenes/Enemies/BackgroundEnemy.tscn" id="6_mwawp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1ed7d"]
 
@@ -17,6 +19,7 @@ grow_vertical = 2
 script = ExtResource("1_n4jkg")
 
 [node name="OptionsMenuMarginContainer" type="MarginContainer" parent="."]
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -80,6 +83,15 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 theme_override_constants/separation = 8
 
+[node name="ResetButton" type="Button" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/GENERAL/GeneralMarginContainer/GeneralVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../LanguageHBoxContainer/LanguageOptionButton")
+focus_neighbor_bottom = NodePath("../../../../../../../BackButton")
+theme_override_fonts/font = ExtResource("4_mwawp")
+text = "RESET"
+
 [node name="LanguageHBoxContainer" type="HBoxContainer" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/GENERAL/GeneralMarginContainer/GeneralVBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -127,7 +139,7 @@ size_flags_vertical = 4
 focus_neighbor_top = NodePath("../../LanguageHBoxContainer/LanguageOptionButton")
 focus_neighbor_bottom = NodePath("../../../../../../../BackButton")
 theme_override_fonts/font = ExtResource("4_mwawp")
-text = "RESET"
+text = "RESET ALL"
 
 [node name="AUDIO" type="TabBar" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer"]
 visible = false
@@ -163,6 +175,7 @@ theme_override_fonts/font = ExtResource("4_mwawp")
 text = "RESET"
 
 [node name="MasterVolumeHBoxContainer" type="HBoxContainer" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/AUDIO/AudioMarginContainer/AudioVBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 10
@@ -284,6 +297,7 @@ uppercase = true
 layout_mode = 2
 
 [node name="VSyncHBoxContainer" type="HBoxContainer" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/VIDEO/VideoMarginContainer/VideoVBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -463,6 +477,7 @@ theme_override_fonts/font = ExtResource("4_mwawp")
 text = "RESET"
 
 [node name="UIScaleHBoxContainer" type="HBoxContainer" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -480,6 +495,7 @@ size_flags_vertical = 4
 value = 50.0
 
 [node name="TextSpeedHBoxContainer" type="HBoxContainer" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -543,6 +559,7 @@ uppercase = true
 
 [node name="ShieldTintPicker" type="ColorPickerButton" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/ShieldTintHBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="BackButton" type="Button" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer"]
 layout_mode = 2
@@ -559,3 +576,10 @@ theme_override_font_sizes/font_size = 30
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1ed7d")
 text = "BACK"
 flat = true
+
+[node name="BackgroundSpawner" type="Node2D" parent="."]
+z_index = 6
+position = Vector2(-1, 0)
+script = ExtResource("5_qcylp")
+background_enemy_scene = ExtResource("6_mwawp")
+enemy_count = 20
