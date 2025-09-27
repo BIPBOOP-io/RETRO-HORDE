@@ -2,6 +2,17 @@ extends CharacterBody2D
 
 signal died
 
+# --- States & Animations ---
+# Simple state machine to drive new animations (hit/die/falling/cast)
+enum State { IDLE, MOVE, HIT, DIE, FALLING, CAST }
+var state: int = State.IDLE
+var last_dir_str: String = "down"
+
+# Tunables for non-loop animations
+@export var hit_anim_duration: float = 0.15
+@export var die_anim_duration: float = 0.40
+@export var cast_anim_duration: float = 0.25
+
 # --- Movement & Combat ---
 @export var speed: float = 100.0
 @export var attack_interval: float = 1.0
@@ -140,24 +151,33 @@ func _ready():
 #       MOVEMENT
 # ==========================
 func _physics_process(delta):
+	# Movement is only player-driven in MOVE/IDLE. Other states limit to knockback glide.
 	var input_vector = Vector2(
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	).normalized()
 
-	is_sprinting = Input.is_action_pressed("sprint") and input_vector != Vector2.ZERO and _can_sprint()
+	var allow_input := (state == State.MOVE or state == State.IDLE)
+	is_sprinting = allow_input and Input.is_action_pressed("sprint") and input_vector != Vector2.ZERO and _can_sprint()
 	var current_speed = speed * (sprint_multiplier if is_sprinting else 1.0)
-	velocity = input_vector * current_speed + knockback_velocity
+	var move_vec: Vector2 = (input_vector * current_speed) if allow_input else Vector2.ZERO
+	velocity = move_vec + knockback_velocity
 	move_and_slide()
 	# Gradually reduce knockback
 	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 400 * delta)
 
-	if input_vector == Vector2.ZERO:
-		animated_sprite.speed_scale = 1.0
-		_play_idle_animation()
-	else:
-		animated_sprite.speed_scale = sprint_multiplier if is_sprinting else 1.0
-		_play_walk_animation(input_vector)
+	# Update facing and locomotion animations only in locomotion states
+	if allow_input:
+		if input_vector == Vector2.ZERO:
+			# idle
+			state = State.IDLE if state != State.HIT and state != State.CAST and state != State.DIE and state != State.FALLING else state
+			animated_sprite.speed_scale = 1.0
+			_play_idle_animation()
+		else:
+			state = State.MOVE if state != State.HIT and state != State.CAST and state != State.DIE and state != State.FALLING else state
+			animated_sprite.speed_scale = sprint_multiplier if is_sprinting else 1.0
+			_update_last_dir_str(input_vector)
+			_play_walk_animation(input_vector)
 
 	_update_stamina(delta)
 	_update_special_bar()
@@ -216,10 +236,8 @@ func _try_fire_special():
 	var dir = _get_best_target_direction()
 	if dir == Vector2.ZERO:
 		return
-	_fire_giant_arrow(dir)
-	special_ready = false
-	special_timer.wait_time = special_cooldown
-	special_timer.start()
+	# Enter CAST state: play cast then fire the special
+	_start_cast(dir)
 
 func _on_special_ready():
 	special_ready = true
@@ -259,6 +277,64 @@ func _fire_giant_arrow(dir: Vector2):
 	arrow.scale = Vector2.ONE * special_scale
 	get_parent().add_child(arrow)
 
+# ==========================
+#       STATE HELPERS
+# ==========================
+
+func _update_last_dir_str(dir: Vector2) -> void:
+	if abs(dir.x) > abs(dir.y):
+		last_dir_str = "right" if dir.x > 0 else "left"
+	else:
+		last_dir_str = "down" if dir.y > 0 else "up"
+
+func _play_dir_anim(prefix: String) -> void:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return
+	var an := "%s_%s" % [prefix, last_dir_str]
+	if animated_sprite.sprite_frames.has_animation(an):
+		animated_sprite.play(an)
+	elif animated_sprite.sprite_frames.has_animation(prefix):
+		animated_sprite.play(prefix)
+	else:
+		# fallback to idle in facing
+		_play_idle_animation()
+
+func start_hit() -> void:
+	# Public entrypoint (used by HealthComponent) to play hit animation briefly
+	if state == State.DIE or state == State.FALLING:
+		return
+	state = State.HIT
+	_play_dir_anim("hit")
+	# brief hit-stun; do not block timers
+	await get_tree().create_timer(max(0.05, hit_anim_duration)).timeout
+	if state == State.HIT:
+		state = State.IDLE
+		_play_idle_animation()
+
+func _start_cast(dir: Vector2) -> void:
+	if state == State.DIE or state == State.FALLING:
+		return
+	# consume special immediately to start cooldown
+	special_ready = false
+	special_timer.wait_time = special_cooldown
+	special_timer.start()
+	# face cast direction
+	_update_last_dir_str(dir)
+	state = State.CAST
+	_play_dir_anim("cast")
+	await get_tree().create_timer(max(0.05, cast_anim_duration)).timeout
+	# Fire after windup, unless we died in between
+	if state != State.DIE and state != State.FALLING:
+		_fire_giant_arrow(dir)
+		state = State.IDLE
+		_play_idle_animation()
+
+func _start_fall() -> void:
+	# Placeholder: falling state reserved for future holes/transition mechanic
+	state = State.FALLING
+	_play_dir_anim("falling")
+
+
 func _can_sprint() -> bool:
 	# Sprinting is blocked only if stamina was totally depleted,
 	# and only until it recovers above the threshold.
@@ -277,9 +353,8 @@ func _play_walk_animation(dir: Vector2):
 		else: animated_sprite.play("walk_up")
 
 func _play_idle_animation():
-	var current_anim = animated_sprite.animation
-	if "walk" in current_anim:
-		animated_sprite.play(current_anim.replace("walk", "idle"))
+	# Always try to play directional idle based on last_dir_str
+	_play_dir_anim("idle")
 
 	# ==========================
 	#       AUTO-ATTACK
@@ -350,11 +425,17 @@ func _apply_upgrade(choice: String):
 # ==========================
 func take_damage(amount: int):
 	if health_comp:
+		# Let component handle stats/UI (it will also trigger hit state/feedback)
 		health_comp.damage(amount)
 		return
 	if has_shield:
 		has_shield = false
 		return
+	# Local damage path
+	# Play hit state first (brief) when non-lethal
+	var lethal := (health - amount) <= 0
+	if not lethal:
+		start_hit()
 	health -= amount
 	if hud: hud.update_health(health, max_health)
 	if health_bar_2d and health_bar_2d.has_method("set_values"):
@@ -403,8 +484,14 @@ func spawn_particles(particles_scene: PackedScene):
 		p.emitting = true
 
 func die():
-	emit_signal("died")  # notify Main that the player died
-	queue_free()         # optionally free the Player
+	if state == State.DIE:
+		return
+	state = State.DIE
+	_play_dir_anim("die")
+	# Delay death to let animation play
+	await get_tree().create_timer(max(0.05, die_anim_duration)).timeout
+	emit_signal("died")
+	queue_free()
 func _auto_attack():
 	var enemies = _get_enemies()
 	if enemies.is_empty(): return

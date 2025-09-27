@@ -38,11 +38,12 @@ func damage(amount: int) -> void:
 	# Apply damage
 	player.health -= amount
 	_update_health_ui()
-	# Feedback
-	if player.has_method("flash_red"):
-		player.flash_red()
-	if player.has_method("shake_camera"):
-		player.shake_camera()
+	# Feedback + hit animation
+	if player.feedback:
+		player.feedback.flash_red()
+		player.feedback.shake_camera()
+	if player.has_method("start_hit") and player.health > 0:
+		player.start_hit()
 	# Death
 	if player.health <= 0 and player.has_method("die"):
 		player.die()
@@ -59,8 +60,8 @@ func apply_vampirism(damage_dealt: int) -> void:
 	if new_health > player.health:
 		player.health = new_health
 		_update_health_ui()
-		if player.has_method("flash_green"):
-			player.flash_green()
+		if player.feedback:
+			player.feedback.flash_green()
 
 func _on_regen_tick():
 	if player == null:
@@ -68,8 +69,8 @@ func _on_regen_tick():
 	if player.health < player.max_health:
 		player.health += 1
 		_update_health_ui()
-		if player.has_method("flash_green"):
-			player.flash_green()
+		if player.feedback:
+			player.feedback.flash_green()
 
 func _update_health_ui() -> void:
 	if hud and hud.has_method("update_health"):
