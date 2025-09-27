@@ -178,8 +178,6 @@ func _physics_process(delta):
 		stamina_comp.tick(delta, is_sprinting)
 	_update_special_bar()
 
-## Stamina logic moved to StaminaComponent
-
 func _update_special_bar() -> void:
 	if attack_ctrl == null:
 		return
@@ -363,13 +361,15 @@ func spawn_particles(particles_scene: PackedScene):
 		get_parent().add_child(p)
 		p.emitting = true
 
-const SHIELD_TINT := Color(1, 0.5, 0, 1) # orange while shield is active
-
 func set_has_shield(on: bool) -> void:
 	_has_shield = on
 	if feedback:
 		if on:
-			feedback.set_tint(SHIELD_TINT)
+			var c: Color = Color(1, 0.5, 0, 1)
+			var settings := get_node_or_null("/root/Settings")
+			if settings and settings.has_method("get_shield_tint"):
+				c = settings.get_shield_tint()
+			feedback.set_tint(c)
 		else:
 			feedback.clear_tint()
 

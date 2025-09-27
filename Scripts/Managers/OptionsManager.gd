@@ -32,6 +32,7 @@ var previous_scene: String = ""
 @onready var text_speed_slider = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/TextSpeedHBoxContainer/TextSpeedHSlider
 @onready var colorblind_button = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/ColorblindModeHBoxContainer/ColorblindModeOptionButton
 @onready var heal_feedback_checkbox = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/HealFeedbackHBoxContainer/HealFeedbackCheckBox if has_node("OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/HealFeedbackHBoxContainer/HealFeedbackCheckBox") else null
+@onready var shield_tint_picker = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/ShieldTintHBoxContainer/ShieldTintPicker if has_node("OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/ShieldTintHBoxContainer/ShieldTintPicker") else null
 
 @onready var back_button = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/BackButton
 
@@ -126,6 +127,14 @@ func _load_settings() -> void:
 		if has_node("/root/Settings"):
 			get_node("/root/Settings").set_heal_feedback(enabled)
 
+	# Shield tint color
+	if shield_tint_picker != null:
+		var tint_val = config.get_value("accessibility", "shield_tint", Color(1, 0.5, 0, 1))
+		if typeof(tint_val) == TYPE_COLOR:
+			shield_tint_picker.color = tint_val
+		if has_node("/root/Settings"):
+			get_node("/root/Settings").set_shield_tint(shield_tint_picker.color)
+
 
 # --------------------------
 # Apply Functions
@@ -186,6 +195,12 @@ func _connect_signals() -> void:
 			_save_setting("accessibility", "heal_feedback", pressed)
 			if has_node("/root/Settings"):
 				get_node("/root/Settings").set_heal_feedback(pressed)
+		)
+	if shield_tint_picker != null:
+		shield_tint_picker.color_changed.connect(func(c: Color):
+			_save_setting("accessibility", "shield_tint", c)
+			if has_node("/root/Settings"):
+				get_node("/root/Settings").set_shield_tint(c)
 		)
 
 

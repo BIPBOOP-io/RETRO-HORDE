@@ -7,6 +7,7 @@ var layout: String = "qwerty"
 var debug_enemy_ranges: bool = false
 var player_name: String = "Guest"
 var heal_feedback: bool = true
+var shield_tint: Color = Color(1, 0.5, 0, 1)
 
 func _ready():
 	_load_config()
@@ -89,6 +90,9 @@ func _load_config() -> void:
 		debug_enemy_ranges = bool(cfg.get_value("debug", "enemy_ranges", debug_enemy_ranges))
 		player_name = str(cfg.get_value("profile", "player_name", player_name))
 		heal_feedback = bool(cfg.get_value("feedback", "heal", heal_feedback))
+		var tint_val = cfg.get_value("feedback", "shield_tint", shield_tint)
+		if typeof(tint_val) == TYPE_COLOR:
+			shield_tint = tint_val
 
 func _save_config() -> void:
 	var cfg := ConfigFile.new()
@@ -96,6 +100,7 @@ func _save_config() -> void:
 	cfg.set_value("debug", "enemy_ranges", debug_enemy_ranges)
 	cfg.set_value("profile", "player_name", player_name)
 	cfg.set_value("feedback", "heal", heal_feedback)
+	cfg.set_value("feedback", "shield_tint", shield_tint)
 	cfg.save(CONFIG_PATH)
 
 func is_enemy_debug_on() -> bool:
@@ -120,4 +125,11 @@ func is_heal_feedback_on() -> bool:
 
 func set_heal_feedback(on: bool) -> void:
 	heal_feedback = on
+	_save_config()
+
+func get_shield_tint() -> Color:
+	return shield_tint
+
+func set_shield_tint(c: Color) -> void:
+	shield_tint = c
 	_save_config()

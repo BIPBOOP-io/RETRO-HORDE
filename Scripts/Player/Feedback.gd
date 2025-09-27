@@ -35,8 +35,6 @@ func flash_red() -> void:
 func flash_green() -> void:
 	await _flash_color(Color(0, 1, 0))
 
-func flash_gold() -> void:
-	await _flash_color(Color(1, 0.84, 0))
 
 func _flash_color(color: Color) -> void:
 	if player == null:

@@ -530,6 +530,20 @@ uppercase = true
 [node name="HealFeedbackCheckBox" type="CheckBox" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/HealFeedbackHBoxContainer"]
 layout_mode = 2
 
+[node name="ShieldTintHBoxContainer" type="HBoxContainer" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ShieldTintLabel" type="Label" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/ShieldTintHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Shield Tint"
+label_settings = ExtResource("3_qcylp")
+uppercase = true
+
+[node name="ShieldTintPicker" type="ColorPickerButton" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/ShieldTintHBoxContainer"]
+layout_mode = 2
+
 [node name="BackButton" type="Button" parent="OptionsMenuMarginContainer/OptionsMenuVBoxContainer"]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../MarginContainer/TabContainer/GENERAL")
