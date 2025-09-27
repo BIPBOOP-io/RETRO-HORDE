@@ -282,6 +282,7 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_h54ih")
+attack_range = 150.0
 arrow_scene = ExtResource("2_ude3g")
 heal_particles_scene = ExtResource("3_4wape")
 levelup_particles_scene = ExtResource("4_t26db")

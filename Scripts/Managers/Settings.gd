@@ -5,6 +5,7 @@ const CONFIG_PATH := "user://settings.cfg"
 # Supported layouts: "qwerty" or "azerty"
 var layout: String = "qwerty"
 var debug_enemy_ranges: bool = false
+var player_name: String = "Guest"
 
 func _ready():
 	_load_config()
@@ -85,11 +86,13 @@ func _load_config() -> void:
 	if err == OK:
 		layout = str(cfg.get_value("input", "layout", layout)).to_lower()
 		debug_enemy_ranges = bool(cfg.get_value("debug", "enemy_ranges", debug_enemy_ranges))
+		player_name = str(cfg.get_value("profile", "player_name", player_name))
 
 func _save_config() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("input", "layout", layout)
 	cfg.set_value("debug", "enemy_ranges", debug_enemy_ranges)
+	cfg.set_value("profile", "player_name", player_name)
 	cfg.save(CONFIG_PATH)
 
 func is_enemy_debug_on() -> bool:
@@ -98,3 +101,13 @@ func is_enemy_debug_on() -> bool:
 func set_enemy_debug(on: bool) -> void:
 	debug_enemy_ranges = on
 	_save_config()
+
+func set_player_name(name: String) -> void:
+	var n := name.strip_edges()
+	if n == "":
+		n = "Guest"
+	player_name = n
+	_save_config()
+
+func get_player_name() -> String:
+	return player_name

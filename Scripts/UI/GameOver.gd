@@ -59,7 +59,8 @@ func _send_score(player_name: String, kills: int, level: int, duration: int, dev
 		upgrades = Global.score_data.upgrades
 
 	await Score.submit_score(player_name, kills, level, duration, device, version, computed_score, upgrades)
-	print("✅ Score sent to Supabase for %s (v%s)" % [player_name, version])
+	if has_node("/root/Global") and get_node("/root/Global").has_method("log"):
+		get_node("/root/Global").log("score sent", player_name)
 	_score_sent = true
 
 # --------------------------
@@ -85,6 +86,8 @@ func _ensure_submit() -> void:
 	if player_name.strip_edges() == "":
 		player_name = "Guest"
 	Global.player_name = player_name
+	if has_node("/root/Settings") and get_node("/root/Settings").has_method("set_player_name"):
+		get_node("/root/Settings").set_player_name(player_name)
 	await _send_score(player_name, kills, lvl, t, device, version)
 
 
@@ -107,6 +110,8 @@ func _on_main_menu_button_pressed():
 func _on_name_submitted(new_text: String) -> void:
 	if new_text.strip_edges() != "":
 		Global.player_name = new_text.strip_edges()
+		if has_node("/root/Settings") and get_node("/root/Settings").has_method("set_player_name"):
+			get_node("/root/Settings").set_player_name(Global.player_name)
 		# Optionally auto-submit upon Enter
 		await _ensure_submit()
 
@@ -115,3 +120,5 @@ func _on_name_focus_exited() -> void:
 		var t := name_edit.text.strip_edges()
 		if t != "":
 			Global.player_name = t
+			if has_node("/root/Settings") and get_node("/root/Settings").has_method("set_player_name"):
+				get_node("/root/Settings").set_player_name(t)

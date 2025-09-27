@@ -2,6 +2,7 @@ extends Node
 var score_data: Dictionary = {}  # time, kills, level, etc.
 var previous_scene: String = ""  # track where to return after options
 var player_name: String = "Guest" # persisted player display name
+var DEBUG: bool = false
 
 # ================================
 #   Global constants
@@ -37,3 +38,18 @@ func calculate_score(data: Dictionary) -> int:
 	var duration = int(data.get("duration", 0))
 
 	return (kills * 10) + (level * 100) + (duration * 2)
+
+func _ready() -> void:
+	# Load persisted player name if available
+	if has_node("/root/Settings"):
+		var s = get_node("/root/Settings")
+		if s.has_method("get_player_name"):
+			player_name = String(s.get_player_name())
+
+func log(msg: Variant, data: Variant = null) -> void:
+	if not DEBUG:
+		return
+	if data == null:
+		print(msg)
+	else:
+		print(str(msg), " ", str(data))

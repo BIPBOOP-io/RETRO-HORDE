@@ -18,6 +18,7 @@ var attack_active: float
 var attack_recovery: float
 var attack_hitbox_offset: float
 var attack_cancel_factor: float
+var cancel_on_escape: bool
 var attack_player_knockback: float
 var self_knockback_on_attack: float
 var attack_hitbox_radius: float
@@ -44,6 +45,7 @@ func setup(enemy: Node, anim: AnimatedSprite2D, fx: AnimatedSprite2D, area: Area
 	attack_recovery = float(host.attack_recovery)
 	attack_hitbox_offset = float(host.attack_hitbox_offset)
 	attack_cancel_factor = float(host.attack_cancel_factor)
+	cancel_on_escape = bool(host.attack_cancel_on_escape)
 	attack_player_knockback = float(host.attack_player_knockback)
 	self_knockback_on_attack = float(host.self_knockback_on_attack)
 	attack_hitbox_radius = float(host.attack_hitbox_radius)
@@ -59,6 +61,7 @@ func setup(enemy: Node, anim: AnimatedSprite2D, fx: AnimatedSprite2D, area: Area
 		attack_recovery = config.attack_recovery
 		attack_hitbox_offset = config.attack_hitbox_offset
 		attack_cancel_factor = config.attack_cancel_factor
+		cancel_on_escape = config.cancel_on_escape
 		attack_player_knockback = config.attack_player_knockback
 		self_knockback_on_attack = config.self_knockback_on_attack
 		attack_hitbox_radius = config.attack_hitbox_radius
@@ -73,8 +76,13 @@ func setup(enemy: Node, anim: AnimatedSprite2D, fx: AnimatedSprite2D, area: Area
 		if not attack_area.body_entered.is_connected(_on_attack_area_body_entered):
 			attack_area.body_entered.connect(_on_attack_area_body_entered)
 		if hitbox_template:
+			var before_layer = attack_area.collision_layer
+			var before_mask = attack_area.collision_mask
 			attack_area.collision_layer = hitbox_template.collision_layer
 			attack_area.collision_mask = hitbox_template.collision_mask
+			if before_layer != attack_area.collision_layer or before_mask != attack_area.collision_mask:
+				if host and host.has_method("push_warning"):
+					host.push_warning("AttackArea filters adjusted to match Hitbox")
 	if attack_shape and attack_shape.shape is CircleShape2D and attack_hitbox_radius > 0.0:
 		(attack_shape.shape as CircleShape2D).radius = attack_hitbox_radius
 
@@ -116,14 +124,14 @@ func _start_attack(player: Node2D, last_dir_str: String) -> void:
 
 	if use_frame_markers and animated_sprite:
 		await get_tree().create_timer(attack_windup).timeout
-		if (player.global_position - host.global_position).length() > attack_trigger_distance * attack_cancel_factor:
+		if cancel_on_escape and (player.global_position - host.global_position).length() > attack_trigger_distance * attack_cancel_factor:
 			_end_attack()
 			return
 		# After windup, frames will drive the hitbox and _on_anim_finished will end attack
 		return
 	else:
 		await get_tree().create_timer(attack_windup).timeout
-		if (player.global_position - host.global_position).length() > attack_trigger_distance * attack_cancel_factor:
+		if cancel_on_escape and (player.global_position - host.global_position).length() > attack_trigger_distance * attack_cancel_factor:
 			_end_attack()
 			return
 		_attack_area_enable(true)

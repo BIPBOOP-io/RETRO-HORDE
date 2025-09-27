@@ -58,6 +58,12 @@ func _request(method: int, path: String, body: Dictionary = {}) -> Dictionary:
 	var data: Variant = _parse_response(body_bytes)
 	return {"ok": code >= 200 and code < 300, "code": code, "data": data}
 
+func _debug(msg: Variant, data: Variant = null) -> void:
+	if has_node("/root/Global"):
+		var g = get_node("/root/Global")
+		if g.has_method("log"):
+			g.log(msg, data)
+
 func submit_score(player_name: String, kills: int, level: int, survival_time: int, device: String = "", version: String = "", total_score: int = 0, upgrades: Dictionary = {}) -> bool:
 	var body: Dictionary = {
 		"player_name": player_name,
@@ -71,7 +77,7 @@ func submit_score(player_name: String, kills: int, level: int, survival_time: in
 		}
 	var res: Dictionary = await _request(HTTPClient.METHOD_POST, "/rest/v1/%s" % TABLE, body)
 	if not res.ok:
-		printerr("submit_score failed: ", res)
+		_debug("submit_score failed", res)
 	return res.ok
 
 func get_leaderboard(order_by: String = "survival_time", limit: int = 20, descending: bool = true) -> Array:
@@ -79,7 +85,7 @@ func get_leaderboard(order_by: String = "survival_time", limit: int = 20, descen
 	var path: String = "/rest/v1/%s?order=%s%s&limit=%d" % [TABLE, order_by, dir, limit]
 	var res: Dictionary = await _request(HTTPClient.METHOD_GET, path)
 	if not res.ok:
-		printerr("get_leaderboard failed: ", res)
+		_debug("get_leaderboard failed", res)
 		return []
 	
 	if res.data is Array:
@@ -87,6 +93,6 @@ func get_leaderboard(order_by: String = "survival_time", limit: int = 20, descen
 	elif res.data is PackedStringArray or res.data is PackedInt32Array or res.data is PackedByteArray:
 		return res.data
 	else:
-		printerr("Unexpected data type from Supabase: ", typeof(res.data))
-		print_debug("Leaderboard raw data: ", res.data)
+		_debug("Unexpected data type from Supabase", typeof(res.data))
+		_debug("Leaderboard raw data", res.data)
 		return []
