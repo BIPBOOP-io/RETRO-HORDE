@@ -31,6 +31,7 @@ var previous_scene: String = ""
 @onready var ui_scale_slider = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/UIScaleHBoxContainer/UIScaleHSlider
 @onready var text_speed_slider = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/TextSpeedHBoxContainer/TextSpeedHSlider
 @onready var colorblind_button = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/ColorblindModeHBoxContainer/ColorblindModeOptionButton
+@onready var heal_feedback_checkbox = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/HealFeedbackHBoxContainer/HealFeedbackCheckBox if has_node("OptionsMenuMarginContainer/OptionsMenuVBoxContainer/MarginContainer/TabContainer/ACCESSIBILITY/AccessibilityMarginContainer/AccessibilityVBoxContainer/HealFeedbackHBoxContainer/HealFeedbackCheckBox") else null
 
 @onready var back_button = $OptionsMenuMarginContainer/OptionsMenuVBoxContainer/BackButton
 
@@ -118,6 +119,13 @@ func _load_settings() -> void:
 	if config.has_section_key("accessibility", "colorblind_mode"):
 		colorblind_button.select(config.get_value("accessibility", "colorblind_mode"))
 
+	# Heal HP feedback
+	if heal_feedback_checkbox != null:
+		var enabled: bool = bool(config.get_value("accessibility", "heal_feedback", true))
+		heal_feedback_checkbox.button_pressed = enabled
+		if has_node("/root/Settings"):
+			get_node("/root/Settings").set_heal_feedback(enabled)
+
 
 # --------------------------
 # Apply Functions
@@ -173,6 +181,12 @@ func _connect_signals() -> void:
 	ui_scale_slider.value_changed.connect(func(v): _apply_ui_scale(v); _save_setting("accessibility", "ui_scale", v))
 	text_speed_slider.value_changed.connect(func(v): _save_setting("accessibility", "text_speed", v))
 	colorblind_button.item_selected.connect(func(i): _save_setting("accessibility", "colorblind_mode", i))
+	if heal_feedback_checkbox != null:
+		heal_feedback_checkbox.toggled.connect(func(pressed):
+			_save_setting("accessibility", "heal_feedback", pressed)
+			if has_node("/root/Settings"):
+				get_node("/root/Settings").set_heal_feedback(pressed)
+		)
 
 
 # --------------------------

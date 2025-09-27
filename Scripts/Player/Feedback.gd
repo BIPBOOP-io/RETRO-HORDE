@@ -4,6 +4,7 @@ class_name Feedback
 var player: Node = null
 var camera: Camera2D = null
 var active_tween: Tween = null
+var _flash_id: int = 0
 
 func setup(player_ref: Node) -> void:
 	player = player_ref
@@ -35,10 +36,13 @@ func _flash_color(color: Color) -> void:
 		target = player
 	if target == null:
 		return
+	_flash_id += 1
+	var this_id := _flash_id
 	var original: Color = target.modulate
 	target.modulate = color
 	await get_tree().create_timer(0.2).timeout
-	target.modulate = original
+	if _flash_id == this_id:
+		target.modulate = original
 
 func shake_camera(amount: float = 10.0, duration: float = 0.2) -> void:
 	# Use SceneTreeTween API in Godot 4

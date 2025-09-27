@@ -6,6 +6,7 @@ const CONFIG_PATH := "user://settings.cfg"
 var layout: String = "qwerty"
 var debug_enemy_ranges: bool = false
 var player_name: String = "Guest"
+var heal_feedback: bool = true
 
 func _ready():
 	_load_config()
@@ -87,12 +88,14 @@ func _load_config() -> void:
 		layout = str(cfg.get_value("input", "layout", layout)).to_lower()
 		debug_enemy_ranges = bool(cfg.get_value("debug", "enemy_ranges", debug_enemy_ranges))
 		player_name = str(cfg.get_value("profile", "player_name", player_name))
+		heal_feedback = bool(cfg.get_value("feedback", "heal", heal_feedback))
 
 func _save_config() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("input", "layout", layout)
 	cfg.set_value("debug", "enemy_ranges", debug_enemy_ranges)
 	cfg.set_value("profile", "player_name", player_name)
+	cfg.set_value("feedback", "heal", heal_feedback)
 	cfg.save(CONFIG_PATH)
 
 func is_enemy_debug_on() -> bool:
@@ -111,3 +114,10 @@ func set_player_name(new_name: String) -> void:
 
 func get_player_name() -> String:
 	return player_name
+
+func is_heal_feedback_on() -> bool:
+	return heal_feedback
+
+func set_heal_feedback(on: bool) -> void:
+	heal_feedback = on
+	_save_config()

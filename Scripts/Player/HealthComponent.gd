@@ -60,8 +60,10 @@ func apply_vampirism(damage_dealt: int) -> void:
 	if new_health > player.health:
 		player.health = new_health
 		_update_health_ui()
-		if player.feedback:
-			player.feedback.flash_green()
+		var settings := get_node_or_null("/root/Settings")
+		if settings and settings.has_method("is_heal_feedback_on") and settings.is_heal_feedback_on():
+			if player.feedback:
+				player.feedback.flash_green()
 
 func _on_regen_tick():
 	if player == null:
@@ -69,8 +71,10 @@ func _on_regen_tick():
 	if player.health < player.max_health:
 		player.health += 1
 		_update_health_ui()
-		if player.feedback:
-			player.feedback.flash_green()
+		var settings := get_node_or_null("/root/Settings")
+		if settings and settings.has_method("is_heal_feedback_on") and settings.is_heal_feedback_on():
+			if player.feedback:
+				player.feedback.flash_green()
 
 func _update_health_ui() -> void:
 	if hud and hud.has_method("update_health"):

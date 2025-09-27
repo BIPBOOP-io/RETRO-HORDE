@@ -6,17 +6,32 @@ class_name AttackController
 var player: Node = null
 var get_enemies: Callable
 var attack_timer: Timer
+var special_timer: Timer
+var special_ready: bool = false
+var special_cooldown: float = 8.0
 
 func _ready():
 	# Timer is created but not started; Player keeps current logic until migrated.
 	attack_timer = Timer.new()
 	attack_timer.one_shot = false
 	add_child(attack_timer)
+	special_timer = Timer.new()
+	special_timer.one_shot = true
+	special_timer.autostart = false
+	add_child(special_timer)
+	if not special_timer.timeout.is_connected(_on_special_ready):
+		special_timer.timeout.connect(_on_special_ready)
 
-func setup(p: Node, get_enemies_fn: Callable, attack_interval: float) -> void:
+func setup(p: Node, get_enemies_fn: Callable, attack_interval: float, special_cd: float = 8.0) -> void:
 	player = p
 	get_enemies = get_enemies_fn
 	set_attack_interval(max(0.01, attack_interval))
+	special_cooldown = max(0.01, special_cd)
+	# Start special on cooldown at match start
+	special_ready = false
+	if special_timer:
+		special_timer.wait_time = special_cooldown
+		special_timer.start()
 
 func set_attack_interval(seconds: float) -> void:
 	if attack_timer:
@@ -54,6 +69,27 @@ func _on_attack_tick() -> void:
 		for i in range(player.multi_shot):
 			var delay = i * 0.3
 			fire_arrow_salvo(dir, delay)
+
+func _on_special_ready() -> void:
+	special_ready = true
+
+func is_special_ready() -> bool:
+	return special_ready
+
+func start_special_cooldown() -> void:
+	special_ready = false
+	if special_timer:
+		special_timer.wait_time = special_cooldown
+		special_timer.start()
+
+func get_special_progress() -> Dictionary:
+	var max_v := special_cooldown
+	var elapsed: float
+	if special_ready:
+		elapsed = max_v
+	else:
+		elapsed = max_v - (special_timer.time_left if special_timer else 0.0)
+	return {"elapsed": elapsed, "max": max_v, "ready": special_ready}
 
 func fire_arrow_salvo(dir: Vector2, delay: float) -> void:
 	if delay > 0:
