@@ -102,8 +102,8 @@ func set_enemy_debug(on: bool) -> void:
 	debug_enemy_ranges = on
 	_save_config()
 
-func set_player_name(name: String) -> void:
-	var n := name.strip_edges()
+func set_player_name(new_name: String) -> void:
+	var n := new_name.strip_edges()
 	if n == "":
 		n = "Guest"
 	player_name = n
